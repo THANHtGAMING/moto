@@ -1,0 +1,100 @@
+<div class="admin-page-form">
+  <div class="page-header">
+    <h2>🎟️ Thêm mã giảm giá mới</h2>
+    <a routerLink="/admin/coupon-list" class="btn-back">← Quay lại</a>
+  </div>
+
+  <form [formGroup]="couponForm" (ngSubmit)="onSubmit()" class="admin-form">
+    <div class="form-sections-grid">
+      <!-- Cột trái -->
+      <div class="form-column">
+        <div class="form-section">
+          <h3>Thông tin cơ bản</h3>
+          
+          <div class="form-group">
+            <label>Mã code <span class="required">*</span></label>
+            <div class="code-input">
+              <input type="text" formControlName="code" placeholder="VD: SUMMER2024" style="text-transform: uppercase;" />
+              <button type="button" class="btn-generate" (click)="generateCode()">Tạo mã</button>
+            </div>
+            <small class="hint">Mã code viết hoa, không dấu, 3-20 ký tự</small>
+          </div>
+
+          <div class="form-group">
+            <label>Tên chương trình <span class="required">*</span></label>
+            <input type="text" formControlName="name" placeholder="VD: Giảm giá mùa hè" />
+          </div>
+
+          <div class="form-group">
+            <label>Mô tả</label>
+            <textarea formControlName="description" placeholder="Mô tả chi tiết về chương trình giảm giá..." rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Thời gian & Số lượng</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Ngày bắt đầu <span class="required">*</span></label>
+              <input type="date" formControlName="startDate" />
+            </div>
+
+            <div class="form-group">
+              <label>Ngày kết thúc <span class="required">*</span></label>
+              <input type="date" formControlName="endDate" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Số lượt sử dụng tối đa <span class="required">*</span></label>
+            <input type="number" formControlName="usageLimit" min="1" />
+            <small class="hint">Tổng số lần mã có thể được sử dụng</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cột phải -->
+      <div class="form-column">
+        <div class="form-section">
+          <h3>Giá trị giảm giá</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Loại giảm giá <span class="required">*</span></label>
+              <select formControlName="type">
+                <option value="PERCENTAGE">Giảm theo phần trăm (%)</option>
+                <option value="FIXED_AMOUNT">Giảm tiền cố định (VND)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Giá trị <span class="required">*</span></label>
+              <div class="value-input">
+                <input type="number" formControlName="value" min="1" />
+                <span class="suffix">{{ couponForm.value.type === 'PERCENTAGE' ? '%' : 'VND' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Đơn hàng tối thiểu</label>
+            <div class="value-input">
+              <input type="number" formControlName="minOrderValue" min="0" />
+              <span class="suffix">VND</span>
+            </div>
+            <small class="hint">Để 0 nếu không yêu cầu đơn tối thiểu</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" routerLink="/admin/coupon-list">Hủy</button>
+      <button type="submit" class="btn-submit" [disabled]="couponForm.invalid || isLoading">
+        {{ isLoading ? 'Đang tạo...' : '✓ Tạo mã giảm giá' }}
+      </button>
+    </div>
+  </form>
+</div>
+

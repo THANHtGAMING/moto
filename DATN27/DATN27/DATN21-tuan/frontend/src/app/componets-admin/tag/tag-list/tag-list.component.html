@@ -1,0 +1,68 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>🏷️ Quản lý tags</h2>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Tìm kiếm tags..."
+          [(ngModel)]="keyword"
+          (ngModelChange)="onSearch()"
+          (keyup.enter)="onSearch()"
+        />
+      </div>
+    </div>
+    <a routerLink="/admin/tag-add" class="btn-add">+ Thêm tag mới</a>
+  </div>
+
+  <!-- Tag Table -->
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên tag</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tag of filteredTags | paginate: { itemsPerPage: 20, currentPage: p }; index as i">
+          <td>{{ i + 1 }}</td>
+          <td><strong>{{ tag.name }}</strong></td>
+          <td class="actions-cell">
+            <a
+              [routerLink]="['/admin/tag-edit/', tag._id]"
+              class="btn-action btn-edit"
+              title="Chỉnh sửa">✏️</a>
+            <button
+              (click)="onDelete(tag._id)"
+              class="btn-action btn-delete"
+              title="Xóa">🗑️</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredTags.length === 0">
+          <td colspan="3" class="empty-row">
+            <p>Không tìm thấy tag nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="filteredTags.length > 0">
+    <span>Tổng: <strong>{{ filteredTags.length }}</strong> tags</span>
+  </div>
+
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="p = $event"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>
+</div>
+

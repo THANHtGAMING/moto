@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/" />
+  <title>MotoGP Store</title>
+
+  <!-- Critical CSS - Inline để tránh FOUC -->
+  <style>
+    /* Reset và background mặc định */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Arial, 'Roboto', 'Helvetica Neue', sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: #f5f5f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Loading placeholder - hiển thị trước khi Angular load */
+    #app-loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease-out;
+    }
+
+    #app-loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Spinner animation */
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #e0e0e0;
+      border-top: 4px solid #ff4d4f;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: #666;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    /* Ẩn app-root cho đến khi Angular bootstrap */
+    app-root {
+      display: block;
+      min-height: 100vh;
+    }
+
+    app-root:not(.loaded) {
+      opacity: 0;
+    }
+
+    app-root.loaded {
+      opacity: 1;
+      transition: opacity 0.3s ease-in;
+    }
+  </style>
+
+  <!-- Preconnect to external resources for faster loading -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <!-- Loading placeholder -->
+  <div id="app-loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Đang tải...</div>
+  </div>
+
+  <!-- Angular app root -->
+  <app-root></app-root>
+
+  <!-- Script để ẩn loading khi Angular bootstrap -->
+  <script>
+    // Hàm ẩn loading placeholder
+    function hideLoading() {
+      const loadingEl = document.getElementById('app-loading');
+      const appRoot = document.querySelector('app-root');
+
+      if (loadingEl) {
+        loadingEl.classList.add('hidden');
+        // Xóa element sau khi fade out
+        setTimeout(function() {
+          loadingEl.remove();
+        }, 300);
+      }
+
+      if (appRoot) {
+        appRoot.classList.add('loaded');
+      }
+    }
+
+    // Thử ẩn loading ngay khi DOM ready (fallback)
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        // Đợi một chút để Angular có thời gian bootstrap
+        setTimeout(hideLoading, 100);
+      });
+    } else {
+      setTimeout(hideLoading, 100);
+    }
+
+    // Expose function để Angular có thể gọi
+    window.hideAppLoading = hideLoading;
+
+    // Error handler để log lỗi
+    window.addEventListener('error', function(event) {
+      console.error('Runtime error:', event.error);
+      // Vẫn ẩn loading ngay cả khi có lỗi
+      setTimeout(hideLoading, 500);
+    });
+
+    // Unhandled promise rejection handler
+    window.addEventListener('unhandledrejection', function(event) {
+      console.error('Unhandled promise rejection:', event.reason);
+    });
+  </script>
+</body>
+</html>
+
+
+

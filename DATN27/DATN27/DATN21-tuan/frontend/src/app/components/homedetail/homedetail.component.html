@@ -1,0 +1,37 @@
+
+<section class="banner">
+  <div class="banner-content">
+    <div class="banner-overlay"></div>
+    <img [src]="news.cover_image_url" alt="Image" class="banner-img" />
+
+    <div class="banner-text">
+      <h3 class="banner-category">MotoGP™</h3>
+      <h1 class="banner-title">{{ news.title }}</h1>
+      <p class="banner-meta">{{ news.published_date }} · BY MOTOGP.COM</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<section class="news-detail">
+  <div class="detail-container">
+    <h2 class="detail-heading">{{ news.title }}</h2>
+    <p class="detail-date">{{ news.published_date }}</p>
+
+    <div class="detail-content" [innerHTML]="news.content"></div>
+  </div>
+
+  <!-- SIDEBAR RIGHT -->
+  <aside class="sidebar">
+   
+
+    <div class="related" *ngFor="let r of news">
+      <img [src]="r.cover_image_url" />
+      <div class="related-info">
+        <h4 [routerLink]="['/news', r._id]">{{ r.title }}</h4>
+        <p>{{ r.published_date }}</p>
+      </div>
+    </div>
+  </aside>
+</section>
+                      

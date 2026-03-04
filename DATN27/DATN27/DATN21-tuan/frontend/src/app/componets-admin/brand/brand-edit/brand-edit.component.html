@@ -1,0 +1,88 @@
+<div class="admin-page-form">
+  <div class="page-header">
+    <h2>✏️ Sửa nhãn hàng</h2>
+    <a routerLink="/admin/brand-list" class="btn-back">← Quay lại</a>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading && !brandForm.value.name">
+    <div class="spinner"></div>
+    <p>Đang tải...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="errorMessage">
+    ❌ {{ errorMessage }}
+    <button class="close-btn" (click)="errorMessage = null">×</button>
+  </div>
+
+  <form [formGroup]="brandForm" (ngSubmit)="onSubmit()" class="admin-form" *ngIf="!isLoading || brandForm.value.name" enctype="multipart/form-data">
+    
+    <div class="form-section">
+      <h3>Thông tin cơ bản</h3>
+      
+      <div class="form-group">
+        <label for="name">Tên nhãn hàng <span class="required">*</span></label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Nhập tên nhãn hàng"
+          [class.error]="brandForm.get('name')?.invalid && brandForm.get('name')?.touched"
+        />
+        <span *ngIf="brandForm.get('name')?.errors?.['required'] && brandForm.get('name')?.touched" class="error-message-text">
+          Tên nhãn hàng không được để trống.
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Mô tả (tùy chọn)</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          rows="3"
+          placeholder="Mô tả về nhãn hàng"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Trạng thái</label>
+        <select id="status" formControlName="status">
+          <option value="active">Hoạt động</option>
+          <option value="inactive">Ngừng hoạt động</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Logo</h3>
+      
+      <div class="form-group" *ngIf="imagePreview">
+        <label>Logo hiện tại</label>
+        <div class="image-preview-grid">
+          <div class="image-preview-item">
+            <img [src]="imagePreview" alt="Logo nhãn hàng" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Thay đổi logo (tùy chọn)</label>
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+        />
+        <small class="hint">Chọn ảnh mới nếu muốn thay đổi logo</small>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a routerLink="/admin/brand-list" class="btn-cancel">Hủy</a>
+      <button type="submit" class="btn-submit" [disabled]="brandForm.invalid || isLoading">
+        {{ isLoading ? 'Đang cập nhật...' : '✓ Lưu thay đổi' }}
+      </button>
+    </div>
+  </form>
+</div>
+

@@ -1,0 +1,120 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>🏷️ Quản lý loại sản phẩm</h2>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Tìm kiếm loại sản phẩm..."
+          [(ngModel)]="keyword"
+          (input)="onSearch()"
+        />
+      </div>
+      <div class="filter-group">
+        <select
+          [(ngModel)]="selectedGenderFilter"
+          (change)="onFilterChange()"
+          class="filter-select"
+        >
+          <option value="">Tất cả giới tính</option>
+          <option *ngFor="let gender of genders" [value]="gender._id">
+            {{ gender.name }}
+          </option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <select
+          [(ngModel)]="selectedTagFilter"
+          (change)="onFilterChange()"
+          class="filter-select"
+        >
+          <option value="">Tất cả tags</option>
+          <option *ngFor="let tag of tags" [value]="tag._id">
+            {{ tag.name }}
+          </option>
+        </select>
+      </div>
+      <button
+        *ngIf="selectedGenderFilter || selectedTagFilter"
+        (click)="selectedGenderFilter = ''; selectedTagFilter = ''; onFilterChange()"
+        class="btn-clear-filters"
+      >
+        ✕ Xóa bộ lọc
+      </button>
+    </div>
+    <a routerLink="/admin/type-add" class="btn-add">+ Thêm loại mới</a>
+  </div>
+
+  <!-- Type Table -->
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên loại</th>
+          <th>Slug</th>
+          <th>Giới tính</th>
+          <th>Thẻ</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let type of filteredTypes | paginate: { itemsPerPage: 10, currentPage: p }; index as i">
+          <td>{{ (p - 1) * 10 + i + 1 }}</td>
+          <td><strong>{{ type.name }}</strong></td>
+          <td>{{ type.slug }}</td>
+          <td>
+            <div class="badge-container" *ngIf="type.genders && type.genders.length > 0">
+              <span [class]="getGenderClass(gender)" *ngFor="let gender of type.genders">
+                {{ gender.name || gender }}
+              </span>
+            </div>
+            <span class="text-muted" *ngIf="!type.genders || type.genders.length === 0">-</span>
+          </td>
+          <td>
+            <div class="badge-container" *ngIf="type.tags && type.tags.length > 0">
+              <span class="badge badge-tag" *ngFor="let tag of type.tags">
+                {{ tag.name || tag }}
+              </span>
+            </div>
+            <span class="text-muted" *ngIf="!type.tags || type.tags.length === 0">-</span>
+          </td>
+          <td class="actions-cell">
+            <a
+              [routerLink]="['/admin/type-edit/', type._id]"
+              class="btn-action btn-edit"
+              title="Chỉnh sửa"
+              *ngIf="type._id">✏️</a>
+            <button
+              (click)="onDelete(type._id)"
+              class="btn-action btn-delete"
+              title="Xóa"
+              [disabled]="!type._id">🗑️</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredTypes.length === 0">
+          <td colspan="6" class="empty-row">
+            <p>Không tìm thấy loại nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="filteredTypes.length > 0">
+    <span>Tổng: <strong>{{ filteredTypes.length }}</strong> loại</span>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="p = $event"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>
+</div>

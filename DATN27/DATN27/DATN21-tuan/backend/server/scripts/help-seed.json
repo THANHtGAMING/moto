@@ -1,0 +1,99 @@
+[
+  {
+    "name": "Tài khoản của tôi",
+    "description": "Quản lý thông tin tài khoản, địa chỉ giao hàng và cài đặt cá nhân",
+    "icon": "fas fa-user",
+    "iconColor": "#6c757d",
+    "order": 1,
+    "status": "active"
+  },
+  {
+    "name": "Đặt hàng của bạn",
+    "description": "Theo dõi đơn hàng, xem lịch sử mua hàng và quản lý đơn đặt hàng",
+    "icon": "fas fa-shopping-cart",
+    "iconColor": "#28a745",
+    "order": 2,
+    "status": "active"
+  },
+  {
+    "name": "Giao hàng & Vận chuyển",
+    "description": "Thông tin về phương thức giao hàng, thời gian vận chuyển và phí ship",
+    "icon": "fas fa-shipping-fast",
+    "iconColor": "#856404",
+    "order": 3,
+    "status": "active"
+  },
+  {
+    "name": "Hướng dẫn về kích thước",
+    "description": "Bảng kích thước sản phẩm và hướng dẫn chọn size phù hợp",
+    "icon": "fas fa-ruler",
+    "iconColor": "#ffc107",
+    "order": 4,
+    "status": "active"
+  },
+  {
+    "name": "Thông tin trả về",
+    "description": "Chính sách đổi trả, hướng dẫn trả hàng và hoàn tiền",
+    "icon": "fas fa-undo",
+    "iconColor": "#fd7e14",
+    "order": 5,
+    "status": "active"
+  },
+  {
+    "name": "Khuyến mãi",
+    "description": "Thông tin về các chương trình khuyến mãi, mã giảm giá và ưu đãi đặc biệt",
+    "icon": "fas fa-tags",
+    "iconColor": "#dc3545",
+    "order": 6,
+    "status": "active"
+  },
+  {
+    "name": "Thông tin theo dõi",
+    "description": "Theo dõi trạng thái đơn hàng và vị trí giao hàng",
+    "icon": "fas fa-map-marker-alt",
+    "iconColor": "#007bff",
+    "order": 7,
+    "status": "active"
+  },
+  {
+    "name": "Bảo mật của bạn",
+    "description": "Thông tin về bảo mật dữ liệu, quyền riêng tư và an toàn thanh toán",
+    "icon": "fas fa-lock",
+    "iconColor": "#6c757d",
+    "order": 8,
+    "status": "active"
+  },
+  {
+    "name": "Điều khoản và Điều kiện",
+    "description": "Điều khoản sử dụng dịch vụ và các quy định của cửa hàng",
+    "icon": "fas fa-file-alt",
+    "iconColor": "#6c757d",
+    "order": 9,
+    "status": "active"
+  },
+  {
+    "name": "Chính sách bảo mật",
+    "description": "Chính sách về việc thu thập, sử dụng và bảo vệ thông tin cá nhân",
+    "icon": "fas fa-user-shield",
+    "iconColor": "#6c757d",
+    "order": 10,
+    "status": "active"
+  },
+  {
+    "name": "Chính sách Cookie",
+    "description": "Thông tin về việc sử dụng cookie trên website",
+    "icon": "fas fa-cookie",
+    "iconColor": "#6c757d",
+    "order": 11,
+    "status": "active"
+  },
+  {
+    "name": "Giới thiệu về chúng tôi",
+    "description": "Thông tin về công ty, lịch sử phát triển và giá trị cốt lõi",
+    "icon": "fas fa-info-circle",
+    "iconColor": "#6c757d",
+    "order": 12,
+    "status": "active"
+  }
+]
+

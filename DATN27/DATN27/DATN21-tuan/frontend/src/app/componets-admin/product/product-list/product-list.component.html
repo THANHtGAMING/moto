@@ -1,0 +1,180 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>📦 Quản lý sản phẩm</h2>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Tìm kiếm sản phẩm..."
+          [(ngModel)]="keyword"
+          (ngModelChange)="onSearch()"
+          (keyup.enter)="onSearch()"
+        />
+      </div>
+      <select class="sort-select" [(ngModel)]="sortOption" (change)="onFilterChange()">
+        <option value="">Sắp xếp</option>
+        <option value="price_asc">Giá (tăng dần)</option>
+        <option value="price_desc">Giá (giảm dần)</option>
+        <option value="stock_asc">Tồn kho (tăng dần)</option>
+        <option value="stock_desc">Tồn kho (giảm dần)</option>
+      </select>
+    </div>
+    <a routerLink="/admin/product-add" class="btn-add">+ Thêm sản phẩm mới</a>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-group">
+      <div class="filter-btn-wrapper">
+        <button 
+          class="filter-btn" 
+          [class.active]="typeFilter"
+          (click)="toggleFilter('type')">
+          {{ typeFilter ? getTypeName(typeFilter) : 'Tất cả loại' }}
+        </button>
+        <div class="filter-dropdown" *ngIf="showFilterDropdown === 'type'">
+          <div class="filter-option" (click)="selectFilter('type', '')">Tất cả loại</div>
+          <div class="filter-option" *ngFor="let t of types" (click)="selectFilter('type', t._id)" [class.selected]="typeFilter === t._id">
+            {{ t.name }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="filter-btn-wrapper">
+        <button 
+          class="filter-btn" 
+          [class.active]="riderFilter"
+          (click)="toggleFilter('rider')">
+          {{ riderFilter ? getRiderName(riderFilter) : 'Tất cả tay đua' }}
+        </button>
+        <div class="filter-dropdown" *ngIf="showFilterDropdown === 'rider'">
+          <div class="filter-option" (click)="selectFilter('rider', '')">Tất cả tay đua</div>
+          <div class="filter-option" *ngFor="let r of riders" (click)="selectFilter('rider', r._id)" [class.selected]="riderFilter === r._id">
+            {{ r.name }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="filter-btn-wrapper">
+        <button 
+          class="filter-btn" 
+          [class.active]="brandFilter"
+          (click)="toggleFilter('brand')">
+          {{ brandFilter ? getBrandName(brandFilter) : 'Tất cả nhãn hàng' }}
+        </button>
+        <div class="filter-dropdown" *ngIf="showFilterDropdown === 'brand'">
+          <div class="filter-option" (click)="selectFilter('brand', '')">Tất cả nhãn hàng</div>
+          <div class="filter-option" *ngFor="let b of brands" (click)="selectFilter('brand', b._id)" [class.selected]="brandFilter === b._id">
+            {{ b.name }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="filter-btn-wrapper">
+        <button 
+          class="filter-btn" 
+          [class.active]="genderFilter"
+          (click)="toggleFilter('gender')">
+          {{ genderFilter ? getGenderName(genderFilter) : 'Tất cả giới tính' }}
+        </button>
+        <div class="filter-dropdown" *ngIf="showFilterDropdown === 'gender'">
+          <div class="filter-option" (click)="selectFilter('gender', '')">Tất cả giới tính</div>
+          <div class="filter-option" *ngFor="let g of genders" (click)="selectFilter('gender', g._id)" [class.selected]="genderFilter === g._id">
+            {{ g.name }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="filter-btn-wrapper">
+        <button 
+          class="filter-btn" 
+          [class.active]="sizeFilter"
+          (click)="toggleFilter('size')">
+          {{ sizeFilter === 'has_size' ? 'Có size' : sizeFilter === 'accessory' ? 'Phụ kiện' : 'Tất cả sản phẩm' }}
+        </button>
+        <div class="filter-dropdown" *ngIf="showFilterDropdown === 'size'">
+          <div class="filter-option" (click)="selectFilter('size', '')" [class.selected]="sizeFilter === ''">Tất cả sản phẩm</div>
+          <div class="filter-option" (click)="selectFilter('size', 'has_size')" [class.selected]="sizeFilter === 'has_size'">Có size (Quần áo)</div>
+          <div class="filter-option" (click)="selectFilter('size', 'accessory')" [class.selected]="sizeFilter === 'accessory'">Phụ kiện (Mũ, Balo, ...)</div>
+        </div>
+      </div>
+      
+      <button class="btn-cancel btn-reset" (click)="resetFilters()">Đặt Lại</button>
+    </div>
+  </div>
+
+  <!-- Product Table -->
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên sản phẩm</th>
+          <th>Giá</th>
+          <th>Ảnh</th>
+          <th>Tồn kho</th>
+          <th>Kích cỡ</th>
+          <th>Hoạt động</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of filteredProducts | paginate : { itemsPerPage: 10, currentPage: p }; index as i">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <strong>{{ product.nameProduct }}</strong>
+          </td>
+          <td><strong class="price-text">{{ product.priceProduct | number }}đ</strong></td>
+          <td>
+            <img *ngIf="product.imagesProduct?.length" [src]="product.imagesProduct[0]" alt="" class="product-image" />
+            <span *ngIf="!product.imagesProduct?.length" class="no-image">Không có ảnh</span>
+          </td>
+          <td><strong>{{ getTotalStock(product) }}</strong></td>
+          <td>
+            <ng-container *ngIf="product.sizes && product.sizes.length > 0; else accessory">
+              <div class="size-list">
+                <ng-container *ngFor="let s of getFirstSizes(product, 3)">
+                  <span class="status-badge badge-active size-item">{{ s.name }} ({{ s.stock }})</span>
+                </ng-container>
+                <span *ngIf="getRemainingSizeCount(product, 3) > 0" class="size-more">+{{ getRemainingSizeCount(product, 3) }}</span>
+              </div>
+            </ng-container>
+            <ng-template #accessory><span class="accessory-text">Phụ kiện,Mũ,Balo,...</span></ng-template>
+          </td>
+          <td>
+            <div class="status-indicator" (click)="toggleActive(product)" [title]="product.isActive !== false ? 'Đang hoạt động - Nhấp để tắt' : 'Đã tắt - Nhấp để bật'">
+              <span class="status-dot" [class.active]="product.isActive !== false" [class.inactive]="product.isActive === false"></span>
+              <span class="status-text">{{ product.isActive !== false ? 'Hoạt động' : 'Tắt' }}</span>
+            </div>
+          </td>
+          <td class="actions-cell">
+            <a [routerLink]="['/admin/product-edit/', product._id]" class="btn-action btn-edit" title="Chỉnh sửa">✏️</a>
+            <button (click)="onDelete(product._id)" class="btn-action btn-delete" title="Xóa">🗑️</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredProducts.length === 0">
+          <td colspan="8" class="empty-row">
+            <p>Không tìm thấy sản phẩm nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="filteredProducts.length > 0">
+    <span>Tổng: <strong>{{ filteredProducts.length }}</strong> sản phẩm</span>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="p = $event"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>
+</div>

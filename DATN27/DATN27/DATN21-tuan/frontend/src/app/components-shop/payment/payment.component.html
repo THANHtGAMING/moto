@@ -1,0 +1,345 @@
+<div class="payment-page">
+  <!-- Loading -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Đang tải...</p>
+  </div>
+
+  <!-- Messages -->
+  <div class="message-container" *ngIf="errorMessage || successMessage">
+    <div class="error-message" *ngIf="errorMessage">
+      ❌ {{ errorMessage }}
+      <button class="close-btn" (click)="clearMessages()">×</button>
+    </div>
+    <div class="success-message" *ngIf="successMessage">
+      ✓ {{ successMessage }}
+      <button class="close-btn" (click)="clearMessages()">×</button>
+    </div>
+  </div>
+
+  <div class="container" *ngIf="!isLoading">
+    <!-- LEFT SECTION: Address & Payment Method -->
+    <div class="left-section">
+      <h2>Địa chỉ giao hàng</h2>
+
+      <!-- Address List -->
+      <div class="address-list" *ngIf="addresses.length > 0">
+        <div
+          class="address-card"
+          *ngFor="let addr of addresses"
+          [class.selected]="selectedAddress?._id === addr._id"
+          (click)="selectAddress(addr)"
+        >
+          <div class="address-radio">
+            <input
+              type="radio"
+              [checked]="selectedAddress?._id === addr._id"
+              name="selectedAddress"
+            />
+          </div>
+          <div class="address-content">
+            <div class="address-header">
+              <span class="address-name">{{ addr.name }}</span>
+              <span class="default-badge" *ngIf="addr.isDefault">Mặc định</span>
+            </div>
+            <div class="recipient-info">
+              <strong>{{ addr.recipientName }}</strong> | {{ addr.phoneNumber }}
+            </div>
+            <div class="address-detail">{{ addr.fullAddress }}</div>
+            <div class="address-actions">
+              <button
+                class="btn-link"
+                *ngIf="!addr.isDefault"
+                (click)="setDefaultAddress(addr); $event.stopPropagation()"
+              >
+                Đặt làm mặc định
+              </button>
+              <button
+                class="btn-link danger"
+                (click)="deleteAddress(addr); $event.stopPropagation()"
+              >
+                Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Address Message -->
+      <div class="no-address" *ngIf="addresses.length === 0">
+        <p>📭 Bạn chưa có địa chỉ nào. Vui lòng thêm địa chỉ để tiếp tục.</p>
+      </div>
+
+      <!-- Add Address Button -->
+      <button class="add-address-btn" (click)="openAddAddressModal()">
+        + Thêm địa chỉ mới
+      </button>
+
+      <!-- Payment Method -->
+      <h3>💳 Phương thức thanh toán</h3>
+      <div class="payment-methods">
+        <label class="payment-option" [class.selected]="paymentMethod === 'cod'">
+          <input type="radio" name="paymentMethod" value="cod" [(ngModel)]="paymentMethod" />
+          <div class="payment-content">
+            <img src="https://cdn-icons-png.flaticon.com/512/2303/2303826.png" alt="COD" />
+            <div class="payment-info">
+              <span>Thanh toán khi nhận hàng (COD)</span>
+              <small>Thanh toán bằng tiền mặt khi nhận hàng</small>
+            </div>
+          </div>
+        </label>
+
+        <label class="payment-option" [class.selected]="paymentMethod === 'vnpay'">
+          <input type="radio" name="paymentMethod" value="vnpay" [(ngModel)]="paymentMethod" />
+          <div class="payment-content">
+            <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR.png" alt="VNPay" />
+            <div class="payment-info">
+              <span>Thanh toán VNPay</span>
+              <small>Thanh toán qua ví VNPay, thẻ ATM, Visa...</small>
+            </div>
+          </div>
+        </label>
+
+        <label class="payment-option" [class.selected]="paymentMethod === 'momo'">
+          <input type="radio" name="paymentMethod" value="momo" [(ngModel)]="paymentMethod" />
+          <div class="payment-content">
+            <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="Momo" />
+            <div class="payment-info">
+              <span>Thanh toán Momo</span>
+              <small>Thanh toán qua ví điện tử Momo</small>
+            </div>
+          </div>
+        </label>
+      </div>
+
+      <!-- Checkout Button -->
+      <button
+        class="checkout-btn"
+        (click)="onCheckout()"
+        [disabled]="isSubmitting || !selectedAddress || cartItems.length === 0"
+      >
+        {{ isSubmitting ? 'Đang xử lý...' : '🔒 Đặt hàng ngay' }}
+      </button>
+    </div>
+
+    <!-- RIGHT SECTION: Order Summary -->
+    <div class="right-section">
+      <h2>Tổng quan đơn hàng</h2>
+
+      <!-- Product List -->
+      <div class="product-list">
+        <div class="product-item" *ngFor="let item of cartItems">
+          <div class="product-image">
+            <img [src]="item.image" [alt]="item.name" />
+            <span class="quantity-badge">{{ item.quantity }}</span>
+          </div>
+          <div class="product-info">
+            <p class="product-name">{{ item.name }}</p>
+            <p class="product-size" *ngIf="item.size">Size: {{ item.size }}</p>
+            <p class="product-price">
+              <span class="current-price">{{ item.price | number:'1.0-0' }} đ</span>
+              <span class="original-price" *ngIf="item.discount > 0">
+                {{ item.originalPrice | number:'1.0-0' }} đ
+              </span>
+            </p>
+          </div>
+          <div class="product-subtotal">
+            {{ item.price * item.quantity | number:'1.0-0' }} đ
+          </div>
+        </div>
+      </div>
+
+      <!-- Coupon Section -->
+      <div class="coupon-section">
+        <div class="coupon-header">
+          <h3>🎟️ Mã giảm giá</h3>
+          <button
+            class="btn-toggle-coupon"
+            (click)="toggleCouponInput()"
+            *ngIf="!hasAppliedCoupon">
+            {{ showCouponInput ? 'Ẩn' : 'Áp dụng mã' }}
+          </button>
+        </div>
+
+        <!-- Applied Coupon (with remove button) -->
+        <div class="coupon-applied" *ngIf="hasAppliedCoupon && appliedCoupon">
+          <div class="coupon-info-card">
+            <div class="coupon-info-header">
+              <span class="coupon-icon">🎟️</span>
+              <span class="coupon-title">Mã đã áp dụng</span>
+            </div>
+            <div class="coupon-info-details">
+              <div class="coupon-code-display">
+                <strong>{{ appliedCoupon.code }}</strong>
+              </div>
+              <div class="coupon-discount-display">
+                {{ getCouponDiscountText(appliedCoupon) }}
+              </div>
+              <div class="coupon-name" *ngIf="appliedCoupon.name">
+                {{ appliedCoupon.name }}
+              </div>
+            </div>
+            <button
+              class="btn-remove-coupon"
+              (click)="removeCoupon()"
+              [disabled]="isApplyingCoupon">
+              {{ isApplyingCoupon ? 'Đang xử lý...' : 'Xóa' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Coupon Input Form -->
+        <div class="coupon-input-section" *ngIf="!hasAppliedCoupon && showCouponInput">
+          <div class="coupon-input-group">
+            <input
+              type="text"
+              [(ngModel)]="couponCode"
+              (input)="onCouponCodeInput()"
+              placeholder="Nhập mã giảm giá"
+              class="coupon-input"
+              [disabled]="isApplyingCoupon"
+            />
+            <button
+              class="btn-apply-coupon"
+              (click)="applyCoupon()"
+              [disabled]="isApplyingCoupon || !couponCode.trim()">
+              {{ isApplyingCoupon ? 'Đang áp dụng...' : 'Áp dụng' }}
+            </button>
+          </div>
+
+          <!-- Available Coupons List -->
+          <div class="available-coupons" *ngIf="availableCoupons.length > 0">
+            <p class="coupons-label">Mã có thể áp dụng:</p>
+            <div class="coupon-list">
+              <div
+                class="coupon-item"
+                *ngFor="let coupon of availableCoupons"
+                [class.selected]="selectedCoupon?._id === coupon._id"
+                (click)="selectCoupon(coupon)">
+                <div class="coupon-item-content">
+                  <div class="coupon-item-header">
+                    <strong>{{ coupon.code }}</strong>
+                    <span class="coupon-badge">{{ getCouponDiscountText(coupon) }}</span>
+                  </div>
+                  <div class="coupon-item-details" *ngIf="coupon.name">
+                    {{ coupon.name }}
+                  </div>
+                  <div class="coupon-item-min" *ngIf="coupon.minOrderValue > 0">
+                    Đơn tối thiểu: {{ coupon.minOrderValue | number:'1.0-0' }}đ
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <div class="summary-row">
+          <span>Tạm tính</span>
+          <span>{{ totalPrice | number:'1.0-0' }} đ</span>
+        </div>
+        <div class="summary-row" *ngIf="discountAmount > 0">
+          <span>Giảm giá</span>
+          <span class="discount">-{{ discountAmount | number:'1.0-0' }} đ</span>
+        </div>
+        <div class="summary-row">
+          <span>Phí vận chuyển</span>
+          <span class="free-shipping">Miễn phí</span>
+        </div>
+        <hr />
+        <div class="summary-row total">
+          <span>Tổng cộng</span>
+          <span class="total-price">{{ finalPrice | number:'1.0-0' }} đ</span>
+        </div>
+      </div>
+
+      <!-- Back to Cart -->
+      <a routerLink="/cart" class="back-to-cart">← Quay lại giỏ hàng</a>
+    </div>
+  </div>
+
+  <!-- Add Address Modal -->
+  <div class="modal-overlay" *ngIf="showAddAddressModal" (click)="closeAddAddressModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Thêm địa chỉ mới</h3>
+        <button class="modal-close" (click)="closeAddAddressModal()">×</button>
+      </div>
+
+      <form [formGroup]="addressForm" (ngSubmit)="submitAddAddress()">
+        <div class="form-group">
+          <label>Tên địa chỉ (VD: Nhà, Công ty...)</label>
+          <input 
+            type="text" 
+            formControlName="name" 
+            placeholder="Nhập tên địa chỉ" 
+            [class.error]="addressForm.get('name')?.invalid && addressForm.get('name')?.touched" />
+          <div class="error-message" *ngIf="addressForm.get('name')?.invalid && addressForm.get('name')?.touched">
+            <span *ngIf="addressForm.get('name')?.errors?.['required']">Tên địa chỉ là bắt buộc</span>
+            <span *ngIf="addressForm.get('name')?.errors?.['minlength']">Tên địa chỉ phải có ít nhất 2 ký tự</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Họ tên người nhận</label>
+          <input 
+            type="text" 
+            formControlName="recipientName" 
+            placeholder="Nhập họ tên người nhận (10-20 ký tự)" 
+            maxlength="20"
+            [class.error]="addressForm.get('recipientName')?.invalid && addressForm.get('recipientName')?.touched" />
+          <div class="error-message" *ngIf="addressForm.get('recipientName')?.invalid && addressForm.get('recipientName')?.touched">
+            <span *ngIf="addressForm.get('recipientName')?.errors?.['required']">Họ tên người nhận không được bỏ trống</span>
+            <span *ngIf="addressForm.get('recipientName')?.errors?.['minlength']">Họ tên người nhận phải có ít nhất 10 ký tự</span>
+            <span *ngIf="addressForm.get('recipientName')?.errors?.['maxlength']">Họ tên người nhận không được vượt quá 20 ký tự</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Số điện thoại</label>
+          <input 
+            type="tel" 
+            formControlName="phoneNumber" 
+            placeholder="Nhập số điện thoại (10 số)" 
+            maxlength="10"
+            (keypress)="onPhoneNumberKeyPress($event)"
+            (input)="onPhoneNumberInput($event)"
+            [class.error]="addressForm.get('phoneNumber')?.invalid && addressForm.get('phoneNumber')?.touched" />
+          <div class="error-message" *ngIf="addressForm.get('phoneNumber')?.invalid && addressForm.get('phoneNumber')?.touched">
+            <span *ngIf="addressForm.get('phoneNumber')?.errors?.['required']">Số điện thoại không được bỏ trống</span>
+            <span *ngIf="addressForm.get('phoneNumber')?.errors?.['pattern']">Số điện thoại phải là 10 ký tự số</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Địa chỉ chi tiết</label>
+          <textarea 
+            formControlName="fullAddress" 
+            placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố (10-150 ký tự)" 
+            rows="4"
+            maxlength="150"
+            [class.error]="addressForm.get('fullAddress')?.invalid && addressForm.get('fullAddress')?.touched"></textarea>
+          <div class="error-message" *ngIf="addressForm.get('fullAddress')?.invalid && addressForm.get('fullAddress')?.touched">
+            <span *ngIf="addressForm.get('fullAddress')?.errors?.['required']">Địa chỉ chi tiết không được bỏ trống</span>
+            <span *ngIf="addressForm.get('fullAddress')?.errors?.['minlength']">Địa chỉ chi tiết phải có ít nhất 10 ký tự</span>
+            <span *ngIf="addressForm.get('fullAddress')?.errors?.['maxlength']">Địa chỉ chi tiết không được vượt quá 150 ký tự</span>
+          </div>
+        </div>
+
+        <div class="form-group checkbox">
+          <label>
+            <input type="checkbox" formControlName="isDefault" />
+            Đặt làm địa chỉ mặc định
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="closeAddAddressModal()">Hủy</button>
+          <button type="submit" class="btn-submit" [disabled]="addressForm.invalid">Lưu địa chỉ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

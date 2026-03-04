@@ -1,0 +1,156 @@
+<div class="admin-page-form">
+  <div class="page-header">
+    <h2>📍 Quản lý địa chỉ liên hệ</h2>
+    <a routerLink="/admin/contact-list" class="btn-back">← Quay lại</a>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoadingData" class="loading-state">
+    <p>Đang tải thông tin liên hệ...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="errorMessage">
+    ❌ {{ errorMessage }}
+    <button class="close-btn" (click)="errorMessage = null">×</button>
+  </div>
+
+  <!-- Success Message -->
+  <div class="success-message" *ngIf="successMessage">
+    ✅ {{ successMessage }}
+    <button class="close-btn" (click)="successMessage = null">×</button>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="contactInfoForm" class="admin-form" *ngIf="!isLoadingData">
+    <div class="form-sections-grid">
+      <!-- Cột trái -->
+      <div class="form-column">
+        <div class="form-section">
+          <h3>Thông tin liên hệ cơ bản</h3>
+
+          <div class="form-group">
+            <label for="address">Địa chỉ <span class="required">*</span></label>
+            <input
+              type="text"
+              id="address"
+              formControlName="address"
+              placeholder="Nhập địa chỉ liên hệ"
+              [class.error]="contactInfoForm.get('address')?.invalid && contactInfoForm.get('address')?.touched"
+            />
+            <span *ngIf="contactInfoForm.get('address')?.errors?.['required'] && contactInfoForm.get('address')?.touched" class="error-message-text">
+              Địa chỉ không được để trống.
+            </span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Số điện thoại <span class="required">*</span></label>
+              <input
+                type="text"
+                id="phone"
+                formControlName="phone"
+                placeholder="Nhập số điện thoại"
+                [class.error]="contactInfoForm.get('phone')?.invalid && contactInfoForm.get('phone')?.touched"
+              />
+              <span *ngIf="contactInfoForm.get('phone')?.errors?.['required'] && contactInfoForm.get('phone')?.touched" class="error-message-text">
+                Số điện thoại không được để trống.
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email <span class="required">*</span></label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                placeholder="Nhập email liên hệ"
+                [class.error]="contactInfoForm.get('email')?.invalid && contactInfoForm.get('email')?.touched"
+              />
+              <span *ngIf="contactInfoForm.get('email')?.errors?.['required'] && contactInfoForm.get('email')?.touched" class="error-message-text">
+                Email không được để trống.
+              </span>
+              <span *ngIf="contactInfoForm.get('email')?.errors?.['email'] && contactInfoForm.get('email')?.touched" class="error-message-text">
+                Email không hợp lệ.
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="workingHours">Giờ làm việc</label>
+            <input
+              type="text"
+              id="workingHours"
+              formControlName="workingHours"
+              placeholder="Ví dụ: Thứ 2 - Chủ nhật: 8:00 - 22:00"
+            />
+            <small class="hint">Nhập thông tin giờ làm việc (tùy chọn)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="mapUrl">URL bản đồ (Google Maps)</label>
+            <input
+              type="url"
+              id="mapUrl"
+              formControlName="mapUrl"
+              placeholder="https://maps.app.goo.gl/c45pMyXAuHooAcJd7"
+            />
+            <small class="hint">
+              <strong>Hướng dẫn:</strong>
+              <br>1. Vào Google Maps và tìm địa chỉ của bạn
+              <br>2. Nhấp vào "Chia sẻ" → "Nhúng bản đồ"
+              <br>3. Copy URL embed (dạng: https://www.google.com/maps/embed?pb=...)
+              <br>Hoặc dán link Google Maps thông thường, hệ thống sẽ tự động chuyển đổi
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cột phải -->
+      <div class="form-column">
+        <div class="form-section">
+          <h3>Mạng xã hội</h3>
+
+          <div class="form-group">
+            <label for="facebook">Facebook</label>
+            <input
+              type="url"
+              id="facebook"
+              formControlName="facebook"
+              placeholder="https://facebook.com/..."
+            />
+            <small class="hint">Link trang Facebook (tùy chọn)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="instagram">Instagram</label>
+            <input
+              type="url"
+              id="instagram"
+              formControlName="instagram"
+              placeholder="https://instagram.com/..."
+            />
+            <small class="hint">Link trang Instagram (tùy chọn)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="zalo">Zalo</label>
+            <input
+              type="text"
+              id="zalo"
+              formControlName="zalo"
+              placeholder="Số điện thoại Zalo hoặc link Zalo"
+            />
+            <small class="hint">Số điện thoại Zalo hoặc link Zalo (tùy chọn)</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-submit" [disabled]="contactInfoForm.invalid || isLoading">
+        {{ isLoading ? 'Đang lưu...' : '💾 Lưu thông tin liên hệ' }}
+      </button>
+    </div>
+  </form>
+</div>
+

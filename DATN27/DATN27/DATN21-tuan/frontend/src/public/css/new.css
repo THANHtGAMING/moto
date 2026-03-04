@@ -1,0 +1,50 @@
+.menu-news {
+  background: linear-gradient(to right, #000 0%, #1a0000 100%);
+  color: #fff;
+  padding: 40px 80px 10px;
+}
+
+.news-logo {
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+  font-family: 'Arial Black', sans-serif;
+}
+
+.news-nav {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.news-nav a {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  transition: color 0.3s ease;
+}
+
+.news-nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background-color: #fff;
+  transition: width 0.3s ease;
+}
+
+.news-nav a:hover::after,
+.news-nav a.active::after {
+  width: 100%;
+}
+
+.news-nav a:hover {
+  color: #fff;
+}

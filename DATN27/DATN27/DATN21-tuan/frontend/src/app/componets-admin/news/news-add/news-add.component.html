@@ -1,0 +1,108 @@
+<div class="admin-page-form">
+  <div class="page-header">
+    <h2>➕ Thêm tin tức</h2>
+    <a routerLink="/admin/news-list" class="btn-back">← Quay lại</a>
+  </div>
+
+  <form [formGroup]="newsForm" (ngSubmit)="onSubmit()" class="admin-form" enctype="multipart/form-data">
+    <div class="form-sections-grid">
+      <!-- Cột trái -->
+      <div class="form-column">
+        <div class="form-section">
+          <h3>Thông tin cơ bản</h3>
+
+          <div class="form-group">
+            <label for="title">Tiêu đề <span class="required">*</span></label>
+            <input
+              type="text"
+              id="title"
+              formControlName="title"
+              placeholder="Nhập tiêu đề tin tức"
+              [class.error]="newsForm.get('title')?.invalid && newsForm.get('title')?.touched"
+            />
+            <span *ngIf="newsForm.get('title')?.errors?.['required'] && newsForm.get('title')?.touched" class="error-message-text">
+              Tiêu đề không được để trống.
+            </span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="category_code">Danh mục <span class="required">*</span></label>
+              <input
+                type="text"
+                id="category_code"
+                formControlName="category_code"
+                placeholder="Mã danh mục"
+                [class.error]="newsForm.get('category_code')?.invalid && newsForm.get('category_code')?.touched"
+              />
+              <span *ngIf="newsForm.get('category_code')?.errors?.['required'] && newsForm.get('category_code')?.touched" class="error-message-text">
+                Danh mục không được để trống.
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label for="status_code">Trạng thái</label>
+              <select id="status_code" formControlName="status_code">
+                <option value="draft">Bản nháp</option>
+                <option value="published">Đã xuất bản</option>
+                <option value="hidden">Ẩn</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cột phải -->
+      <div class="form-column">
+        <div class="form-section">
+          <h3>Hình ảnh</h3>
+
+          <div class="form-group">
+            <label for="cover_image">Ảnh bìa (tùy chọn)</label>
+            <input
+              type="file"
+              id="cover_image"
+              accept="image/*"
+              (change)="onFileSelected($event)"
+            />
+            <small class="hint">Chọn ảnh bìa cho bài viết</small>
+          </div>
+
+          <div class="form-group" *ngIf="imagePreview">
+            <label>Xem trước ảnh bìa</label>
+            <div class="image-preview-grid">
+              <div class="image-preview-item">
+                <img [src]="imagePreview" alt="Xem trước" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nội dung - Full width -->
+    <div class="form-section form-section-full">
+      <h3>Nội dung bài viết</h3>
+      <div class="form-group">
+        <label for="content">Nội dung <span class="required">*</span></label>
+        <textarea
+          id="content"
+          formControlName="content"
+          rows="15"
+          placeholder="Nhập nội dung tin tức..."
+          [class.error]="newsForm.get('content')?.invalid && newsForm.get('content')?.touched"
+        ></textarea>
+        <span *ngIf="newsForm.get('content')?.errors?.['required'] && newsForm.get('content')?.touched" class="error-message-text">
+          Nội dung không được để trống.
+        </span>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a routerLink="/admin/news-list" class="btn-cancel">Hủy</a>
+      <button type="submit" class="btn-submit" [disabled]="newsForm.invalid || isLoading">
+        {{ isLoading ? 'Đang thêm...' : '✓ Thêm tin tức' }}
+      </button>
+    </div>
+  </form>
+</div>

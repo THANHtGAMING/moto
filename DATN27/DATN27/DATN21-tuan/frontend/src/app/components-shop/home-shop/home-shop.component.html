@@ -1,0 +1,146 @@
+<!-- Brands Section -->
+<section class="brands-section" *ngIf="brands.length > 0">
+  <h2 class="brands-title">MUA SẮM THEO NHÃN HÀNG</h2>
+  <div class="brands-container">
+    <div class="brand-item" *ngFor="let brand of brands" (click)="navigateToBrand(brand._id)">
+      <img
+        [src]="brand.logoUrl"
+        [alt]="brand.name"
+        loading="lazy"
+        (error)="onBrandImageError($event, brand.name)"
+      />
+    </div>
+  </div>
+</section>
+<!-- Payment Message -->
+<div *ngIf="paymentMessage" class="payment-message" [class.success]="paymentSuccess" [class.error]="!paymentSuccess">
+  <div class="message-content">
+    <span *ngIf="paymentSuccess">✓</span>
+    <span *ngIf="!paymentSuccess">✕</span>
+    <span>{{ paymentMessage }}</span>
+    <button class="close-btn" (click)="clearPaymentMessage()">×</button>
+  </div>
+</div>
+
+<!-- Banner Slideshow -->
+<section class="banner-slideshow" *ngIf="!isLoadingBanners && bannerImages.length > 0">
+  <div class="slideshow-container">
+    <!-- Navigation arrows -->
+    <button 
+      class="slideshow-nav prev" 
+      (click)="prevSlide()"
+      *ngIf="bannerImages.length > 1"
+      [attr.aria-label]="'Previous slide'">
+      ‹
+    </button>
+    <button 
+      class="slideshow-nav next" 
+      (click)="nextSlide()"
+      *ngIf="bannerImages.length > 1"
+      [attr.aria-label]="'Next slide'">
+      ›
+    </button>
+
+    <div class="slideshow-wrapper" [style.transform]="'translateX(-' + (currentSlideIndex * 100) + '%)'">
+      <div class="slide" *ngFor="let image of bannerImages; let i = index">
+        <img [src]="image" [alt]="'Banner ' + (i + 1)" loading="eager" />
+      </div>
+    </div>
+
+    <!-- Dots indicator -->
+    <div class="slideshow-dots" *ngIf="bannerImages.length > 1">
+      <span
+        *ngFor="let image of bannerImages; let i = index"
+        class="dot"
+        [class.active]="i === currentSlideIndex"
+        (click)="goToSlide(i)"
+        [attr.aria-label]="'Go to slide ' + (i + 1)">
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- Loading state -->
+<div *ngIf="isLoadingBanners" class="banner-loading">
+  <p>Đang tải banner...</p>
+</div>
+<!-- sale -->
+
+
+<!-- 2 ảnh ngang -->
+<section class="product-showcase">
+  <div class="product-card">
+    <img src="/public/image/headwear.jpg" alt="Headwear" loading="lazy">
+    <h2>MŨ LƯỠI TRAI</h2>
+    <p>Hoàn thiện vẻ ngoài của bạn với mũ lưỡi trai, mũ len và mũ MotoGP™ chính thức.</p>
+    <button class="shop-btn" (click)="navigateToType('mũ')">MUA NGAY</button>
+  </div>
+
+  <div class="product-card">
+    <img src="public/image/accessirues.jpg" alt="Accessories" loading="lazy">
+    <h2>PHỤ KIỆN</h2>
+    <p>Hoàn thiện bộ sưu tập MotoGP™ của bạn với phụ kiện độc quyền.</p>
+    <button class="shop-btn" (click)="navigateToType('phụ kiện')">MUA NGAY</button>
+  </div>
+</section>
+
+<!-- product -->
+<section class="product-slider">
+  <div class="slider-header">
+    <h2>SẢN PHẨM GIẢM GIÁ:</h2>
+    <a href="#" class="view-all">XEM TẤT CẢ</a>
+  </div>
+
+  <div class="slider-container">
+    <button class="slider-btn prev" (click)="scrollLeft()">❮</button>
+
+    <div class="slider-track" #sliderTrack>
+      <a *ngFor="let item of displayProducts" class="product-item" [routerLink]="['/product-detail', item._id]" routerLinkActive="router-link-active" >
+        <div class="product-image-wrapper">
+          <img [src]="getProductImage(item.imagesProduct)" alt="{{item.nameProduct}}" loading="lazy" (error)="$event.target.src=getPlaceholderImage()">
+          <div class="tag-badges" *ngIf="getTagNames(item).length > 0">
+            <span class="tag-badge" *ngFor="let tagName of getTagNames(item)">{{tagName}}</span>
+          </div>
+        </div>
+        <p class="clearance-label" *ngIf="getCategoryName(item) || getTypeName(item)">
+          <span class="category-name" *ngIf="getCategoryName(item)">{{getCategoryName(item)}}</span>
+          <span class="separator" *ngIf="getCategoryName(item) && getTypeName(item)"> - </span>
+          <span class="type-name" *ngIf="getTypeName(item)">{{getTypeName(item)}}</span>
+        </p>
+        <p class="price">
+          <span class="sale-price">{{getDiscountedPrice(item) | number:'1.0-0'}} ₫</span>
+          <span class="original-price" *ngIf="item.discountProduct && item.discountProduct > 0">{{item.priceProduct | number:'1.0-0'}} ₫</span>
+        </p>
+        <p class="product-name">{{item.nameProduct}}</p>
+      </a>
+    </div>
+
+    <button class="slider-btn next" (click)="scrollRight()">❯</button>
+  </div>
+</section>
+
+
+<!-- Riders Section -->
+<section class="riders-section" *ngIf="riders.length > 0">
+  <div class="riders-header">
+    <h2>CÁC TAY ĐUA NỔI BẬT:</h2>
+  </div>
+  <div class="riders-container">
+    <button class="riders-btn prev" (click)="scrollRidersLeft()">❮</button>
+    <div class="riders-track" #ridersTrack>
+      <div *ngFor="let rider of displayRiders" class="rider-card" (click)="navigateToRider(rider._id!)">
+        <div class="rider-number">{{ getRiderNumber(rider) }}</div>
+        <div class="rider-image-wrapper">
+          <img
+            [src]="rider.image"
+            [alt]="rider.name"
+            loading="lazy"
+            (error)="$event.target.src=getPlaceholderImage()"
+            class="rider-image"
+          />
+        </div>
+      </div>
+    </div>
+    <button class="riders-btn next" (click)="scrollRidersRight()">❯</button>
+  </div>
+</section>

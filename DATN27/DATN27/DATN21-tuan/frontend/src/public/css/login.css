@@ -1,0 +1,268 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-image: url(/public/image/backgourndlogin.png);
+  color: #fff;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.background {
+ background-image: url(/public/image/backgourndlogin.png);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
+  z-index: -1;
+}
+
+.top-bar {
+  width: 100%;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 15px;
+  font-size: 14px;
+}
+
+.top-links {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.top-links a, .lang {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.login-container {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 25px;
+}
+
+.form-box {
+  width: 350px;
+  background: white;
+  color: black;
+  margin: 0 auto;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px 0;
+  font-weight: 500;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.tab.active {
+  color: red;
+  border-bottom: 2px solid red;
+}
+
+.social-login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 15px;
+}
+
+.social-login button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.google {
+  background: #fff;
+  color: #444;
+  border: 1px solid #ccc;
+}
+.google:hover {
+  background: #f8f8f8;
+}
+
+form {
+  text-align: left;
+  padding: 0 20px 20px;
+}
+
+form label {
+  font-size: 14px;
+  font-weight: 500;
+  display: block;
+  margin-top: 10px;
+}
+
+input[type="email"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.password-box {
+  position: relative;
+}
+
+.password-box .show {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.forgot {
+  font-size: 13px;
+  color: #333;
+  text-decoration: none;
+  float: right;
+  margin: 5px 0 10px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #E21B22;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background-color: #c5181f;
+}
+
+.footer-text {
+  font-size: 13px;
+  color: #aaa;
+  margin-top: 15px;
+}
+
+.devices {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0 20px;
+}
+
+.device {
+  width: 25px;
+  height: 20px;
+  border: 1px solid #999;
+  border-radius: 2px;
+}
+
+footer {
+  position: fixed;
+  bottom: 5px;
+  font-size: 12px;
+  color: #aaa;
+}
+/* ===============================
+   REGISTER PAGE EXTENSIONS
+================================= */
+
+/* Tạo thêm khoảng cách giữa các input trong form đăng ký */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Checkbox đồng ý điều khoản */
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #333;
+  margin: 12px 0 18px;
+}
+
+.checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox label a {
+  color: #E21B22;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.checkbox label a:hover {
+  text-decoration: underline;
+}
+
+/* Nút tạo tài khoản */
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #E21B22;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.login-btn:hover {
+  background-color: #c5181f;
+}
+
+/* Text bên dưới (JOIN THE MOTO GP COMMUNITY) */
+.footer-text {
+  font-size: 13px;
+  color: #bbb;
+  margin-top: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive nhỏ hơn 400px */
+@media (max-width: 400px) {
+  .form-box {
+    width: 90%;
+  }
+}

@@ -1,0 +1,72 @@
+<div class="admin-page-form">
+  <div class="page-header">
+    <h2>➕ Thêm loại sản phẩm</h2>
+    <a routerLink="/admin/type-list" class="btn-back">← Quay lại</a>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="typeForm" class="admin-form">
+
+    <div class="form-section">
+      <h3>Thông tin cơ bản</h3>
+
+      <div class="form-group">
+        <label for="name">Tên loại <span class="required">*</span></label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Nhập tên loại"
+          [class.error]="typeForm.get('name')?.invalid && typeForm.get('name')?.touched"
+        />
+        <span *ngIf="typeForm.get('name')?.errors?.['minlength'] && typeForm.get('name')?.touched" class="error-message-text">
+          Tên loại không được để trống.
+        </span>
+        <span *ngIf="typeForm.get('name')?.errors?.['required'] && typeForm.get('name')?.touched" class="error-message-text">
+          Tên loại không được để trống.
+        </span>
+        <small class="hint">Slug sẽ được tự động tạo từ tên loại</small>
+      </div>
+
+      <div class="form-group">
+        <label>Giới tính áp dụng</label>
+        <div class="checkbox-group" *ngIf="genders.length > 0">
+          <label *ngFor="let gender of genders" class="checkbox-label">
+            <input
+              type="checkbox"
+              [value]="gender._id"
+              [checked]="isGenderSelected(gender._id)"
+              (change)="onGenderChange(gender._id, $event)"
+            />
+            <span>{{ gender.name }}</span>
+          </label>
+        </div>
+        <small class="hint" *ngIf="genders.length === 0">Chưa có giới tính nào. Vui lòng thêm giới tính trước.</small>
+        <small class="hint" *ngIf="genders.length > 0">Chọn một hoặc nhiều giới tính cho loại sản phẩm này. Có thể để trống nếu áp dụng cho tất cả.</small>
+      </div>
+
+      <div class="form-group">
+        <label>Thẻ</label>
+        <div class="checkbox-group" *ngIf="tags.length > 0">
+          <label *ngFor="let tag of tags" class="checkbox-label">
+            <input
+              type="checkbox"
+              [value]="tag._id"
+              [checked]="isTagSelected(tag._id)"
+              (change)="onTagChange(tag._id, $event)"
+            />
+            <span>{{ tag.name }}</span>
+          </label>
+        </div>
+        <small class="hint" *ngIf="tags.length === 0">Chưa có tag nào. Vui lòng thêm tag trước.</small>
+        <small class="hint" *ngIf="tags.length > 0">Chọn một hoặc nhiều tags cho loại sản phẩm này. Có thể để trống.</small>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a routerLink="/admin/type-list" class="btn-cancel">Hủy</a>
+      <button type="submit" class="btn-submit" [disabled]="typeForm.invalid || isLoading">
+        {{ isLoading ? 'Đang thêm...' : '✓ Thêm loại' }}
+      </button>
+    </div>
+  </form>
+</div>

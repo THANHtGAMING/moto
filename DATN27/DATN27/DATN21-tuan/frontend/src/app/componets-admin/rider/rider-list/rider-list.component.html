@@ -1,0 +1,83 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>🏍️ Quản lý tay đua</h2>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Tìm kiếm tay đua..."
+          [(ngModel)]="keyword"
+          (input)="onSearch()"
+        />
+      </div>
+    </div>
+    <a routerLink="/admin/rider-add" class="btn-add">+ Thêm tay đua mới</a>
+  </div>
+
+  <!-- Rider Table -->
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên tay đua</th>
+          <th>Đội</th>
+          <th>Hình ảnh</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rider of filteredRiders | paginate: { itemsPerPage: 20, currentPage: p }; index as i">
+          <td>{{ (p - 1) * 10 + i + 1 }}</td>
+          <td><strong>{{ rider.name }}</strong></td>
+          <td>
+            <span class="status-badge">
+              {{ getRiderTeamLabel(rider) }}
+            </span>
+          </td>
+          <td>
+            <img
+              [src]="rider.image"
+              alt="{{ rider.name }}"
+              style="width: 80px; height: 80px; border-radius: 4px; object-fit: cover;"
+              onerror="this.onerror=null;this.src='https://via.placeholder.com/100';"
+            />
+          </td>
+          <td class="actions-cell">
+            <a
+              [routerLink]="['/admin/rider-edit/', rider._id]"
+              class="btn-action btn-edit"
+              title="Chỉnh sửa">✏️</a>
+            <button
+              (click)="onDelete(rider._id)"
+              class="btn-action btn-delete"
+              title="Xóa">🗑️</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredRiders.length === 0">
+          <td colspan="5" class="empty-row">
+            <p>Không tìm thấy tay đua nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="filteredRiders.length > 0">
+    <span>Tổng: <strong>{{ filteredRiders.length }}</strong> tay đua</span>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="p = $event"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>
+</div>
+

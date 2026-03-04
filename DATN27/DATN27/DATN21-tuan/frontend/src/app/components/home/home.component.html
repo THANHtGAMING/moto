@@ -1,0 +1,134 @@
+BANNER 1
+<section class="banner">
+  <div class="banner-content">
+    <div class="banner-overlay"></div>
+    <img src="/public/image/banner1.webp" alt="Marc Marquez" class="banner-img" />
+    <div class="banner-text">
+      <h3 class="banner-category">MotoGP™</h3>
+      <h1 class="banner-title">MARC MARQUEZ TO MISS AUSTRALIAN AND MALAYSIAN GRANDS PRIX</h1>
+      <button class="read-now">READ NOW</button>
+    </div>
+  </div>
+</section>
+<!-- LATEST NEWS -->
+<section class="latest-news">
+  <div class="news-header">
+    <h2>LATEST NEWS</h2>
+    <a href="#" class="view-more">VIEW MORE →</a>
+  </div>
+
+  <div class="news-wrapper">
+    <button class="arrow left">&#10094;</button>
+
+    <div class="news-carousel">
+      <div *ngFor="let p of news" class="news-card" [routerLink]="['/news', p._id]" routerLinkActive="router-link-active">
+        <img [src]="p.cover_image_url" alt="">
+        <div class="news-content">
+          <h3>{{p.title}}</h3>
+          <p class="meta"><span>{{p.
+              published_date}}</span> · BY MOTOGP.COM</p>
+        </div>
+      </div>
+
+     
+    </div>
+
+    <button class="arrow right">&#10095;</button>
+  </div>
+</section>
+<!-- Highlights -->
+<section class="latest-news">
+  <div class="news-header">
+    <h2>Highlights</h2>
+    <a href="#" class="view-more">VIEW MORE →</a>
+  </div>
+
+  <div class="news-wrapper">
+    <button class="arrow left">&#10094;</button>
+
+    <div class="news-carousel">
+      <div *ngFor="let t of news6to10" class="news-card" [routerLink]="['/news', t._id]" routerLinkActive="router-link-active">
+        <img [src]="t.cover_image_url" alt="">
+        <div class="news-content">
+          <h3>{{t.title}}</h3>
+          <p class="meta"><span>{{t.
+              published_date}}</span> · BY MOTOGP.COM</p>
+        </div>
+      </div>
+
+      <!-- <div class="news-card">
+        <img src="https://resources.motogp.pulselive.com/photo-resources/2025/10/05/b5a6ad03-1b6f-4f5e-841b-2a1a19c229e1/_KTM_ENGINE.jpg?width=800" alt="">
+        <div class="news-content">
+          <h3>KTM test engine designed for new MotoGP era</h3>
+          <p class="meta"><span>06 OCT 2025</span> · BY MOTOGP.COM</p>
+        </div>
+      </div>
+
+      <div class="news-card">
+        <img src="https://resources.motogp.pulselive.com/photo-resources/2025/10/06/aa1ecb0b-1282-43c4-b28f-0b81993ecfab/_QUARTARARO_TALKINGPOINTS.jpg?width=800" alt="">
+        <div class="news-content">
+          <h3>Talking Points: "I will eat two burgers and maybe one pizza!"</h3>
+          <p class="meta"><span>06 OCT 2025</span> · BY MOTOGP.COM</p>
+        </div>
+      </div>
+
+      <div class="news-card">
+        <img src="https://resources.motogp.pulselive.com/photo-resources/2025/10/05/3e96339b-09b7-423b-b6de-b4c2cf5a3e67/_BEZZECCHI_MANDALIKA.jpg?width=800" alt="">
+        <div class="news-content">
+          <h3>Bezzecchi–Marquez clash at Mandalika: what happened on Lap 1?</h3>
+          <p class="meta"><span>05 OCT 2025</span> · BY MOTOGP.COM</p>
+        </div>
+      </div>
+
+      <div class="news-card">
+        <img src="https://resources.motogp.pulselive.com/photo-resources/2025/10/05/6a07d8c8-56b4-47ac-8d53-3209d3e86cba/_ALEIX_INTERVIEW.jpg?width=800" alt="">
+        <div class="news-content">
+          <h3>Aleix Espargaro reflects on his comeback race</h3>
+          <p class="meta"><span>05 OCT 2025</span> · BY MOTOGP.COM</p>
+        </div>
+      </div> -->
+    </div>
+
+    <button class="arrow right">&#10095;</button>
+  </div>
+</section>
+<!-- BANNER 2-->
+<section class="banner">
+  <div class="banner-content">
+    <div class="banner-overlay"></div>
+    <img src="/public/image/banner3.webp" alt="Marc Marquez" class="banner-img" />
+    <div class="banner-text">
+      <h3 class="banner-category">MotoGP™</h3>
+      <h1 class="banner-title">MARC MARQUEZ TO MISS AUSTRALIAN AND MALAYSIAN GRANDS PRIX</h1>
+      <button class="read-now">READ NOW</button>
+    </div>
+  </div>
+</section>
+
+<!-- Recommended for you -->
+<section class="latest-news">
+  <div class="news-header">
+    <h2>Recommended for you</h2>
+    <a href="#" class="view-more">VIEW MORE →</a>
+  </div>
+
+  <div class="news-wrapper">
+    <button class="arrow left">&#10094;</button>
+
+    <div class="news-carousel">
+<div *ngFor="let q of news12to16" class="news-card" [routerLink]="['/news', q._id]" routerLinkActive="router-link-active">
+        <img
+         [src]="q.cover_image_url"
+          alt="">
+        <div class="news-content">
+          <h3>{{q.title}}</h3>
+         <p class="meta"><span>{{q.
+              published_date}}</span> · BY MOTOGP.COM</p>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="arrow right">&#10095;</button>
+  </div>
+</section>

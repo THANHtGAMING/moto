@@ -1,0 +1,306 @@
+<section class="product-detail" *ngIf="product">
+  <!-- LEFT: Image Gallery -->
+  <div class="product-left" *ngIf="productImages && productImages.length > 0">
+    <div class="thumbs">
+      <img *ngFor="let img of productImages; let i = index"
+           [src]="img"
+           [class.active]="i === currentImageIndex"
+           (click)="selectImage(i)"
+           alt="{{product.nameProduct}}"
+           loading="lazy" />
+    </div>
+
+    <div class="main-image">
+      <button class="arrow left" (click)="prevImage()">&#10094;</button>
+      <img [src]="productImages[currentImageIndex]" alt="{{ product.nameProduct }}" loading="eager">
+      <button class="arrow right" (click)="nextImage()">&#10095;</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: Product Info -->
+  <div class="product-right">
+
+    <h2>{{ product.nameProduct }}  <p class="stock" [class.out-of-stock]="!isInStock">
+      {{ stockStatusText }}
+    </p></h2>
+
+
+
+    <!-- Price -->
+    <div class="price-container">
+      <p *ngIf="hasDiscount" class="clearance">
+        Giảm {{ product.discountProduct }}%
+      </p>
+      <p class="price">
+        {{ discountedPrice | number:'1.0-0' }} VNĐ
+        <span *ngIf="hasDiscount" class="original-price">
+          {{ originalPrice | number:'1.0-0' }} VNĐ
+        </span>
+      </p>
+    </div>
+
+    <!-- Size Selection (only if product has sizes) -->
+    <div class="size-box" *ngIf="hasSizes">
+      <div class="size-header">
+        <p>Kích cỡ: <strong *ngIf="selectedSize">{{ selectedSize.name }}</strong></p>
+        <button class="size-chart" (click)="openModal()">Bảng kích thước</button>
+      </div>
+      <div class="size-options">
+        <button *ngFor="let s of product.sizes"
+                (click)="selectSize(s)"
+                [disabled]="!isSizeInStock(s)"
+                [class.active]="selectedSize?.name === s.name"
+                [class.out-of-stock]="!isSizeInStock(s)">
+          {{ s.name }}
+          <span class="stock-badge" *ngIf="isSizeInStock(s)">({{ s.stock }})</span>
+          <span class="stock-badge out" *ngIf="!isSizeInStock(s)">(Hết)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Shipping Info (only if in stock) -->
+    <p *ngIf="isInStock" class="shipping-info">
+      Còn hàng - Sản phẩm này sẽ được giao trong vòng 3 ngày làm việc. Vui lòng tiến hành thanh toán để biết thêm thông tin về các tùy chọn vận chuyển và thời gian vận chuyển.
+    </p>
+
+    <!-- Quantity Selection -->
+    <div class="quantity-box" *ngIf="(hasSizes && selectedSize) || (!hasSizes && isInStock)">
+      <p>Số lượng:</p>
+      <div class="quantity-controls">
+        <button class="qty-btn" (click)="decrementQuantity()" [disabled]="selectedQuantity <= 1">-</button>
+        <input type="number"
+               [(ngModel)]="selectedQuantity"
+               [min]="1"
+               [max]="maxQuantity"
+               readonly />
+        <button class="qty-btn" (click)="incrementQuantity()" [disabled]="selectedQuantity >= maxQuantity">+</button>
+      </div>
+      <span class="max-qty">Tối đa: {{ maxQuantity }}</span>
+    </div>
+
+    <!-- Message when size not selected (for products with sizes) -->
+    <p *ngIf="hasSizes && !selectedSize && isInStock" class="select-size-hint">
+      👕 Vui lòng chọn kích cỡ trước khi chọn số lượng
+    </p>
+
+    <!-- Error/Success Messages -->
+    <div class="message-box" *ngIf="errorMessage || successMessage">
+      <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <!-- Buy Now Button (only show when logged in and not Admin) -->
+      <button *ngIf="isLogin && !isADM"
+              class="buy-now"
+              (click)="buyNow()"
+              [disabled]="!canAddToCart || isBuyingNow"
+              [class.loading]="isBuyingNow">
+        <span *ngIf="!isBuyingNow">
+          {{ isInStock ? ' Mua ngay' : 'Hết hàng' }}
+        </span>
+        <span *ngIf="isBuyingNow">Đang xử lý...</span>
+      </button>
+
+    <!-- Add to Cart Button (hide for Admin) -->
+    <button *ngIf="!isADM"
+            class="add-cart"
+            (click)="addToCart()"
+            [disabled]="!canAddToCart || isAddingToCart"
+            [class.loading]="isAddingToCart">
+      <span *ngIf="!isAddingToCart">
+        {{ isInStock ? 'Thêm vào giỏ hàng' : 'Hết hàng' }}
+      </span>
+      <span *ngIf="isAddingToCart">Đang thêm...</span>
+    </button>
+
+      <!-- Wishlist Button -->
+      <button class="wishlist-btn"
+              (click)="toggleWishlist()"
+              [disabled]="isTogglingWishlist"
+              [class.active]="isInWishlist"
+              [title]="isInWishlist ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích'">
+        <span *ngIf="!isTogglingWishlist">
+          <span *ngIf="isInWishlist">❤️</span>
+          <span *ngIf="!isInWishlist">🤍</span>
+        </span>
+        <span *ngIf="isTogglingWishlist">...</span>
+      </button>
+    </div>
+
+    <!-- Description Section -->
+    <div class="description-section">
+      <h4>Mô Tả:</h4>
+      <p>{{ product.descriptionProduct || 'Chưa có mô tả cho sản phẩm này.' }}</p>
+    </div>
+  </div>
+</section>
+
+<!-- Loading state -->
+<div *ngIf="!product" class="loading-container">
+  <p>Đang tải thông tin sản phẩm...</p>
+</div>
+
+<!-- Size Chart Modal -->
+<div id="sizeModal" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <h4>Bảng size</h4>
+    <br>
+    <img [src]="sizeChartImage" alt="Size Chart">
+  </div>
+</div>
+
+<!-- Reviews Section -->
+<section class="reviews-section" *ngIf="product">
+  <div class="reviews-header">
+    <h2>Đánh giá sản phẩm</h2>
+    <div class="reviews-summary" *ngIf="reviews.length > 0">
+      <div class="average-rating">
+        <span class="rating-number">{{ getAverageRating().toFixed(1) }}</span>
+        <div class="stars">
+          <span *ngFor="let filled of getStarsArray(getAverageRatingRounded())"
+                class="star" [class.filled]="filled">★</span>
+        </div>
+        <span class="review-count">({{ reviews.length }} đánh giá)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews List -->
+  <div class="reviews-list" *ngIf="!isLoadingReviews && reviews.length > 0">
+    <div class="review-item" *ngFor="let review of reviews">
+      <div class="review-header">
+        <div class="reviewer-info">
+          <div class="reviewer-avatar">
+            <img *ngIf="review.userId?.avatar" [src]="review.userId.avatar" alt="{{ review.userId.fullName }}" loading="lazy">
+            <span *ngIf="!review.userId?.avatar">{{ review.userId.fullName.charAt(0) || 'U' }}</span>
+          </div>
+          <div class="reviewer-details">
+            <p class="reviewer-name">{{ review.userId.fullName || 'Người dùng' }}</p>
+            <p class="review-date">{{ formatDate(review.createdAt) }}</p>
+          </div>
+        </div>
+        <div class="review-rating">
+          <span *ngFor="let filled of getStarsArray(review.rating)"
+                class="star" [class.filled]="filled">★</span>
+        </div>
+      </div>
+      <div class="review-content">
+        <p class="review-comment">{{ review.comment }}</p>
+        <div class="review-images" *ngIf="review.images && review.images.length > 0">
+          <img *ngFor="let img of review.images" [src]="img" alt="Review image" class="review-image" loading="lazy" (error)="$event.target.style.display='none'">
+        </div>
+      </div>
+
+      <!-- Like/Dislike Actions -->
+      <div class="review-actions">
+        <button
+          class="action-btn like-btn"
+          [class.active]="isLiked(review)"
+          (click)="toggleLike(review)"
+          [disabled]="isTogglingLike[review._id] || !isLogin">
+          <span class="icon">👍</span>
+          <span class="count">{{ (review.likes || []).length }}</span>
+        </button>
+        <button
+          class="action-btn dislike-btn"
+          [class.active]="isDisliked(review)"
+          (click)="toggleDislike(review)"
+          [disabled]="isTogglingDislike[review._id] || !isLogin">
+          <span class="icon">👎</span>
+          <span class="count">{{ (review.dislikes || []).length }}</span>
+        </button>
+        <button
+          class="action-btn reply-btn"
+          (click)="startReply(review._id)"
+          [disabled]="!isLogin">
+          💬 Bình luận
+        </button>
+      </div>
+
+      <!-- Replies Section -->
+      <div class="replies-section" *ngIf="review.replies && review.replies.length > 0">
+        <div class="reply-item" *ngFor="let reply of review.replies">
+          <div class="reply-header">
+            <div class="replyer-avatar">
+              <img *ngIf="reply.userId?.avatar" [src]="reply.userId.avatar" alt="{{ reply.userId.fullName }}" loading="lazy">
+              <span *ngIf="!reply.userId?.avatar">{{ reply.userId.fullName.charAt(0) || 'U' }}</span>
+            </div>
+            <div class="replyer-details">
+              <span class="replyer-name">
+                {{ reply.userId.fullName }}
+                <span class="admin-badge" *ngIf="reply.isAdmin || reply.userId.isAdmin">👑 Admin</span>
+              </span>
+              <span class="reply-date">{{ formatDate(reply.createdAt) }}</span>
+            </div>
+            <button
+              *ngIf="canDeleteReply(reply)"
+              class="delete-reply-btn"
+              (click)="deleteReply(review, reply._id)">
+              ✕
+            </button>
+          </div>
+          <div class="reply-content">
+            <p>{{ reply.comment }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reply Input -->
+      <div class="reply-input-section" *ngIf="replyingToReviewId === review._id">
+        <textarea
+          [(ngModel)]="replyText[review._id]"
+          placeholder="Nhập bình luận của bạn..."
+          class="reply-textarea"
+          rows="3"></textarea>
+        <div class="reply-actions">
+          <button
+            class="btn-submit-reply"
+            (click)="submitReply(review)"
+            [disabled]="!replyText[review._id]?.trim() || isSubmittingReply[review._id]">
+            {{ isSubmittingReply[review._id] ? 'Đang gửi...' : 'Gửi' }}
+          </button>
+          <button
+            class="btn-cancel-reply"
+            (click)="cancelReply(review._id)">
+            Hủy
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="reviews-empty" *ngIf="!isLoadingReviews && reviews.length === 0">
+    <p>Chưa có đánh giá nào cho sản phẩm này. Hãy là người đầu tiên đánh giá!</p>
+  </div>
+
+  <!-- Loading State -->
+  <div class="reviews-loading" *ngIf="isLoadingReviews">
+    <p>Đang tải đánh giá...</p>
+  </div>
+</section>
+
+<!-- Viewed Products -->
+<section class="product-slider" *ngIf="viewedProducts.length > 0">
+  <div class="slider-header">
+    <h2>Sản phẩm đã xem</h2>
+  </div>
+
+  <div class="slider-container">
+    <div class="slider-track">
+      <a *ngFor="let item of viewedProducts"
+         [routerLink]="['/product-detail', item._id]"
+         class="product-item">
+        <img [src]="getProductImage(item.imagesProduct)"
+             alt="{{ item.nameProduct }}"
+             loading="lazy"
+             (error)="$event.target.src=getPlaceholderImage()">
+        <p class="price">{{ item.priceProduct | number:'1.0-0' }} đ</p>
+        <p>{{ item.nameProduct }}</p>
+      </a>
+    </div>
+  </div>
+</section>

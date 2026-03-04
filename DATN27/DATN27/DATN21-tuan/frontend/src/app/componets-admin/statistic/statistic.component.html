@@ -1,0 +1,282 @@
+<div class="statistic-page">
+  <div class="page-header">
+    <h2>📊 Phân tích thống kê</h2>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-cards">
+    <div class="stat-card" *ngIf="!isLoadingStats && dashboardStats">
+      <div class="stat-icon revenue">💰</div>
+      <div class="stat-content">
+        <h3>Tổng doanh thu</h3>
+        <p class="stat-value">{{ currencyVN(dashboardStats.totalRevenue || 0) }}</p>
+        <p class="stat-note">(Chỉ tính đơn đã hoàn thành)</p>
+      </div>
+    </div>
+    <div class="stat-card" *ngIf="!isLoadingStats && dashboardStats">
+      <div class="stat-icon orders">📦</div>
+      <div class="stat-content">
+        <h3>Tổng đơn hàng</h3>
+        <p class="stat-value">{{ dashboardStats.totalOrders || 0 }}</p>
+      </div>
+    </div>
+    <div class="stat-card" *ngIf="!isLoadingStats && dashboardStats">
+      <div class="stat-icon users">👥</div>
+      <div class="stat-content">
+        <h3>Tổng người dùng</h3>
+        <p class="stat-value">{{ dashboardStats.totalUsers || 0 }}</p>
+      </div>
+    </div>
+    <div class="stat-card" *ngIf="!isLoadingStats && dashboardStats">
+      <div class="stat-icon products">🛍️</div>
+      <div class="stat-content">
+        <h3>Tổng sản phẩm</h3>
+        <p class="stat-value">{{ dashboardStats.totalProducts || 0 }}</p>
+      </div>
+    </div>
+    <div class="stat-card loading" *ngIf="isLoadingStats">
+      <div class="spinner"></div>
+      <p>Đang tải...</p>
+    </div>
+  </div>
+
+  <!-- Chart and Top Products Row -->
+  <div class="chart-products-row">
+    <!-- Revenue Chart -->
+    <div class="chart-container">
+      <div class="card-header">
+        <h3>📈 Doanh thu 7 ngày gần nhất</h3>
+      </div>
+      <div class="card-body">
+        <div class="loading" *ngIf="isLoadingChart">
+          <div class="spinner"></div>
+          <p>Đang tải biểu đồ...</p>
+        </div>
+        <div class="chart-wrapper" *ngIf="!isLoadingChart">
+          <canvas baseChart
+            [data]="revenueChartData"
+            [options]="revenueChartOptions"
+            type="line">
+          </canvas>
+        </div>
+        <div class="empty-message" *ngIf="!isLoadingChart && revenueChartData.labels?.length === 0">
+          <p>Không có dữ liệu doanh thu</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="top-products-container">
+      <div class="card-header">
+        <h3>🏆 Top sản phẩm bán chạy</h3>
+      </div>
+      <div class="card-body">
+        <div class="loading" *ngIf="isLoadingTopProducts">
+          <div class="spinner"></div>
+          <p>Đang tải...</p>
+        </div>
+        <div class="top-products-table" *ngIf="!isLoadingTopProducts">
+          <table>
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng bán</th>
+                <th>Doanh thu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of topProducts; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td class="product-name">{{ product.name }}</td>
+                <td>{{ product.totalSold }}</td>
+                <td class="revenue-cell">{{ currencyVN(product.revenue) }}</td>
+              </tr>
+              <tr *ngIf="topProducts.length === 0">
+                <td colspan="4" class="empty-row">Không có dữ liệu</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Orders -->
+  <div class="recent-orders-container">
+    <div class="card-header">
+      <h3>📋 Đơn hàng mới nhất</h3>
+    </div>
+    <div class="card-body">
+      <div class="loading" *ngIf="isLoadingRecentOrders">
+        <div class="spinner"></div>
+        <p>Đang tải...</p>
+      </div>
+      <div class="orders-table" *ngIf="!isLoadingRecentOrders">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã đơn</th>
+              <th>Khách hàng</th>
+              <th>Tổng tiền</th>
+              <th>Trạng thái</th>
+              <th>Ngày tạo</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of recentOrders">
+              <td class="code-cell">
+                <strong>{{ order.orderCode }}</strong>
+              </td>
+              <td>
+                <div *ngIf="order.userId">
+                  <strong>{{ order.userId.fullName }}</strong>
+                  <p class="text-muted">{{ order.userId.email }}</p>
+                </div>
+                <div *ngIf="!order.userId">
+                  <strong>N/A</strong>
+                </div>
+              </td>
+              <td class="price-cell">{{ currencyVN(order.totalPrice) }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusBadgeClass(order.status)">
+                  {{ getStatusText(order.status) }}
+                </span>
+              </td>
+              <td class="date-cell">{{ formatDate(order.createdAt) }}</td>
+              <td class="actions-cell">
+                <a [routerLink]="['/admin/order-detail', order._id]" class="btn-view">👁️</a>
+              </td>
+            </tr>
+            <tr *ngIf="recentOrders.length === 0">
+              <td colspan="6" class="empty-row">Không có đơn hàng nào</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtered Orders (Advanced) -->
+  <div class="filtered-orders-container">
+    <div class="card-header">
+      <h3>🔍 Tìm kiếm & Lọc đơn hàng</h3>
+    </div>
+    <div class="card-body">
+      <!-- Filters -->
+      <div class="filters">
+        <div class="filter-group">
+          <label>Từ ngày:</label>
+          <input
+            type="date"
+            [(ngModel)]="filters.startDate"
+            (change)="onFilterChange()"
+          />
+        </div>
+        <div class="filter-group">
+          <label>Đến ngày:</label>
+          <input
+            type="date"
+            [(ngModel)]="filters.endDate"
+            (change)="onFilterChange()"
+          />
+        </div>
+        <div class="filter-group">
+          <label>Trạng thái:</label>
+          <select [(ngModel)]="filters.status" (change)="onFilterChange()">
+            <option value="">Tất cả</option>
+            <option value="pending">Chờ xử lý</option>
+            <option value="pending_payment">Chờ thanh toán</option>
+            <option value="confirmed">Đã xác nhận</option>
+            <option value="shipping">Đang giao</option>
+            <option value="delivered">Đã giao</option>
+            <option value="cancelled">Đã hủy</option>
+            <option value="returned">Đã trả hàng</option>
+            <option value="failed">Thất bại</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <button class="btn-apply" (click)="loadFilteredOrders()">Áp dụng</button>
+        </div>
+      </div>
+
+      <!-- Filtered Orders Table -->
+      <div class="loading" *ngIf="isLoadingFilteredOrders">
+        <div class="spinner"></div>
+        <p>Đang tải...</p>
+      </div>
+      <div class="orders-table" *ngIf="!isLoadingFilteredOrders">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã đơn</th>
+              <th>Khách hàng</th>
+              <th>Tổng tiền</th>
+              <th>Trạng thái</th>
+              <th>Ngày tạo</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of filteredOrders">
+              <td class="code-cell">
+                <strong>{{ order.orderCode }}</strong>
+              </td>
+              <td>
+                <div *ngIf="order.userId">
+                  <strong>{{ order.userId.fullName || order.shippingAddress?.fullName }}</strong>
+                  <p class="text-muted">{{ order.shippingAddress?.phoneNumber }}</p>
+                </div>
+                <div *ngIf="!order.userId && order.shippingAddress">
+                  <strong>{{ order.shippingAddress.fullName }}</strong>
+                  <p class="text-muted">{{ order.shippingAddress.phoneNumber }}</p>
+                </div>
+              </td>
+              <td class="price-cell">{{ currencyVN(order.finalPrice || order.totalPrice) }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusBadgeClass(order.status)">
+                  {{ getStatusText(order.status) }}
+                </span>
+              </td>
+              <td class="date-cell">{{ formatDate(order.createdAt) }}</td>
+              <td class="actions-cell">
+                <a [routerLink]="['/admin/order-detail', order._id]" class="btn-view">👁️</a>
+              </td>
+            </tr>
+            <tr *ngIf="filteredOrders.length === 0 && !isLoadingFilteredOrders">
+              <td colspan="6" class="empty-row">Không tìm thấy đơn hàng nào</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="!isLoadingFilteredOrders && pagination.totalPages > 1">
+        <button
+          (click)="onPageChange(pagination.page - 1)"
+          [disabled]="pagination.page === 1"
+          class="page-btn"
+        >
+          ← Trước
+        </button>
+        <button
+          *ngFor="let page of getPageNumbers()"
+          (click)="onPageChange(page)"
+          [class.active]="page === pagination.page"
+          class="page-btn"
+        >
+          {{ page }}
+        </button>
+        <button
+          (click)="onPageChange(pagination.page + 1)"
+          [disabled]="pagination.page === pagination.totalPages"
+          class="page-btn"
+        >
+          Sau →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,60 @@
+<div class="wishlist-page">
+  <div class="page-header">
+    <h1>❤️ Danh sách yêu thích</h1>
+  </div>
+
+  <div class="wishlist-container">
+    <!-- Loading -->
+    <div class="loading" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Đang tải...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="errorMessage && !isLoading">
+      <p>❌ {{ errorMessage }}</p>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && !errorMessage && wishlistItems.length === 0">
+      <div class="empty-icon">❤️</div>
+      <h2>Danh sách yêu thích trống</h2>
+      <p>Bạn chưa có sản phẩm nào trong danh sách yêu thích</p>
+      <a [routerLink]="['/allproduct']" class="btn-shop">Tiếp tục mua sắm</a>
+    </div>
+
+    <!-- Wishlist Items -->
+    <div class="wishlist-grid" *ngIf="!isLoading && !errorMessage && wishlistItems.length > 0">
+      <div class="wishlist-item" *ngFor="let item of wishlistItems">
+        <div class="item-image">
+          <a [routerLink]="['/product-detail', item.productId._id]">
+            <img [src]="getProductImage(item.productId.imagesProduct)" [alt]="item.productId.nameProduct" />
+          </a>
+          <button class="remove-btn" (click)="removeFromWishlist(item.productId._id)" title="Xóa khỏi yêu thích">
+            ❌
+          </button>
+        </div>
+        <div class="item-info">
+          <h3>
+            <a [routerLink]="['/product-detail', item.productId._id]">
+              {{ item.productId.nameProduct }}
+            </a>
+          </h3>
+          <div class="item-price">
+            <span class="current-price">
+              {{ formatPrice(calculateDiscountPrice(item.productId.priceProduct, item.productId.discountProduct)) }}
+            </span>
+            <span class="original-price" *ngIf="item.productId.discountProduct && item.productId.discountProduct > 0">
+              {{ formatPrice(item.productId.priceProduct) }}
+            </span>
+            <span class="discount-badge" *ngIf="item.productId.discountProduct && item.productId.discountProduct > 0">
+              -{{ item.productId.discountProduct }}%
+            </span>
+          </div>
+          <a [routerLink]="['/product-detail', item.productId._id]" class="btn-view">Xem chi tiết</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

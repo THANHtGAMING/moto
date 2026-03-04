@@ -1,0 +1,83 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>📰 Quản lý tin tức</h2>
+      <div class="search-box">
+        <input 
+          type="text" 
+          placeholder="Tìm kiếm tin tức..." 
+          [(ngModel)]="keyword"
+          (input)="onSearch()"
+          (keyup.enter)="onSearch()"
+        />
+      </div>
+    </div>
+    <a routerLink="/admin/news-add" class="btn-add">+ Thêm tin tức mới</a>
+  </div>
+
+  <!-- News Table -->
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tiêu đề</th>
+          <th>Hình ảnh</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of filterednews | paginate: { itemsPerPage: 6, currentPage: p }; index as i">
+          <td>{{ i + 1 }}</td>
+          <td><strong>{{ item.title || item.name }}</strong></td>
+          <td>
+            <img
+              *ngIf="item.cover_image_url"
+              [src]="item.cover_image_url"
+              alt="{{ item.name }}"
+            />
+            <span *ngIf="!item.cover_image_url" class="no-image">Không có ảnh</span>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="(item.status_code || item.status) === 'published' ? 'badge-active' : 'badge-inactive'">
+              {{ (item.status_code || item.status) === 'published' ? 'Đã xuất bản' : 'Bản nháp' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <a
+              [routerLink]="['/admin/news-edit/', item._id]"
+              class="btn-action btn-edit"
+              title="Chỉnh sửa">✏️</a>
+            <button
+              (click)="onDelete(item._id)"
+              class="btn-action btn-delete"
+              title="Xóa">🗑️</button>
+          </td>
+        </tr>
+        <tr *ngIf="filterednews.length === 0">
+          <td colspan="5" class="empty-row">
+            <p>Không tìm thấy tin tức nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="filterednews.length > 0">
+    <span>Tổng: <strong>{{ filterednews.length }}</strong> tin tức</span>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="p = $event"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>
+</div>

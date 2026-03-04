@@ -1,0 +1,211 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+    <h2>📧 Quản lý thư liên hệ</h2>
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Tìm kiếm theo tên, email, tiêu đề..."
+        [(ngModel)]="keyword"
+        (input)="onSearch()"
+          (keyup.enter)="onSearch()"
+      />
+    </div>
+      <select class="sort-select" [(ngModel)]="statusFilter" (change)="onFilterChange()">
+        <option value="">Tất cả trạng thái</option>
+        <option value="new">Mới</option>
+        <option value="read">Đã đọc</option>
+        <option value="replied">Đã trả lời</option>
+        <option value="archived">Đã lưu trữ</option>
+      </select>
+      <select class="sort-select" [(ngModel)]="isReadFilter" (change)="onFilterChange()">
+        <option value="">Tất cả</option>
+        <option value="false">Chưa đọc</option>
+        <option value="true">Đã đọc</option>
+      </select>
+    </div>
+    <a routerLink="/admin/contact-infor" class="btn-add">📍 Quản lý địa chỉ liên hệ</a>
+  </div>
+
+  <!-- Contact Table -->
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Người gửi</th>
+          <th>Email</th>
+          <th>Tiêu đề</th>
+          <th>Trạng thái</th>
+          <th>Ngày gửi</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let contact of filteredContacts | paginate: { itemsPerPage: 10, currentPage: p }; index as i" [class.unread]="!contact.isRead">
+          <td>{{ (p - 1) * 10 + i + 1 }}</td>
+          <td>
+            <strong>{{ contact.name }}</strong>
+            <span *ngIf="contact.phone" class="phone-badge">{{ contact.phone }}</span>
+          </td>
+          <td>{{ contact.email }}</td>
+          <td class="subject-cell">{{ contact.subject }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(contact.status)">
+              {{ getStatusLabel(contact.status) }}
+            </span>
+            <span *ngIf="!contact.isRead" class="unread-dot" title="Chưa đọc">●</span>
+          </td>
+          <td>{{ formatDate(contact.createdAt) }}</td>
+          <td class="actions-cell">
+            <button
+              (click)="viewDetail(contact)"
+              class="btn-action btn-view"
+              title="Xem chi tiết">👁️</button>
+            <button
+              *ngIf="contact.status !== 'replied'"
+              (click)="openReplyModal(contact)"
+              class="btn-action btn-reply"
+              title="Trả lời">✉️</button>
+            <button
+              (click)="updateStatus(contact, contact.status === 'archived' ? 'read' : 'archived')"
+              class="btn-action btn-archive"
+              [title]="contact.status === 'archived' ? 'Bỏ lưu trữ' : 'Lưu trữ'">
+              {{ contact.status === 'archived' ? '📂' : '📁' }}
+            </button>
+            <button
+              (click)="onDelete(contact)"
+              class="btn-action btn-delete"
+              title="Xóa">🗑️</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredContacts.length === 0">
+          <td colspan="7" class="empty-row">
+            <p>Không tìm thấy thư liên hệ nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="filteredContacts.length > 0">
+    <span>Tổng: <strong>{{ filteredContacts.length }}</strong> thư</span>
+    <span style="margin-left: 20px;">
+      Chưa đọc: <strong>{{ getUnreadCount() }}</strong>
+    </span>
+    <span style="margin-left: 20px;">
+      Đã trả lời: <strong>{{ getRepliedCount() }}</strong>
+    </span>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="p = $event"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div *ngIf="showDetailModal && selectedContact" class="modal-overlay" (click)="closeDetailModal()">
+  <div class="modal-content contact-detail-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Chi tiết thư liên hệ</h3>
+      <button class="modal-close" (click)="closeDetailModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-section">
+        <h4>Thông tin người gửi</h4>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Tên:</label>
+            <span><strong>{{ selectedContact.name }}</strong></span>
+          </div>
+          <div class="detail-item">
+            <label>Email:</label>
+            <span>{{ selectedContact.email }}</span>
+          </div>
+          <div class="detail-item" *ngIf="selectedContact.phone">
+            <label>Số điện thoại:</label>
+            <span>{{ selectedContact.phone }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Ngày gửi:</label>
+            <span>{{ formatDate(selectedContact.createdAt) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h4>Nội dung thư</h4>
+        <div class="message-box">
+          <div class="message-subject">
+            <strong>Tiêu đề:</strong> {{ selectedContact.subject }}
+          </div>
+          <div class="message-content">
+            {{ selectedContact.message }}
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section" *ngIf="selectedContact.replyMessage">
+        <h4>Trả lời</h4>
+        <div class="reply-box">
+          <div class="reply-content">
+            {{ selectedContact.replyMessage }}
+          </div>
+          <div class="reply-meta" *ngIf="selectedContact.repliedAt">
+            Trả lời lúc: {{ formatDate(selectedContact.repliedAt) }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button *ngIf="selectedContact.status !== 'replied'" class="btn-primary" (click)="openReplyModal(selectedContact)">
+        Trả lời thư
+      </button>
+      <button class="btn-secondary" (click)="closeDetailModal()">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reply Modal -->
+<div *ngIf="showReplyModal && selectedContact" class="modal-overlay" (click)="closeReplyModal()">
+  <div class="modal-content reply-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Trả lời thư</h3>
+      <button class="modal-close" (click)="closeReplyModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Người nhận:</label>
+        <p><strong>{{ selectedContact.name }}</strong> ({{ selectedContact.email }})</p>
+      </div>
+      <div class="form-group">
+        <label>Tiêu đề thư gốc:</label>
+        <p>{{ selectedContact.subject }}</p>
+      </div>
+      <div class="form-group">
+        <label for="replyMessage">Nội dung trả lời:</label>
+        <textarea
+          id="replyMessage"
+          [(ngModel)]="replyMessage"
+          rows="8"
+          placeholder="Nhập nội dung trả lời..."
+          class="form-control"
+        ></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" (click)="sendReply()">Gửi trả lời</button>
+      <button class="btn-secondary" (click)="closeReplyModal()">Hủy</button>
+    </div>
+  </div>
+</div>
+

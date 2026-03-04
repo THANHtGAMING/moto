@@ -1,0 +1,881 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Arial, 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
+body {
+  background: #fff;
+}
+
+/* Coupon Banner */
+.coupon-banner {
+  background: #f5f5f5;
+  color: #333;
+  padding: 8px 50px;
+  text-align: center;
+  font-size: 14px;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  animation: slideDown 0.3s ease-out;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.coupon-banner:hover {
+  background: #eeeeee;
+}
+
+.coupon-banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.coupon-icon {
+  font-size: 18px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.coupon-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.coupon-text strong {
+  font-weight: 600;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.coupon-code {
+  background: rgba(0, 0, 0, 0.08);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #555;
+}
+
+.coupon-close {
+  position: absolute;
+  right: 50px;
+  background: transparent;
+  border: none;
+  color: #666;
+  font-size: 24px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  line-height: 1;
+  padding: 0;
+}
+
+.coupon-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+/* Top Utility Bar */
+.top-bar {
+  background: #FFFFFF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 50px;
+  font-size: 13px;
+  border-bottom: 2px solid #d0d0d0;
+}
+
+.top-bar-left {
+  flex: 1;
+}
+
+.signup-banner {
+  background: #d00;
+  color: white;
+  padding: 6px 15px;
+  display: inline-block;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.signup-text {
+  color: white;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.top-link {
+  color: #333;
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.top-link:hover {
+  color: #333;
+  text-decoration: underline;
+  text-decoration-color: #000;
+}
+
+.language-dropdown,
+.currency-dropdown {
+  position: relative;
+}
+
+.language-select,
+.currency-select {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 5px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.language-select option,
+.currency-select option {
+  background: #1a5f3f;
+  color: white;
+}
+
+.wishlist-button {
+  background: white;
+  color: #d00;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  position: relative;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.wishlist-button:hover {
+  background: #fff5f5;
+  border-color: #d00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(208, 0, 0, 0.15);
+}
+
+.wishlist-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cart-button {
+  background: linear-gradient(135deg, #d00 0%, #b30000 100%);
+  color: white;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  position: relative;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(208, 0, 0, 0.3);
+}
+
+.cart-button:hover {
+  background: linear-gradient(135deg, #b30000 0%, #990000 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(208, 0, 0, 0.4);
+}
+
+.cart-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(208, 0, 0, 0.3);
+}
+
+.wishlist-badge,
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: linear-gradient(135deg, #ff4444 0%, #d00 100%);
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  box-shadow: 0 2px 4px rgba(208, 0, 0, 0.3);
+  border: 2px solid white;
+  z-index: 1;
+}
+
+/* Main Header */
+.site-header {
+  background: white;
+  padding: 20px 50px;
+  border-bottom: 2px solid #d0d0d0;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.logo {
+  flex-shrink: 0;
+}
+
+.logo img {
+  height: 50px;
+  width: auto;
+  display: block;
+}
+
+.search-bar {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 40px 0 40px;
+  display: flex;
+  border: 2px solid #ccc;
+  border-radius: 0;
+  overflow: hidden;
+  background: white;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  padding: 12px 15px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-button {
+  background: transparent;
+  border: none;
+  padding: 0 10px;
+  margin-left: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: color 0.2s;
+}
+
+.search-button:hover {
+  color: #d00;
+}
+
+/* Main Navigation */
+.main-nav {
+  background: #8B0000;
+  padding: 0;
+  width: 100%;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;   /* GIÃN ĐỀU 2 BÊN */
+  align-items: center;
+  margin: 0;
+  padding: 0 40px;   /* tạo khoảng cách mép trái phải */
+  width: 100%;
+  background: #c40000; /* nền đỏ giống hình */
+}
+
+.menu-item {
+  position: relative;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 15px 18px;
+  display: block;
+  font-weight: 750;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background: #6B0000;
+}
+
+/* Submenu */
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 800px;
+  padding: 0;
+}
+
+/* Submenu for right-aligned menu items (last items) */
+.menu-item-right > .submenu {
+  left: auto;
+  right: 0;
+}
+
+.submenu-content {
+  display: flex;
+  padding: 25px 30px;
+  gap: 30px;
+}
+
+.submenu-column {
+  flex: 1;
+}
+
+.submenu-column h4 {
+  color: #d00;
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.submenu-column a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  margin-bottom: 10px;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.submenu-column a:hover {
+  color: #d00;
+}
+
+/* Brand Submenu Styles */
+.brand-submenu {
+  min-width: 850px;
+}
+
+.brand-item-link {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0 !important;
+  margin-bottom: 6px !important;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.brand-item-link:hover {
+  color: #d00;
+  background-color: transparent;
+}
+
+.brand-logo-small {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  padding: 3px;
+  background: #fff;
+}
+
+.brand-name {
+  font-size: 13px;
+  font-weight: 500;
+  flex: 1;
+}
+
+/* Rider Submenu Styles */
+.rider-submenu {
+  min-width: 750px;
+}
+
+.rider-item-link {
+  display: block !important;
+  padding: 8px 0 !important;
+  margin-bottom: 6px !important;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.rider-item-link:hover {
+  color: #d00;
+  background-color: transparent;
+}
+
+.rider-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Category Submenu Styles (for Men) */
+.category-item-link {
+  display: block !important;
+  padding: 8px 0 !important;
+  margin-bottom: 6px !important;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.category-item-link:hover {
+  color: #d00;
+  background-color: transparent;
+}
+
+.category-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Submenu Empty State */
+.submenu-empty {
+  padding: 40px 30px;
+  text-align: center;
+  color: #666;
+}
+
+.submenu-empty p {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.submenu-empty small {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Rider Submenu Specific Styles */
+.rider-submenu {
+  min-width: 900px;
+}
+
+.rider-content {
+  display: flex;
+  padding: 25px 30px;
+  gap: 50px;
+}
+
+.riders-column {
+  flex: 1.2;
+}
+
+.legends-column {
+  flex: 0.8;
+}
+
+.riders-heading,
+.legends-heading {
+  color: #000;
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.view-all {
+  color: #d00 !important;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.brand-logos {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.brand-logo {
+  padding: 8px 15px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.brand-logo.repsol {
+  background: linear-gradient(135deg, #ff6b00, #ff0000, #ffd700);
+  color: white;
+  border: none;
+}
+
+.brand-logo.honda {
+  background: #d00;
+  color: white;
+  border: none;
+}
+
+/* Profile Dropdown */
+.profile-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  color: #333;
+  font-size: 13px;
+  padding: 5px 0;
+}
+
+.profile-trigger:hover {
+  color: #d00;
+}
+
+.profile-name {
+  color: #333;
+  font-size: 13px;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  color: #333;
+  transition: transform 0.2s;
+}
+
+.profile-dropdown-container:hover .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  z-index: 1001;
+  overflow: hidden;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdown-item span {
+  font-size: 16px;
+}
+
+.dropdown-item.logout {
+  color: #e63946;
+}
+
+.dropdown-item.logout:hover {
+  background-color: #ffe0e0;
+}
+
+.dropdown-divider {
+  height: 2px;
+  background: #ddd;
+  margin: 5px 0;
+}
+
+/* Mobile responsive */
+@media (max-width: 1200px) {
+  .coupon-banner {
+    padding: 6px 30px;
+  }
+
+  .coupon-close {
+    right: 30px;
+  }
+  .nav-link {
+    padding: 15px 12px;
+    font-size: 12px;
+  }
+
+  .submenu {
+    min-width: 700px;
+  }
+
+  .rider-submenu {
+    min-width: 800px;
+  }
+}
+
+@media (max-width: 768px) {
+  .coupon-banner {
+    padding: 6px 20px;
+    font-size: 12px;
+  }
+
+  .coupon-banner-content {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .coupon-text {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .coupon-text strong {
+    font-size: 13px;
+  }
+
+  .coupon-code {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .coupon-close {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    font-size: 20px;
+  }
+
+  .top-bar {
+    padding: 8px 20px;
+    flex-wrap: wrap;
+  }
+
+  .top-bar-right {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .site-header {
+    padding: 100px 40px;
+  }
+
+  .header-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .search-bar {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .main-nav {
+    overflow-x: auto;
+  }
+
+  .nav-list {
+    justify-content: flex-start;
+  }
+
+  .submenu {
+    min-width: 100%;
+    left: 0;
+  }
+
+  .rider-submenu {
+    min-width: 100%;
+  }
+}
+
+/* Advertisement Modal */
+.ad-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.ad-modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-modal-image {
+  width: 100%;
+  height: auto;
+  max-width: 900px;
+  max-height: 90vh;
+  object-fit: contain;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+              0 0 0 1px rgba(255, 255, 255, 0.1);
+  background: #fff;
+  padding: 4px;
+}
+
+.ad-modal-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #333;
+  font-size: 28px;
+  font-weight: 300;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  z-index: 10001;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ad-modal-close:hover {
+  background: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.ad-modal-close:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .ad-modal-overlay {
+    padding: 15px;
+  }
+
+  .ad-modal-content {
+    max-width: 95%;
+  }
+
+  .ad-modal-close {
+    top: -45px;
+    right: -5px;
+    width: 38px;
+    height: 38px;
+    font-size: 24px;
+  }
+
+  .ad-modal-image {
+    max-width: 100%;
+    border-radius: 8px;
+    padding: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ad-modal-overlay {
+    padding: 10px;
+  }
+
+  .ad-modal-content {
+    max-width: 98%;
+  }
+
+  .ad-modal-close {
+    top: -40px;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+  }
+
+  .ad-modal-image {
+    border-radius: 6px;
+  }
+}

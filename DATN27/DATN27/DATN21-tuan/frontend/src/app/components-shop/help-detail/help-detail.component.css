@@ -1,0 +1,128 @@
+.help-detail-page {
+  min-height: 100vh;
+  background: white;
+  padding: 0;
+  position: relative;
+}
+
+.help-detail-container {
+  width: 100%;
+  margin: 0;
+  padding: 40px 20px;
+  position: relative;
+}
+
+/* Back Button */
+.back-button {
+  display: inline-block;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: #0066cc;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 30px;
+  transition: all 0.2s ease;
+  text-decoration: underline;
+}
+
+.back-button:hover {
+  color: #0052a3;
+}
+
+/* Help Article */
+.help-article {
+  background: transparent;
+  padding: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.help-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 20px 0;
+  line-height: 1.3;
+}
+
+.title-divider {
+  border: none;
+  border-top: 1px solid #000;
+  margin: 0 0 30px 0;
+  width: 100%;
+}
+
+.help-body {
+  margin-top: 0;
+}
+
+.help-description {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.help-description p {
+  margin-bottom: 16px;
+}
+
+.help-description strong {
+  font-weight: 600;
+  color: #000;
+}
+
+.help-description ul,
+.help-description ol {
+  margin: 16px 0;
+  padding-left: 30px;
+}
+
+.help-description li {
+  margin-bottom: 12px;
+  line-height: 1.7;
+}
+
+/* Loading and Error States */
+.loading-state,
+.error-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: transparent;
+}
+
+.loading-state p,
+.error-state p {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.error-state {
+  color: #d00;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .help-detail-container {
+    padding: 30px 20px;
+  }
+
+  .help-title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .help-detail-container {
+    padding: 20px 15px;
+  }
+
+  .help-title {
+    font-size: 24px;
+  }
+}
+

@@ -1,0 +1,111 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>❓ Quản lý trợ giúp</h2>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Tìm kiếm trợ giúp..."
+          [(ngModel)]="keyword"
+          (input)="onSearch()"
+        />
+      </div>
+      <div class="filter-group">
+        <select
+          [(ngModel)]="statusFilter"
+          (change)="onFilterChange()"
+          class="filter-select"
+        >
+          <option value="">Tất cả trạng thái</option>
+          <option value="active">Đang hoạt động</option>
+          <option value="inactive">Vô hiệu hóa</option>
+        </select>
+      </div>
+      <button
+        *ngIf="statusFilter"
+        (click)="statusFilter = ''; onFilterChange()"
+        class="btn-clear-filters"
+      >
+        ✕ Xóa bộ lọc
+      </button>
+    </div>
+    <a routerLink="/admin/help-add" class="btn-add">+ Thêm trợ giúp mới</a>
+  </div>
+
+  <!-- Help Table -->
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Icon</th>
+          <th>Tên</th>
+          <th>Mô tả</th>
+          <th>Thứ tự</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let help of filteredHelps | paginate: { itemsPerPage: 11, currentPage: p }; index as i">
+          <td>{{ (p - 1) * 10 + i + 1 }}</td>
+          <td>
+            <div class="icon-preview" [style.background-color]="help.iconColor || '#6c757d'">
+              <i [class]="help.icon || 'fas fa-question-circle'"></i>
+            </div>
+          </td>
+          <td><strong>{{ help.name }}</strong></td>
+          <td class="description-cell">{{ help.description }}</td>
+          <td>{{ help.order || 0 }}</td>
+          <td>
+            <span class="status-badge" [class.active]="help.status === 'active'" [class.inactive]="help.status === 'inactive'">
+              {{ help.status === 'active' ? 'Hoạt động' : 'Vô hiệu hóa' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button
+              (click)="toggleStatus(help)"
+              class="btn-action btn-toggle"
+              [title]="help.status === 'active' ? 'Vô hiệu hóa' : 'Kích hoạt'"
+            >
+              {{ help.status === 'active' ? '👁️' : '👁️‍🗨️' }}
+            </button>
+            <a
+              [routerLink]="['/admin/help-edit/', help._id]"
+              class="btn-action btn-edit"
+              title="Chỉnh sửa"
+              *ngIf="help._id">✏️</a>
+            <button
+              (click)="onDelete(help._id)"
+              class="btn-action btn-delete"
+              title="Xóa"
+              [disabled]="!help._id">🗑️</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredHelps.length === 0">
+          <td colspan="7" class="empty-row">
+            <p>Không tìm thấy mục trợ giúp nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="filteredHelps.length > 0">
+    <span>Tổng: <strong>{{ filteredHelps.length }}</strong> mục trợ giúp</span>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="p = $event"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>
+</div>
+

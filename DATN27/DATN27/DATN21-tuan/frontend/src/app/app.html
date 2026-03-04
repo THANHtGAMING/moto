@@ -1,0 +1,17 @@
+<!-- Nếu hiển thị layout -->
+<ng-container *ngIf="showLayout">
+  <!-- Nếu là trang home -->
+  <app-header *ngIf="isHomePage"></app-header>
+  <!-- Nếu là trang shop -->
+  <app-header-shop *ngIf="!isHomePage"></app-header-shop>
+</ng-container>
+
+<router-outlet></router-outlet>
+
+<ng-container *ngIf="showLayout">
+  <app-footer *ngIf="isHomePage"></app-footer>
+  <app-footer-shop *ngIf="!isHomePage"></app-footer-shop>
+</ng-container>
+
+<!-- Toast Container -->
+<app-toast-container></app-toast-container>

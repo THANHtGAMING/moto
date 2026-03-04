@@ -1,0 +1,253 @@
+<!-- Coupon Banner -->
+<div class="coupon-banner" *ngIf="currentCoupon && !isADM" (click)="goToCart()">
+  <div class="coupon-banner-content">
+    <span class="coupon-icon">🎉</span>
+    <span class="coupon-text">
+      <strong>{{ currentCoupon.name || currentCoupon.code }}</strong>
+      <span *ngIf="currentCoupon.code" class="coupon-code">Mã: {{ currentCoupon.code }}</span>
+    </span>
+    <button class="coupon-close" (click)="dismissCouponBanner(); $event.stopPropagation()" aria-label="Đóng banner">×</button>
+  </div>
+</div>
+
+<!-- Top Utility Bar -->
+<div class="top-bar">
+  <div class="top-bar-left">
+  </div>
+  <div class="top-bar-right">
+    <a [routerLink]="['/home']" class="top-link">Trang Chủ</a>
+    <a [routerLink]="['/help']" class="top-link">Giúp Đỡ</a>
+    <a [routerLink]="['/contact']" class="top-link">Liên Hệ</a>
+    <a [routerLink]="['/news']" class="top-link">Tin Tức</a>
+    <!-- Login link for guests -->
+    <a href="#" class="top-link" *ngIf="!isLogin" [routerLink]="['/login']">Đăng nhập</a>
+
+    <!-- Profile Dropdown for logged in users -->
+    <div class="profile-dropdown-container" *ngIf="isLogin">
+      <div class="profile-trigger" (click)="toggleProfileDropdown()" tabindex="0">
+        <span class="profile-name">Tài khoản của tôi</span>
+        <span class="dropdown-arrow">▼</span>
+      </div>
+      <div class="profile-dropdown" *ngIf="showProfileDropdown">
+        <a (click)="onProfileClick()" class="dropdown-item">
+          <span>👤</span> Hồ sơ của tôi
+        </a>
+        <a *ngIf="hasPassword" (click)="onChangePasswordClick()" class="dropdown-item">
+          <span>🔒</span> Đổi mật khẩu
+        </a>
+        <div class="dropdown-divider"></div>
+        <a *ngIf="isADM" [routerLink]="['/admin']" routerLinkActive="router-link-active" class="dropdown-item">
+          <span>⚙️</span> Quản trị
+        </a>
+        <a (click)="onLogout()" class="dropdown-item logout">
+          <span>🚪</span> Đăng xuất
+        </a>
+      </div>
+    </div>
+
+    <a class="wishlist-button" [routerLink]="['/wishlist']" routerLinkActive="router-link-active">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d00" stroke-width="2">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      <span class="wishlist-badge" *ngIf="wishlistCount > 0">{{ wishlistCount }}</span>
+    </a>
+    <a *ngIf="!isADM" class="cart-button" [routerLink]="['/cart']" routerLinkActive="router-link-active">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+        <path d="M9 2L7 6M17 2l2 4M3 6h18l-2 12H5L3 6zM10 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM20 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+      </svg>
+      <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+    </a>
+
+  </div>
+</div>
+
+<!-- Main Header -->
+<header class="site-header">
+  <div class="header-container">
+    <div class="logo">
+      <a href="/"><img src="https://store.motogp.com/content/assets/__0-773037359505.6387.svg" alt="MGP Store Logo" /></a>
+      </div>
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Chúng tôi có thể giúp bạn tìm thấy gì?"
+        [(ngModel)]="searchKeyword"
+        (input)="onSearchInput()"
+        (keypress)="onSearchKeyPress($event)"
+        class="search-input"
+      />
+      <button class="search-button" (click)="onSearchSubmit()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Main Navigation -->
+<nav class="main-nav">
+  <ul class="nav-list">
+    <li class="menu-item" (mouseenter)="showShopByTeam = true" (mouseleave)="showShopByTeam = false">
+      <a href="#" class="nav-link">MUA SẮM THEO NHÃN HÀNG</a>
+      <div class="submenu brand-submenu" *ngIf="showShopByTeam && brands.length > 0">
+        <div class="submenu-content">
+          <div class="submenu-column" *ngFor="let columnIndex of getColumnIndices()">
+            <a
+              *ngFor="let brand of getBrandsForColumn(columnIndex)"
+              href="#"
+              class="brand-item-link"
+              (click)="navigateToBrand(brand._id); $event.preventDefault()">
+              <img
+                [src]="brand.logoUrl"
+                [alt]="brand.name"
+                class="brand-logo-small"
+                (error)="onBrandImageError($event, brand.name)"
+              />
+              <span class="brand-name">{{ brand.name }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </li>
+
+
+
+    <li class="menu-item" (mouseenter)="showShopByRider = true" (mouseleave)="showShopByRider = false">
+      <a href="#" class="nav-link">MUA SẮM THEO TAY ĐUA</a>
+      <div class="submenu rider-submenu" *ngIf="showShopByRider && riders.length > 0">
+        <div class="submenu-content">
+          <div class="submenu-column" *ngFor="let columnIndex of getColumnIndices()">
+            <a
+              *ngFor="let rider of getRidersForColumn(columnIndex)"
+              href="#"
+              class="rider-item-link"
+              (click)="navigateToRider(rider._id); $event.preventDefault()">
+              <span class="rider-name">{{ rider.name }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li class="menu-item" (mouseenter)="MenuMan = true" (mouseleave)="MenuMan = false">
+      <a href="#" class="nav-link" (click)="navigateToGender(menGenderId); $event.preventDefault()">ĐÀN ÔNG</a>
+      <div class="submenu" *ngIf="MenuMan">
+        <div class="submenu-content" *ngIf="menTypes.length > 0">
+          <div class="submenu-column" *ngFor="let columnIndex of getColumnIndices()">
+            <a
+              *ngFor="let type of getMenTypesForColumn(columnIndex)"
+              href="#"
+              class="category-item-link"
+              (click)="navigateToType(type._id, menGenderId); $event.preventDefault()">
+              <span class="category-name">{{ type.name }}</span>
+            </a>
+          </div>
+        </div>
+        <div class="submenu-content" *ngIf="menTypes.length === 0">
+          <div class="submenu-empty">
+            <p>Chưa có loại sản phẩm cho đàn ông</p>
+            <small>Vui lòng thêm loại sản phẩm và gán giới tính "Đàn ông"</small>
+          </div>
+        </div>
+      </div>
+    </li>
+
+
+    <li class="menu-item menu-item-right" (mouseenter)="showWomenMenu = true" (mouseleave)="showWomenMenu = false">
+      <a href="#" class="nav-link" (click)="navigateToGender(womenGenderId); $event.preventDefault()">PHỤ NỮ</a>
+      <div class="submenu" *ngIf="showWomenMenu">
+        <div class="submenu-content" *ngIf="womenTypes.length > 0">
+          <div class="submenu-column" *ngFor="let columnIndex of getColumnIndices()">
+            <a
+              *ngFor="let type of getWomenTypesForColumn(columnIndex)"
+              href="#"
+              class="category-item-link"
+              (click)="navigateToType(type._id, womenGenderId); $event.preventDefault()">
+              <span class="category-name">{{ type.name }}</span>
+            </a>
+          </div>
+        </div>
+        <div class="submenu-content" *ngIf="womenTypes.length === 0">
+          <div class="submenu-empty">
+            <p>Chưa có loại sản phẩm cho phụ nữ</p>
+            <small>Vui lòng thêm loại sản phẩm và gán giới tính "Phụ nữ"</small>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li class="menu-item menu-item-right" (mouseenter)="showKidMenu = true" (mouseleave)="showKidMenu = false">
+      <a href="#" class="nav-link" (click)="navigateToGender(kidGenderId); $event.preventDefault()">TRẺ EM</a>
+      <div class="submenu" *ngIf="showKidMenu">
+        <div class="submenu-content" *ngIf="kidTypes.length > 0">
+          <div class="submenu-column" *ngFor="let columnIndex of getColumnIndices()">
+            <a
+              *ngFor="let type of getKidTypesForColumn(columnIndex)"
+              href="#"
+              class="category-item-link"
+              (click)="navigateToType(type._id, kidGenderId); $event.preventDefault()">
+              <span class="category-name">{{ type.name }}</span>
+            </a>
+          </div>
+        </div>
+        <div class="submenu-content" *ngIf="kidTypes.length === 0">
+          <div class="submenu-empty">
+            <p>Chưa có loại sản phẩm cho trẻ em</p>
+            <small>Vui lòng thêm loại sản phẩm và gán giới tính "Trẻ em"</small>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li class="menu-item menu-item-right" (mouseenter)="showGiftMenu = true" (mouseleave)="showGiftMenu = false">
+      <a href="#" class="nav-link" (click)="navigateToTag(giftTagId); $event.preventDefault()">QUÀ TẶNG VÀ PHỤ KIỆN</a>
+      <div class="submenu" *ngIf="showGiftMenu">
+        <div class="submenu-content" *ngIf="giftTypes.length > 0">
+          <div class="submenu-column" *ngFor="let columnIndex of getColumnIndices()">
+            <a
+              *ngFor="let type of getGiftTypesForColumn(columnIndex)"
+              href="#"
+              class="category-item-link"
+              (click)="navigateToTag(giftTagId, type._id); $event.preventDefault()">
+              <span class="category-name">{{ type.name }}</span>
+            </a>
+          </div>
+        </div>
+        <div class="submenu-content" *ngIf="giftTypes.length === 0">
+          <div class="submenu-empty">
+            <p>Chưa có loại sản phẩm cho quà tặng và phụ kiện</p>
+            <small>Vui lòng thêm loại sản phẩm và gán tag "Quà tặng và phụ kiện"</small>
+          </div>
+        </div>
+      </div>
+    </li>
+
+   <li><a href="#" class="nav-link">GIẢM GIÁ SLL SẢN PHẨM</a></li>
+
+  </ul>
+</nav>
+<!-- Advertisement Modal -->
+<div class="ad-modal-overlay" *ngIf="showAdModal" (click)="closeAdModal()">
+  <div class="ad-modal-content" (click)="$event.stopPropagation()">
+    <button class="ad-modal-close" (click)="closeAdModal()" aria-label="Đóng quảng cáo">×</button>
+    <img
+      *ngIf="modalBannerImage"
+      [src]="modalBannerImage"
+      alt="Quảng cáo"
+      class="ad-modal-image"
+      (click)="onAdClick()"
+    />
+  </div>
+</div>
+
+<!-- Change Password Modal -->
+<app-change-password-modal
+  *ngIf="showChangePasswordModal"
+  (close)="onCloseChangePasswordModal()"
+  (success)="onChangePasswordSuccess()">
+</app-change-password-modal>
+
+<!-- Chatbox -->
+<app-chatbox></app-chatbox>

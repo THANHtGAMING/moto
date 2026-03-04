@@ -1,0 +1,100 @@
+<div class="chatbox-container">
+  <!-- Chat Button -->
+  <button
+    class="chatbox-toggle"
+    (click)="toggleChatbox()"
+    [class.open]="isOpen"
+    title="Chat với chúng tôi">
+    <svg *ngIf="!isOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+    <svg *ngIf="isOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+    <!-- Badge thông báo số tin nhắn chưa đọc -->
+    <span *ngIf="unreadCount > 0 && !isOpen" class="chatbox-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chatbox-window" *ngIf="isOpen">
+    <div class="chatbox-header">
+      <div class="chatbox-header-info">
+        <h3>💬 Hỗ trợ khách hàng</h3>
+        <p class="chatbox-status">Chúng tôi sẽ phản hồi sớm nhất có thể</p>
+      </div>
+    </div>
+
+    <div class="chatbox-messages" #messagesContainer>
+      <!-- Not logged in message -->
+      <div *ngIf="!isLogin" class="chatbox-login-prompt">
+        <p>Vui lòng đăng nhập để sử dụng chat</p>
+        <a routerLink="/login" class="login-link">Đăng nhập</a>
+      </div>
+
+      <!-- Loading indicator -->
+      <div *ngIf="isLoading && messages.length === 0" class="chatbox-loading">
+        <p>Đang tải tin nhắn...</p>
+      </div>
+
+      <!-- Messages -->
+      <div *ngIf="!isLoading || messages.length > 0" class="messages-list">
+        <div
+          *ngFor="let message of messages"
+          class="message"
+          [class.message-user]="message.sender === 'user'"
+          [class.message-admin]="message.sender === 'admin'">
+          <div class="message-content">
+            <p>{{ message.message }}</p>
+            <div class="message-footer">
+              <span class="message-time">{{ formatTime(message.createdAt) }}</span>
+              <!-- Hiển thị trạng thái đã đọc/chưa đọc cho tin nhắn admin -->
+              <span class="read-status" *ngIf="message.sender === 'admin'">
+                <span *ngIf="isMessageRead(message)" class="read-indicator" title="Đã đọc">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 6L9 17l-5-5"/>
+                  </svg>
+                </span>
+                <span *ngIf="!isMessageRead(message)" class="unread-indicator" title="Chưa đọc">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sending indicator -->
+        <div *ngIf="isSending" class="message message-user">
+          <div class="message-content">
+            <p>Đang gửi...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="chatbox-input-area" *ngIf="isLogin">
+      <textarea
+        [(ngModel)]="newMessage"
+        (keypress)="onKeyPress($event)"
+        placeholder="Nhập tin nhắn của bạn..."
+        class="chatbox-input"
+        rows="1"
+        [disabled]="isSending">
+      </textarea>
+      <button
+        class="chatbox-send-btn"
+        (click)="sendMessage()"
+        [disabled]="!newMessage.trim() || isSending"
+        title="Gửi tin nhắn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+

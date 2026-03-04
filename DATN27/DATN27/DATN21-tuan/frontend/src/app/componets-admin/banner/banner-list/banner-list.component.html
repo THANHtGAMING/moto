@@ -1,0 +1,157 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>🏠 Quản lý Banner trang chủ</h2>
+    </div>
+    <button class="btn-add" (click)="openAddModal()">+ Thêm banner mới</button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading && banners.length === 0" class="loading-state">
+    <p>Đang tải banner...</p>
+  </div>
+
+  <!-- Banner Grid -->
+  <div class="banner-grid" *ngIf="!isLoading || banners.length > 0">
+    <div *ngFor="let banner of banners; let i = index" class="banner-card">
+      <div class="banner-image-container">
+        <img [src]="banner.imageUrl" [alt]="banner.title || 'Banner'" />
+        <div class="banner-overlay">
+          <div class="banner-actions">
+            <button class="btn-action btn-edit" (click)="openEditModal(banner)" title="Chỉnh sửa">✏️</button>
+            <button class="btn-action btn-delete" (click)="onDelete(banner._id!)" title="Xóa">🗑️</button>
+          </div>
+        </div>
+      </div>
+      <div class="banner-info">
+        <div class="banner-order-controls">
+          <button 
+            class="btn-move" 
+            (click)="moveUp(i)" 
+            [disabled]="i === 0"
+            title="Di chuyển lên">↑</button>
+          <span class="order-number">Thứ tự: {{ banner.order || i }}</span>
+          <button 
+            class="btn-move" 
+            (click)="moveDown(i)" 
+            [disabled]="i === banners.length - 1"
+            title="Di chuyển xuống">↓</button>
+        </div>
+        <div class="banner-status">
+          <span class="status-dot" [class.active]="banner.isActive !== false" [class.inactive]="banner.isActive === false"></span>
+          <span>{{ banner.isActive !== false ? 'Hoạt động' : 'Tạm tắt' }}</span>
+        </div>
+        <div class="banner-actions-bottom">
+          <button 
+            class="btn-pin" 
+            [class.pinned]="banner.isModal"
+            (click)="togglePin(banner)"
+            [title]="banner.isModal ? 'Bỏ ghim' : 'Ghim làm Modal'">
+            <span *ngIf="banner.isModal">📌 Đã ghim</span>
+            <span *ngIf="!banner.isModal">📌 Ghim</span>
+          </button>
+        </div>
+        <div class="banner-title" *ngIf="banner.title">{{ banner.title }}</div>
+      </div>
+    </div>
+    <div *ngIf="banners.length === 0" class="empty-state">
+      <p>Chưa có banner nào. Hãy thêm banner mới!</p>
+    </div>
+  </div>
+
+  <!-- Add Modal -->
+  <div class="modal-overlay" *ngIf="showAddModal" (click)="closeModals()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Thêm Banner Mới</h3>
+        <button class="btn-close" (click)="closeModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Ảnh Banner <span class="required">*</span></label>
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+          <div class="preview-container" *ngIf="previewImage">
+            <img [src]="previewImage" alt="Preview" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tiêu đề</label>
+          <input type="text" [(ngModel)]="formData.title" placeholder="Nhập tiêu đề (tùy chọn)" />
+        </div>
+        <div class="form-group">
+          <label>Mô tả</label>
+          <textarea [(ngModel)]="formData.description" placeholder="Nhập mô tả (tùy chọn)" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Thứ tự</label>
+          <input type="number" [(ngModel)]="formData.order" min="0" />
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" [(ngModel)]="formData.isModal" />
+            📌 Ghim làm Modal (hiển thị popup khi vào trang)
+          </label>
+          <small>Chỉ có thể ghim 1 banner làm modal. Banner khác sẽ tự động bỏ ghim.</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeModals()">Hủy</button>
+        <button class="btn-submit" (click)="onSubmit()" [disabled]="isLoading || !selectedFile">
+          {{ isLoading ? 'Đang xử lý...' : 'Thêm Banner' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" *ngIf="showEditModal" (click)="closeModals()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Chỉnh Sửa Banner</h3>
+        <button class="btn-close" (click)="closeModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Ảnh Banner</label>
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+          <small>Để trống nếu không muốn thay đổi ảnh</small>
+          <div class="preview-container" *ngIf="previewImage">
+            <img [src]="previewImage" alt="Preview" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tiêu đề</label>
+          <input type="text" [(ngModel)]="formData.title" placeholder="Nhập tiêu đề" />
+        </div>
+        <div class="form-group">
+          <label>Mô tả</label>
+          <textarea [(ngModel)]="formData.description" placeholder="Nhập mô tả" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Thứ tự</label>
+          <input type="number" [(ngModel)]="formData.order" min="0" />
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" [(ngModel)]="formData.isActive" />
+            Hoạt động
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" [(ngModel)]="formData.isModal" />
+            📌 Ghim làm Modal (hiển thị popup khi vào trang)
+          </label>
+          <small>Chỉ có thể ghim 1 banner làm modal. Banner khác sẽ tự động bỏ ghim.</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeModals()">Hủy</button>
+        <button class="btn-submit" (click)="onSubmit()" [disabled]="isLoading">
+          {{ isLoading ? 'Đang xử lý...' : 'Cập nhật' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

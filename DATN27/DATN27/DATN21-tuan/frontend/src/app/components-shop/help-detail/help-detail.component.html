@@ -1,0 +1,36 @@
+<div class="help-detail-page">
+  <div class="help-detail-container">
+    <!-- Main Content -->
+    <div class="help-detail-content" *ngIf="!loading && !error && helpItem">
+      <!-- Back Button -->
+      <a class="back-button" (click)="goBack()">Trung tâm trợ giúp</a>
+
+      <!-- Help Detail -->
+      <article class="help-article">
+        <!-- Title -->
+        <h1 class="help-title">{{ helpItem.name }}</h1>
+        <hr class="title-divider">
+
+        <!-- Description Content -->
+        <div class="help-body">
+          <div class="help-description">{{ helpItem.description }}</div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="loading">
+      <p>Đang tải...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="error && !loading">
+      <p>{{ error }}</p>
+      <a class="back-button" (click)="goBack()">Trung tâm trợ giúp</a>
+    </div>
+  </div>
+</div>
+
+<!-- Chatbox Component -->
+<app-chatbox></app-chatbox>
+

@@ -1,0 +1,164 @@
+<div class="admin-page-form">
+  <div class="page-header">
+    <h2>✏️ Chỉnh sửa trợ giúp</h2>
+    <a routerLink="/admin/help-list" class="btn-back">← Quay lại</a>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoadingData" class="loading-state">
+    <p>Đang tải thông tin trợ giúp...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="errorMessage">
+    ❌ {{ errorMessage }}
+    <button class="close-btn" (click)="errorMessage = null">×</button>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="helpForm" class="admin-form" *ngIf="!isLoadingData">
+
+    <div class="form-section">
+      <h3>Thông tin cơ bản</h3>
+
+      <div class="form-group">
+        <label for="name">Tên trợ giúp <span class="required">*</span></label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Nhập tên trợ giúp"
+          [class.error]="helpForm.get('name')?.invalid && helpForm.get('name')?.touched"
+        />
+        <span *ngIf="helpForm.get('name')?.errors?.['required'] && helpForm.get('name')?.touched" class="error-message-text">
+          Tên trợ giúp không được để trống.
+        </span>
+        <span *ngIf="helpForm.get('name')?.errors?.['minlength'] && helpForm.get('name')?.touched" class="error-message-text">
+          Tên trợ giúp không được để trống.
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Mô tả <span class="required">*</span></label>
+        <textarea
+          id="description"
+          formControlName="description"
+          placeholder="Nhập mô tả trợ giúp"
+          rows="4"
+          [class.error]="helpForm.get('description')?.invalid && helpForm.get('description')?.touched"
+        ></textarea>
+        <span *ngIf="helpForm.get('description')?.errors?.['required'] && helpForm.get('description')?.touched" class="error-message-text">
+          Mô tả không được để trống.
+        </span>
+        <span *ngIf="helpForm.get('description')?.errors?.['minlength'] && helpForm.get('description')?.touched" class="error-message-text">
+          Mô tả không được để trống.
+        </span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="icon">Icon (Font Awesome) <span class="required">*</span></label>
+          <input
+            type="text"
+            id="icon"
+            formControlName="icon"
+            placeholder="fas fa-question-circle"
+            [class.error]="helpForm.get('icon')?.invalid && helpForm.get('icon')?.touched"
+          />
+          <small class="hint">Ví dụ: fas fa-question-circle, fas fa-user, fas fa-shopping-cart</small>
+
+          <div class="icon-preview-section">
+            <label>Icon phổ biến:</label>
+            <div class="icon-options">
+              <button
+                type="button"
+                *ngFor="let iconOption of commonIcons"
+                (click)="helpForm.patchValue({ icon: iconOption.class })"
+                class="icon-option-btn"
+                [class.selected]="helpForm.get('icon')?.value === iconOption.class"
+                [title]="iconOption.label"
+              >
+                <i [class]="iconOption.class"></i>
+                <span>{{ iconOption.label }}</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="icon-preview" *ngIf="helpForm.get('icon')?.value">
+            <label>Xem trước:</label>
+            <div class="preview-box" [style.background-color]="helpForm.get('iconColor')?.value || '#6c757d'">
+              <i [class]="helpForm.get('icon')?.value"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="iconColor">Màu icon <span class="required">*</span></label>
+          <div class="color-input-group">
+            <input
+              type="color"
+              id="iconColor"
+              formControlName="iconColor"
+              [class.error]="helpForm.get('iconColor')?.invalid && helpForm.get('iconColor')?.touched"
+            />
+            <input
+              type="text"
+              formControlName="iconColor"
+              placeholder="#6c757d"
+              class="color-text-input"
+            />
+          </div>
+
+          <div class="color-options">
+            <label>Màu phổ biến:</label>
+            <div class="color-palette">
+              <button
+                type="button"
+                *ngFor="let colorOption of commonColors"
+                (click)="helpForm.patchValue({ iconColor: colorOption.value })"
+                class="color-option-btn"
+                [style.background-color]="colorOption.value"
+                [class.selected]="helpForm.get('iconColor')?.value === colorOption.value"
+                [title]="colorOption.label"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="order">Thứ tự hiển thị</label>
+          <input
+            type="number"
+            id="order"
+            formControlName="order"
+            placeholder="0"
+            min="0"
+            [class.error]="helpForm.get('order')?.invalid && helpForm.get('order')?.touched"
+          />
+          <small class="hint">Số nhỏ hơn sẽ hiển thị trước. Mặc định: 0</small>
+        </div>
+
+        <div class="form-group">
+          <label for="status">Trạng thái <span class="required">*</span></label>
+          <select
+            id="status"
+            formControlName="status"
+            [class.error]="helpForm.get('status')?.invalid && helpForm.get('status')?.touched"
+          >
+            <option value="active">Hoạt động</option>
+            <option value="inactive">Vô hiệu hóa</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a routerLink="/admin/help-list" class="btn-cancel">Hủy</a>
+      <button type="submit" class="btn-submit" [disabled]="helpForm.invalid || isLoading">
+        {{ isLoading ? 'Đang cập nhật...' : '✓ Cập nhật trợ giúp' }}
+      </button>
+    </div>
+  </form>
+</div>
+

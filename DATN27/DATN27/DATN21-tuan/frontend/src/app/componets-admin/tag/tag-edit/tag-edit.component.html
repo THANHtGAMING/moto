@@ -1,0 +1,50 @@
+<div class="admin-page-form">
+  <div class="page-header">
+    <h2>✏️ Sửa tag</h2>
+    <a routerLink="/admin/tag-list" class="btn-back">← Quay lại</a>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading && !tagForm.value.name">
+    <div class="spinner"></div>
+    <p>Đang tải...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="errorMessage">
+    ❌ {{ errorMessage }}
+    <button class="close-btn" (click)="errorMessage = null">×</button>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="tagForm" class="admin-form" *ngIf="!isLoading || tagForm.value.name">
+
+    <div class="form-section">
+      <h3>Thông tin cơ bản</h3>
+
+      <div class="form-group">
+        <label for="name">Tên tag <span class="required">*</span></label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Nhập tên tag"
+          [class.error]="tagForm.get('name')?.invalid && tagForm.get('name')?.touched"
+        />
+        <span *ngIf="tagForm.get('name')?.errors?.['minlength'] && tagForm.get('name')?.touched" class="error-message-text">
+          Tên tag không được để trống.
+        </span>
+        <span *ngIf="tagForm.get('name')?.errors?.['required'] && tagForm.get('name')?.touched" class="error-message-text">
+          Tên tag không được để trống.
+        </span>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a routerLink="/admin/tag-list" class="btn-cancel">Hủy</a>
+      <button type="submit" class="btn-submit" [disabled]="tagForm.invalid || isLoading">
+        {{ isLoading ? 'Đang cập nhật...' : '✓ Lưu thay đổi' }}
+      </button>
+    </div>
+  </form>
+</div>
+

@@ -1,0 +1,46 @@
+<div class="help-page">
+  <div class="help-container">
+    <!-- Left Section: Help Cards Grid -->
+    <div class="help-cards-section">
+      <div class="help-grid" *ngIf="!loading && !error">
+        <div class="help-card" *ngFor="let item of helpItems" (click)="goToDetail(item._id)">
+          <div class="help-card-icon" [style.background-color]="item.iconColor || '#6c757d'">
+            <i [class]="item.icon"></i>
+          </div>
+          <div class="help-card-content">
+            <h3>{{ item.name }}</h3>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="loading">
+        <p>Đang tải...</p>
+      </div>
+
+      <!-- Error State -->
+      <div class="error-state" *ngIf="error && !loading">
+        <p>{{ error }}</p>
+      </div>
+    </div>
+
+    <!-- Right Section: Need More Help -->
+    <div class="help-sidebar">
+      <div class="sidebar-card">
+        <h2>Cần thêm trợ giúp?</h2>
+        <p>
+          Từ theo dõi đơn hàng, đến trả hàng, v.v. Trò chuyện với trợ lý kỹ thuật số của chúng tôi để được hỗ trợ tự phục vụ hoặc trao đổi trực tiếp với nhân viên.
+        </p>
+        <button class="chat-button" (click)="openChat()">
+          <i class="fas fa-comments"></i>
+          Trò chuyện ngay
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chatbox Component -->
+<app-chatbox></app-chatbox>
+

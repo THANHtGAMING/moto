@@ -1,0 +1,188 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>👥 Quản lý người dùng</h2>
+      <div class="search-box">
+        <input 
+          type="text" 
+          placeholder="Tìm kiếm theo tên hoặc email..." 
+          [(ngModel)]="keyword"
+          (input)="onSearch()"
+        />
+      </div>
+      <div class="filter-group">
+        <select [(ngModel)]="roleFilter" (change)="onRoleFilterChange()">
+          <option value="">Tất cả vai trò</option>
+          <option value="admin">Quản trị viên</option>
+          <option value="user">Người dùng</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Table -->
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên người dùng</th>
+          <th>Email</th>
+          <th>Vai trò</th>
+          <th>Ngày đăng ký</th>
+          <th>Số đơn hàng</th>
+          <th>Tổng tiền đã mua</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of filteredusers | paginate: { itemsPerPage: 10, currentPage: p }; index as i">
+          <td>{{ i + 1 }}</td>
+          <td><strong>{{ u.fullName }}</strong></td>
+          <td>{{ u.email }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="u.isAdmin ? 'badge-admin' : 'badge-inactive'">
+              {{ u.isAdmin ? 'Quản trị viên' : 'Người dùng' }}
+            </span>
+          </td>
+          <td>{{ formatDate(u.createdAt) }}</td>
+          <td>
+            <span style="font-weight: 600; color: #1890ff;">{{ u.orderCount || 0 }}</span>
+          </td>
+          <td>
+            <span style="font-weight: 600; color: #52c41a;">{{ formatCurrency(u.totalSpent) }}</span>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="(u.status || 'active') === 'active' ? 'badge-active' : 'badge-inactive'">
+              {{ (u.status || 'active') === 'active' ? 'Hoạt động' : 'Đã khóa' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button
+              (click)="viewUserDetail(u._id)"
+              class="btn-action btn-view"
+              title="Xem chi tiết">👁️</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredusers.length === 0">
+          <td colspan="9" class="empty-row">
+            <p>Không tìm thấy người dùng nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="filteredusers.length > 0">
+    <span>Tổng: <strong>{{ filteredusers.length }}</strong> người dùng</span>
+    <span style="margin-left: 20px;">
+      Tổng đơn hàng: <strong>{{ getTotalOrders() }}</strong>
+    </span>
+    <span style="margin-left: 20px;">
+      Tổng doanh thu: <strong>{{ formatCurrency(getTotalRevenue()) }}</strong>
+    </span>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="p = $event"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>
+</div>
+
+<!-- User Detail Modal -->
+<div class="modal-overlay" *ngIf="showUserDetailModal" (click)="closeUserDetailModal()">
+  <div class="modal-content user-detail-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>👤 Chi tiết người dùng</h3>
+      <button class="modal-close" (click)="closeUserDetailModal()">×</button>
+    </div>
+    
+    <div class="modal-body" *ngIf="selectedUser">
+      <!-- Thông tin cơ bản -->
+      <div class="detail-section">
+        <h4>Thông tin cơ bản</h4>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Họ và tên:</label>
+            <span>{{ selectedUser.fullName }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Email:</label>
+            <span>{{ selectedUser.email }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Vai trò:</label>
+            <span class="status-badge" [ngClass]="selectedUser.isAdmin ? 'badge-admin' : 'badge-inactive'">
+              {{ selectedUser.isAdmin ? 'Quản trị viên' : 'Người dùng' }}
+            </span>
+          </div>
+          <div class="detail-item">
+            <label>Trạng thái:</label>
+            <span class="status-badge" [ngClass]="(selectedUser.status || 'active') === 'active' ? 'badge-active' : 'badge-inactive'">
+              {{ (selectedUser.status || 'active') === 'active' ? 'Hoạt động' : 'Đã khóa' }}
+            </span>
+          </div>
+          <div class="detail-item">
+            <label>Ngày đăng ký:</label>
+            <span>{{ formatDate(selectedUser.createdAt) }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Cập nhật lần cuối:</label>
+            <span>{{ formatDate(selectedUser.updatedAt) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thống kê -->
+      <div class="detail-section">
+        <h4>Thống kê mua hàng</h4>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Số đơn hàng</div>
+            <div class="stat-value">{{ selectedUser.orderCount || 0 }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Tổng tiền đã mua</div>
+            <div class="stat-value">{{ formatCurrency(selectedUser.totalSpent) }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Địa chỉ -->
+      <div class="detail-section" *ngIf="selectedUser.addresses && selectedUser.addresses.length > 0">
+        <h4>Địa chỉ ({{ selectedUser.addresses.length }})</h4>
+        <div class="address-list">
+          <div class="address-item" *ngFor="let address of selectedUser.addresses">
+            <div class="address-header">
+              <strong>{{ address.name }}</strong>
+              <span class="status-badge badge-active" *ngIf="address.isDefault">Mặc định</span>
+            </div>
+            <div class="address-details">
+              <p><strong>Người nhận:</strong> {{ address.recipientName }}</p>
+              <p><strong>SĐT:</strong> {{ address.phoneNumber }}</p>
+              <p><strong>Địa chỉ:</strong> {{ address.fullAddress }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-section" *ngIf="!selectedUser.addresses || selectedUser.addresses.length === 0">
+        <h4>Địa chỉ</h4>
+        <p style="color: #999; font-style: italic;">Chưa có địa chỉ nào</p>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" (click)="closeUserDetailModal()">Đóng</button>
+    </div>
+  </div>
+</div>
+  

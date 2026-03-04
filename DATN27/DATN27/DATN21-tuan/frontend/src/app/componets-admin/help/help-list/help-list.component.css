@@ -1,0 +1,653 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
+@import '../../shared/admin-styles.css';
+
+/* ============================================
+   Enhanced Help List Styles
+   ============================================ */
+
+.admin-page {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  background: #ffffff;
+  min-height: 100vh;
+  font-family: 'Be Vietnam Pro', 'Inter', 'Roboto', 'Segoe UI', Tahoma, Arial, sans-serif;
+  overflow-x: hidden;
+  overflow-y: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-sizing: border-box;
+}
+
+/* Ẩn scrollbar ngang cho tất cả elements bên trong */
+.admin-page * {
+  scrollbar-width: thin; /* Firefox - thin scrollbar */
+  scrollbar-color: transparent transparent; /* Firefox - ẩn scrollbar */
+  -ms-overflow-style: -ms-autohiding-scrollbar; /* IE and Edge */
+}
+
+/* Ẩn scrollbar ngang cho Chrome, Safari, Opera - chỉ cho elements con */
+.admin-page *::-webkit-scrollbar {
+  height: 0px; /* Ẩn scrollbar ngang */
+}
+
+/* Chỉ cho phép scrollbar dọc ở body/html, không phải ở admin-page */
+.admin-page {
+  position: relative;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 18px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+  gap: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  flex: 1;
+}
+
+.page-header h2 {
+  margin: 0;
+  color: #000000;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+.btn-add {
+  background: #4A90E2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(74, 144, 226, 0.25);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-add:hover {
+  background: #357ABD;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(74, 144, 226, 0.35);
+}
+
+/* Filters Section */
+.filters {
+  background: #ffffff;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Search Box */
+.search-box {
+  margin: 0;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: #fafafa;
+  box-sizing: border-box;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+  color: #000000;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.search-box input:hover {
+  border-color: #a0a0a0;
+  background: white;
+}
+
+.search-box input::placeholder {
+  color: #999999;
+}
+
+.sort-select {
+  padding: 10px 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #fafafa;
+  color: #000000;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  min-width: 160px;
+  box-sizing: border-box;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.sort-select:hover {
+  border-color: #a0a0a0;
+  background: white;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+/* Filter Group */
+.filter-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-group select {
+  padding: 10px 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #fafafa;
+  color: #000000;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  min-width: 160px;
+  box-sizing: border-box;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.filter-group select:hover {
+  border-color: #a0a0a0;
+  background: white;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.filter-group select option {
+  padding: 10px;
+  background: white;
+  color: #000000;
+  font-weight: 500;
+}
+
+/* Filter Buttons */
+.filter-btn-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-btn {
+  padding: 10px 18px;
+  background: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+  min-width: 140px;
+  text-align: left;
+  position: relative;
+}
+
+.filter-btn::after {
+  content: '▼';
+  float: right;
+  font-size: 10px;
+  margin-left: 8px;
+  opacity: 0.6;
+}
+
+.filter-btn:hover {
+  background: #f5f5f5;
+  border-color: #000000;
+}
+
+.filter-btn.active {
+  background: #000000;
+  color: white;
+  border-color: #000000;
+}
+
+.filter-btn.active::after {
+  opacity: 1;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.filter-option {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #000000;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.filter-option:last-child {
+  border-bottom: none;
+}
+
+.filter-option:hover {
+  background: #f5f5f5;
+}
+
+.filter-option.selected {
+  background: #000000;
+  color: white;
+  font-weight: 600;
+}
+
+/* Reset Button */
+.btn-reset {
+  padding: 10px 18px;
+  background: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000000;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.btn-reset:hover {
+  background: #f5f5f5;
+  border-color: #000000;
+  color: #000000;
+}
+
+.btn-clear-filters {
+  padding: 10px 18px;
+  background: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000000;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.btn-clear-filters:hover {
+  background: #f5f5f5;
+  border-color: #000000;
+  color: #000000;
+}
+
+/* Table Container */
+.table-container {
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+  overflow-y: visible;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ẩn scrollbar ngang của table container */
+.table-container::-webkit-scrollbar {
+  height: 6px; /* Scrollbar ngang mỏng cho table */
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Firefox - scrollbar ngang cho table */
+.table-container {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #c1c1c1 #f1f1f1; /* Firefox */
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  background: #f5f5f5;
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 800;
+  color: #000000;
+  border-bottom: 2px solid #e0e0e0;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.admin-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.admin-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: #f5f5f5;
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Icon Preview */
+.icon-preview {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Description Cell */
+.description-cell {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-block;
+  letter-spacing: 0.3px;
+}
+
+.badge-active {
+  background: #000000;
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.badge-inactive {
+  background: #999999;
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.status-badge.active {
+  background: #000000;
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.status-badge.inactive {
+  background: #999999;
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Status Indicator with Dot */
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.status-indicator:hover {
+  opacity: 0.7;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.status-dot.active {
+  background: #27ae60;
+  box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2);
+}
+
+.status-dot.inactive {
+  background: #e74c3c;
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+}
+
+.status-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #000000;
+}
+
+/* Actions */
+.actions-cell {
+  white-space: nowrap;
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  margin: 0 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.btn-edit {
+  color: #000000;
+  background: #f5f5f5;
+}
+
+.btn-edit:hover {
+  background: #000000;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.btn-delete {
+  color: #000000;
+  background: #f5f5f5;
+}
+
+.btn-delete:hover {
+  background: #000000;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.btn-toggle {
+  color: #000000;
+  background: #f5f5f5;
+}
+
+.btn-toggle:hover {
+  background: #000000;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.btn-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Empty Row */
+.empty-row {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999999;
+  font-size: 16px;
+}
+
+.empty-row p {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Stats */
+.stats {
+  background: #ffffff;
+  padding: 14px 24px;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #666666;
+  font-weight: 600;
+}
+
+.stats strong {
+  color: #000000;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* Pagination */
+.pagination {
+  background: #ffffff;
+  padding: 18px 24px;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .filter-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group select {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-page {
+    padding: 0;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .filters {
+    padding: 15px;
+  }
+
+  .admin-table {
+    font-size: 12px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 8px;
+  }
+}

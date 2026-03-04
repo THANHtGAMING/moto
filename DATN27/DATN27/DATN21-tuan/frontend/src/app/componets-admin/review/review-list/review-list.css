@@ -1,0 +1,836 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
+@import '../../shared/admin-styles.css';
+
+/* ============================================
+   Enhanced Review List Styles
+   ============================================ */
+
+.admin-page {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  background: #ffffff;
+  min-height: 100vh;
+  font-family: 'Be Vietnam Pro', 'Inter', 'Roboto', 'Segoe UI', Tahoma, Arial, sans-serif;
+  overflow-x: hidden;
+  overflow-y: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-sizing: border-box;
+}
+
+/* Ẩn scrollbar ngang cho tất cả elements bên trong */
+.admin-page * {
+  scrollbar-width: thin; /* Firefox - thin scrollbar */
+  scrollbar-color: transparent transparent; /* Firefox - ẩn scrollbar */
+  -ms-overflow-style: -ms-autohiding-scrollbar; /* IE and Edge */
+}
+
+/* Ẩn scrollbar ngang cho Chrome, Safari, Opera - chỉ cho elements con */
+.admin-page *::-webkit-scrollbar {
+  height: 0px; /* Ẩn scrollbar ngang */
+}
+
+/* Chỉ cho phép scrollbar dọc ở body/html, không phải ở admin-page */
+.admin-page {
+  position: relative;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 18px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+  gap: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  flex: 1;
+}
+
+.page-header h2 {
+  margin: 0;
+  color: #000000;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+/* Messages */
+.message {
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin: 20px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Filters Section */
+.filters {
+  background: #ffffff;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Search Box */
+.search-box {
+  margin: 0;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: #fafafa;
+  box-sizing: border-box;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+  color: #000000;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.search-box input:hover {
+  border-color: #a0a0a0;
+  background: white;
+}
+
+.search-box input::placeholder {
+  color: #999999;
+}
+
+/* Filter Group */
+.filter-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-group select {
+  padding: 10px 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #fafafa;
+  color: #000000;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  min-width: 160px;
+  box-sizing: border-box;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.filter-group select:hover {
+  border-color: #a0a0a0;
+  background: white;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.filter-group select option {
+  padding: 10px;
+  background: white;
+  color: #000000;
+  font-weight: 500;
+}
+
+.btn-cancel {
+  padding: 10px 18px;
+  background: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000000;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.btn-cancel:hover {
+  background: #f5f5f5;
+  border-color: #000000;
+  color: #000000;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666666;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Reviews Container */
+.reviews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Review Card */
+.review-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.review-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.reviewer-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.reviewer-avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #000000;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid #f0f0f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reviewer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reviewer-details {
+  flex: 1;
+}
+
+.reviewer-name {
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 6px 0;
+  font-size: 16px;
+}
+
+.review-date {
+  font-size: 13px;
+  color: #999999;
+  margin: 0 0 6px 0;
+  font-weight: 500;
+}
+
+.product-name {
+  font-size: 14px;
+  color: #666666;
+  margin: 0;
+  font-weight: 600;
+}
+
+.product-name strong {
+  color: #000000;
+  font-weight: 700;
+}
+
+.review-rating {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.star {
+  color: #ddd;
+  font-size: 20px;
+  transition: all 0.2s ease;
+}
+
+.star.filled {
+  color: #ffc107;
+  text-shadow: 0 1px 2px rgba(255, 193, 7, 0.3);
+}
+
+.review-content {
+  margin-bottom: 20px;
+}
+
+.review-comment {
+  color: #333333;
+  line-height: 1.7;
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.review-images {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.review-image {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.review-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-color: #000000;
+}
+
+.review-stats {
+  display: flex;
+  gap: 20px;
+  padding: 15px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  font-size: 14px;
+  color: #666666;
+  font-weight: 600;
+}
+
+/* Replies Section */
+.replies-section {
+  margin-top: 20px;
+  padding: 18px;
+  background: #fafafa;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+}
+
+.replies-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 15px;
+  letter-spacing: -0.2px;
+}
+
+.reply-item {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 12px;
+  animation: slideIn 0.3s ease-out;
+  transition: all 0.2s;
+  border: 1px solid #f0f0f0;
+}
+
+.reply-item:hover {
+  background: #f5f5f5;
+  transform: translateX(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reply-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.replyer-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid #f0f0f0;
+}
+
+.replyer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.replyer-avatar span {
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.replyer-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.replyer-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #000000;
+}
+
+.admin-badge {
+  background: #000000;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 8px;
+  letter-spacing: 0.3px;
+}
+
+.reply-date {
+  font-size: 12px;
+  color: #999999;
+  font-weight: 500;
+}
+
+.delete-reply-btn {
+  background: #000000;
+  color: white;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-weight: 700;
+}
+
+.delete-reply-btn:hover {
+  background: #333333;
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.reply-content {
+  color: #333333;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.reply-content p {
+  margin: 0;
+}
+
+/* Admin Reply Section */
+.admin-reply-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.btn-reply {
+  padding: 10px 20px;
+  background: #000000;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-reply::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-reply:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-reply:hover {
+  background: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.reply-input-section {
+  margin-top: 15px;
+  padding: 18px;
+  background: #fafafa;
+  border-radius: 10px;
+  animation: slideDown 0.3s ease-out;
+  border: 1px solid #f0f0f0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 300px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+}
+
+.reply-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+  resize: vertical;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  background: white;
+  color: #000000;
+  font-weight: 500;
+}
+
+.reply-textarea:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.reply-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-submit-reply {
+  padding: 10px 20px;
+  background: #000000;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-submit-reply::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-submit-reply:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-submit-reply:hover:not(:disabled) {
+  background: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.btn-submit-reply:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-cancel-reply {
+  padding: 10px 18px;
+  background: white;
+  color: #000000;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.btn-cancel-reply:hover {
+  background: #f5f5f5;
+  border-color: #000000;
+}
+
+/* Review Actions */
+.review-actions {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 12px;
+}
+
+.btn-action {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-hide {
+  background: #000000;
+  color: white;
+}
+
+.btn-hide:hover {
+  background: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-show {
+  background: #27ae60;
+  color: white;
+}
+
+.btn-show:hover {
+  background: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
+/* Pagination */
+.pagination {
+  background: #ffffff;
+  padding: 18px 24px;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Stats */
+.stats {
+  background: #ffffff;
+  padding: 14px 24px;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #666666;
+  font-weight: 600;
+}
+
+.stats strong {
+  color: #000000;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999999;
+  background: #fafafa;
+  border-radius: 12px;
+  margin: 20px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid #f0f0f0;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .filter-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group select {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-page {
+    padding: 0;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .header-left {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .filters {
+    padding: 15px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box {
+    max-width: 100%;
+  }
+
+  .reviews-container {
+    padding: 15px;
+  }
+
+  .review-card {
+    padding: 18px;
+  }
+
+  .review-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .review-rating {
+    align-self: flex-start;
+  }
+}

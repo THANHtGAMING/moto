@@ -1,0 +1,107 @@
+[
+  {
+    "_id": "691e27b20c1ab1603b0309f7",
+    "name": "Áo phông",
+    "slug": "ao-phong",
+    "createdAt": "2025-11-19T20:25:22.934Z",
+    "updatedAt": "2025-11-28T19:22:27.025Z",
+    "__v": 0
+  },
+  {
+    "_id": "692975ab8fa7975cadfec440",
+    "name": "Đồ ngủ & Đồ lót",
+    "slug": "do-ngu-do-lot",
+    "createdAt": "2025-11-28T10:12:59.188Z",
+    "updatedAt": "2025-11-28T19:31:12.324Z",
+    "__v": 0
+  },
+  {
+    "_id": "692975bb8fa7975cadfec445",
+    "name": "Áo khoác",
+    "slug": "ao-khoac",
+    "createdAt": "2025-11-28T10:13:15.042Z",
+    "updatedAt": "2025-11-28T19:31:19.996Z",
+    "__v": 0
+  },
+  {
+    "_id": "692975d38fa7975cadfec44a",
+    "name": "Áo polos",
+    "slug": "ao-polos",
+    "createdAt": "2025-11-28T10:13:39.706Z",
+    "updatedAt": "2025-11-28T19:31:28.100Z",
+    "__v": 0
+  },
+  {
+    "_id": "6929760a8fa7975cadfec45b",
+    "name": "Quần short",
+    "slug": "quan-short",
+    "createdAt": "2025-11-28T10:14:34.773Z",
+    "updatedAt": "2025-11-28T19:31:34.655Z",
+    "__v": 0
+  },
+  {
+    "_id": "6929762c8fa7975cadfec466",
+    "name": "Áo hoodie và áo nỉ",
+    "slug": "ao-hoodie-va-ao-ni",
+    "createdAt": "2025-11-28T10:15:08.383Z",
+    "updatedAt": "2025-11-28T19:31:54.521Z",
+    "__v": 0
+  },
+  {
+    "_id": "692976848fa7975cadfec46c",
+    "name": "Đồ đội đầu",
+    "slug": "do-doi-dau",
+    "createdAt": "2025-11-28T10:16:36.318Z",
+    "updatedAt": "2025-11-28T19:31:47.266Z",
+    "__v": 0
+  },
+  {
+    "_id": "692976dd8fa7975cadfec471",
+    "name": "Ba lô & Túi xách",
+    "slug": "ba-lo-tui-xach",
+    "createdAt": "2025-11-28T10:18:05.507Z",
+    "updatedAt": "2025-11-28T19:39:40.170Z",
+    "__v": 0
+  },
+  {
+    "_id": "692976ed8fa7975cadfec476",
+    "name": "Phụ kiện ô tô",
+    "slug": "phu-kien-o-to",
+    "createdAt": "2025-11-28T10:18:21.502Z",
+    "updatedAt": "2025-11-28T10:18:21.502Z",
+    "__v": 0
+  },
+  {
+    "_id": "692977238fa7975cadfec47b",
+    "name": "Kính râm",
+    "slug": "kinh-ram",
+    "createdAt": "2025-11-28T10:19:15.713Z",
+    "updatedAt": "2025-11-29T11:32:03.001Z",
+    "__v": 0
+  },
+  {
+    "_id": "6929773f8fa7975cadfec480",
+    "name": "Nhà & Văn phòng",
+    "slug": "nha-van-phong",
+    "createdAt": "2025-11-28T10:19:43.890Z",
+    "updatedAt": "2025-11-29T10:37:01.776Z",
+    "__v": 0
+  },
+  {
+    "_id": "692979288fa7975cadfec50d",
+    "name": "Phụ kiện",
+    "slug": "phu-kien",
+    "createdAt": "2025-11-28T10:27:52.621Z",
+    "updatedAt": "2025-11-28T19:32:24.569Z",
+    "__v": 0
+  },
+  {
+    "_id": "692a0112f421602cdd72b7c1",
+    "name": "Áo phông",
+    "slug": "ao-phong-2",
+    "createdAt": "2025-11-28T20:07:46.320Z",
+    "updatedAt": "2025-11-28T20:07:46.320Z",
+    "__v": 0
+  }
+]
+

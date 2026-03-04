@@ -1,0 +1,102 @@
+<div class="admin-page-form">
+  <div class="page-header">
+    <h2>✏️ Sửa loại sản phẩm</h2>
+    <a routerLink="/admin/type-list" class="btn-back">← Quay lại</a>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading && !typeForm.value.name">
+    <div class="spinner"></div>
+    <p>Đang tải...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="errorMessage">
+    ❌ {{ errorMessage }}
+    <button class="close-btn" (click)="errorMessage = null">×</button>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="typeForm" class="admin-form" *ngIf="!isLoading || typeForm.value.name">
+
+    <div class="form-sections-grid">
+      <!-- Cột trái -->
+      <div class="form-column">
+        <div class="form-section">
+          <h3>Thông tin cơ bản</h3>
+
+          <div class="form-group">
+            <label for="name">Tên loại <span class="required">*</span></label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              placeholder="Nhập tên loại"
+              [class.error]="typeForm.get('name')?.invalid && typeForm.get('name')?.touched"
+            />
+            <span *ngIf="typeForm.get('name')?.errors?.['minlength'] && typeForm.get('name')?.touched" class="error-message-text">
+              Tên loại không được để trống.
+            </span>
+            <span *ngIf="typeForm.get('name')?.errors?.['required'] && typeForm.get('name')?.touched" class="error-message-text">
+              Tên loại không được để trống.
+            </span>
+            <small class="hint">Slug sẽ được tự động cập nhật từ tên loại</small>
+          </div>
+
+          <div class="form-group" *ngIf="type">
+            <label>Slug hiện tại</label>
+            <input type="text" [value]="type.slug" disabled style="background: #f5f5f5;" />
+            <small class="hint">Slug được tự động tạo, không thể chỉnh sửa trực tiếp</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cột phải -->
+      <div class="form-column">
+        <div class="form-section">
+          <h3>Phân loại</h3>
+
+          <div class="form-group">
+            <label>Giới tính áp dụng</label>
+            <div class="checkbox-group" *ngIf="genders.length > 0">
+              <label *ngFor="let gender of genders" class="checkbox-label">
+                <input
+                  type="checkbox"
+                  [value]="gender._id"
+                  [checked]="isGenderSelected(gender._id)"
+                  (change)="onGenderChange(gender._id, $event)"
+                />
+                <span>{{ gender.name }}</span>
+              </label>
+            </div>
+            <small class="hint" *ngIf="genders.length === 0">Chưa có giới tính nào. Vui lòng thêm giới tính trước.</small>
+            <small class="hint" *ngIf="genders.length > 0">Chọn một hoặc nhiều giới tính cho loại sản phẩm này. Có thể để trống nếu áp dụng cho tất cả.</small>
+          </div>
+
+          <div class="form-group">
+            <label>Thẻ</label>
+            <div class="checkbox-group" *ngIf="tags.length > 0">
+              <label *ngFor="let tag of tags" class="checkbox-label">
+                <input
+                  type="checkbox"
+                  [value]="tag._id"
+                  [checked]="isTagSelected(tag._id)"
+                  (change)="onTagChange(tag._id, $event)"
+                />
+                <span>{{ tag.name }}</span>
+              </label>
+            </div>
+            <small class="hint" *ngIf="tags.length === 0">Chưa có tag nào. Vui lòng thêm tag trước.</small>
+            <small class="hint" *ngIf="tags.length > 0">Chọn một hoặc nhiều tags cho loại sản phẩm này. Có thể để trống.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a routerLink="/admin/type-list" class="btn-cancel">Hủy</a>
+      <button type="submit" class="btn-submit" [disabled]="typeForm.invalid || isLoading">
+        {{ isLoading ? 'Đang cập nhật...' : '✓ Lưu thay đổi' }}
+      </button>
+    </div>
+  </form>
+</div>

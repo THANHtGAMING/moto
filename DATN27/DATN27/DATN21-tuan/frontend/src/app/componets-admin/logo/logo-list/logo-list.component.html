@@ -1,0 +1,112 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>🎨 Quản lý Logo</h2>
+    </div>
+    <button class="btn-add" (click)="openAddModal()">+ Thêm logo mới</button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading && logos.length === 0" class="loading-state">
+    <p>Đang tải logo...</p>
+  </div>
+
+  <!-- Logo Grid -->
+  <div class="logo-grid" *ngIf="!isLoading || logos.length > 0">
+    <div *ngFor="let logo of logos; let i = index" class="logo-card">
+      <div class="logo-image-container">
+        <img [src]="logo.imageUrl" [alt]="logo.title || 'Logo'" />
+        <div class="logo-overlay">
+          <div class="logo-actions">
+            <button class="btn-action btn-edit" (click)="openEditModal(logo)" title="Chỉnh sửa">✏️</button>
+            <button class="btn-action btn-delete" (click)="onDelete(logo._id!)" title="Xóa">🗑️</button>
+          </div>
+        </div>
+      </div>
+      <div class="logo-info">
+        <div class="logo-actions-bottom">
+          <button 
+            class="btn-pin" 
+            [class.pinned]="logo.isPinned"
+            (click)="togglePin(logo)"
+            [title]="logo.isPinned ? 'Bỏ ghim' : 'Ghim logo'">
+            <span *ngIf="logo.isPinned">📌 Đã ghim</span>
+            <span *ngIf="!logo.isPinned">📌 Ghim</span>
+          </button>
+        </div>
+        <div class="logo-title" *ngIf="logo.title">{{ logo.title }}</div>
+      </div>
+    </div>
+    <div *ngIf="logos.length === 0" class="empty-state">
+      <p>Chưa có logo nào. Hãy thêm logo mới!</p>
+    </div>
+  </div>
+
+  <!-- Add Modal -->
+  <div class="modal-overlay" *ngIf="showAddModal" (click)="closeModals()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Thêm Logo Mới</h3>
+        <button class="btn-close" (click)="closeModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Ảnh Logo <span class="required">*</span></label>
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+          <div class="preview-container" *ngIf="previewImage">
+            <img [src]="previewImage" alt="Preview" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tiêu đề</label>
+          <input type="text" [(ngModel)]="formData.title" placeholder="Nhập tiêu đề (tùy chọn)" />
+        </div>
+        <div class="form-group">
+          <label>Mô tả</label>
+          <textarea [(ngModel)]="formData.description" placeholder="Nhập mô tả (tùy chọn)" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeModals()">Hủy</button>
+        <button class="btn-submit" (click)="onSubmit()" [disabled]="isLoading || !selectedFile">
+          {{ isLoading ? 'Đang xử lý...' : 'Thêm Logo' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" *ngIf="showEditModal" (click)="closeModals()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Chỉnh Sửa Logo</h3>
+        <button class="btn-close" (click)="closeModals()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Ảnh Logo</label>
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+          <small>Để trống nếu không muốn thay đổi ảnh</small>
+          <div class="preview-container" *ngIf="previewImage">
+            <img [src]="previewImage" alt="Preview" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tiêu đề</label>
+          <input type="text" [(ngModel)]="formData.title" placeholder="Nhập tiêu đề" />
+        </div>
+        <div class="form-group">
+          <label>Mô tả</label>
+          <textarea [(ngModel)]="formData.description" placeholder="Nhập mô tả" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeModals()">Hủy</button>
+        <button class="btn-submit" (click)="onSubmit()" [disabled]="isLoading">
+          {{ isLoading ? 'Đang xử lý...' : 'Cập nhật' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

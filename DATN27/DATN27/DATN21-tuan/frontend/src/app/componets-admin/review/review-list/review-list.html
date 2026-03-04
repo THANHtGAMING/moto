@@ -1,0 +1,168 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>💬 Quản lý đánh giá sản phẩm</h2>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="message success" *ngIf="successMessage">
+    ✅ {{ successMessage }}
+  </div>
+  <div class="message error" *ngIf="errorMessage">
+    ❌ {{ errorMessage }}
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Tìm kiếm theo tên người dùng hoặc nội dung..."
+        [(ngModel)]="keyword"
+        (input)="onSearch()"
+      />
+    </div>
+    <div class="filter-group">
+      <select [(ngModel)]="productFilter" (change)="onFilterChange()">
+        <option value="">Tất cả sản phẩm</option>
+        <option *ngFor="let product of products" [value]="product._id">{{ product.nameProduct }}</option>
+      </select>
+      <button class="btn-cancel" (click)="productFilter = ''; keyword = ''; onFilterChange()">Đặt Lại</button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading">
+    Đang tải...
+  </div>
+
+  <!-- Reviews List -->
+  <div class="reviews-container" *ngIf="!isLoading && filteredReviews.length > 0">
+    <div class="review-card" *ngFor="let review of filteredReviews">
+      <div class="review-header">
+        <div class="reviewer-info">
+          <div class="reviewer-avatar">
+            <img *ngIf="review.userId?.avatar" [src]="review.userId.avatar" alt="{{ review.userId.fullName }}">
+            <span *ngIf="!review.userId?.avatar">{{ (review.userId.fullName || '').charAt(0) || 'U' }}</span>
+          </div>
+          <div class="reviewer-details">
+            <p class="reviewer-name">{{ review.userId.fullName || 'Người dùng' }}</p>
+            <p class="review-date">{{ formatDate(review.createdAt) }}</p>
+            <p class="product-name">Sản phẩm: <strong>{{ getProductName(review.productId) }}</strong></p>
+          </div>
+        </div>
+        <div class="review-rating">
+          <span *ngFor="let filled of getStarsArray(review.rating)"
+                class="star" [class.filled]="filled">★</span>
+        </div>
+      </div>
+
+      <div class="review-content">
+        <p class="review-comment">{{ review.comment }}</p>
+        <div class="review-images" *ngIf="review.images && review.images.length > 0">
+          <img *ngFor="let img of review.images" [src]="img" alt="Review image" class="review-image">
+        </div>
+      </div>
+
+      <div class="review-stats">
+        <span class="stat-item">👍 {{ (review.likes || []).length }}</span>
+        <span class="stat-item">👎 {{ (review.dislikes || []).length }}</span>
+        <span class="stat-item">💬 {{ (review.replies || []).length }} bình luận</span>
+      </div>
+
+      <!-- Replies Section -->
+      <div class="replies-section" *ngIf="review.replies && review.replies.length > 0">
+        <h4 class="replies-title">Bình luận ({{ review.replies.length }})</h4>
+        <div class="reply-item" *ngFor="let reply of review.replies">
+          <div class="reply-header">
+            <div class="replyer-avatar">
+              <img *ngIf="reply.userId?.avatar" [src]="reply.userId.avatar" alt="{{ reply.userId.fullName }}">
+              <span *ngIf="!reply.userId?.avatar">{{ (reply.userId.fullName || '').charAt(0) || 'U' }}</span>
+            </div>
+            <div class="replyer-details">
+              <span class="replyer-name">
+                {{ reply.userId.fullName }}
+                <span class="admin-badge" *ngIf="reply.isAdmin || reply.userId.isAdmin">👑 Quản trị viên</span>
+              </span>
+              <span class="reply-date">{{ formatDate(reply.createdAt) }}</span>
+            </div>
+            <button
+              class="delete-reply-btn"
+              (click)="deleteReply(review, reply._id)"
+              title="Xóa bình luận">
+              ✕
+            </button>
+          </div>
+          <div class="reply-content">
+            <p>{{ reply.comment }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Reply Input -->
+      <div class="admin-reply-section">
+        <button
+          class="btn-reply"
+          (click)="startReply(review._id)"
+          *ngIf="replyingToReviewId !== review._id">
+          💬 Phản hồi khách hàng
+        </button>
+
+        <div class="reply-input-section" *ngIf="replyingToReviewId === review._id">
+          <textarea
+            [(ngModel)]="replyText[review._id]"
+            placeholder="Nhập phản hồi của bạn..."
+            class="reply-textarea"
+            rows="3"></textarea>
+          <div class="reply-actions">
+            <button
+              class="btn-submit-reply"
+              (click)="submitReply(review)"
+              [disabled]="!replyText[review._id]?.trim() || isSubmittingReply[review._id]">
+              {{ isSubmittingReply[review._id] ? 'Đang gửi...' : 'Gửi phản hồi' }}
+            </button>
+            <button
+              class="btn-cancel-reply"
+              (click)="cancelReply(review._id)">
+              Hủy
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="review-actions">
+        <button
+          class="btn-action"
+          [class.btn-hide]="!review.isHidden"
+          [class.btn-show]="review.isHidden"
+          (click)="toggleHideReview(review)">
+          {{ review.isHidden ? '👁️ Hiển thị' : '🙈 Ẩn' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats" *ngIf="filteredReviews.length > 0">
+      <span>Tổng: <strong>{{ filteredReviews.length }}</strong> đánh giá</span>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalItems > itemsPerPage">
+      <pagination-controls
+        (pageChange)="pageChanged($event)"
+        previousLabel="Trước"
+        nextLabel="Sau"
+        screenReaderPaginationLabel="Phân trang"
+        screenReaderPageLabel="trang"
+        screenReaderCurrentLabel="Bạn đang ở trang">
+      </pagination-controls>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && filteredReviews.length === 0">
+    <p>Không có đánh giá nào</p>
+  </div>
+</div>

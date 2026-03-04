@@ -1,0 +1,247 @@
+<div class="contact-page">
+  <div class="contact-container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>📧 Liên hệ với chúng tôi</h1>
+      <p>Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn. Hãy gửi thông tin cho chúng tôi!</p>
+    </div>
+
+    <div class="contact-content">
+      <!-- Combined Card: Form and Contact Info -->
+      <div class="combined-card">
+        <div class="combined-content">
+          <!-- Left: Contact Form -->
+          <div class="contact-form-section">
+            <h2>Gửi thư liên hệ</h2>
+
+            <!-- Success Message -->
+            <div class="success-message" *ngIf="submitSuccess">
+              <div class="message-icon">✅</div>
+              <div class="message-content">
+                <strong>Gửi thư thành công!</strong>
+                <p>Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ phản hồi sớm nhất có thể qua email bạn đã cung cấp.</p>
+              </div>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message" *ngIf="submitError">
+              <div class="message-icon">❌</div>
+              <div class="message-content">
+                <strong>Lỗi:</strong>
+                <p>{{ submitError }}</p>
+              </div>
+            </div>
+
+            <form (ngSubmit)="onSubmit()" #contactFormRef="ngForm">
+              <div class="form-group">
+                <label for="name">Họ và tên <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  [(ngModel)]="contactForm.name"
+                  required
+                  minlength="2"
+                  placeholder="Nhập họ và tên của bạn"
+                  [disabled]="isSubmitting"
+                  [class.error]="submitError && !contactForm.name.trim()"
+                />
+                <small class="form-hint" *ngIf="submitError && !contactForm.name.trim()">
+                  Vui lòng nhập họ và tên của bạn
+                </small>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">Email <span class="required">*</span></label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    [(ngModel)]="contactForm.email"
+                    required
+                    email
+                    placeholder="your.email@example.com"
+                    [disabled]="isSubmitting"
+                    [class.error]="submitError && contactFormRef.controls['email']?.invalid && contactFormRef.controls['email']?.touched"
+                  />
+                  <small class="form-hint" *ngIf="submitError && contactFormRef.controls['email']?.invalid && contactFormRef.controls['email']?.touched">
+                    Vui lòng nhập đúng định dạng email
+                  </small>
+                </div>
+
+                <div class="form-group">
+                  <label for="phone">Số điện thoại</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    [(ngModel)]="contactForm.phone"
+                    pattern="[0-9]{10,11}"
+                    placeholder="0123456789"
+                    [disabled]="isSubmitting"
+                  />
+                  <small class="form-hint">(Tùy chọn) Nhập 10-11 chữ số</small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="subject">Tiêu đề <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  [(ngModel)]="contactForm.subject"
+                  required
+                  minlength="3"
+                  placeholder="Nhập tiêu đề thư"
+                  [disabled]="isSubmitting"
+                  [class.error]="submitError && (!contactForm.subject.trim() || contactForm.subject.trim().length < 3)"
+                />
+                <small class="form-hint" *ngIf="submitError && (!contactForm.subject.trim() || contactForm.subject.trim().length < 3)">
+                  Tiêu đề phải có ít nhất 3 ký tự
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label for="message">Nội dung thư <span class="required">*</span></label>
+                <textarea
+                  id="message"
+                  name="message"
+                  [(ngModel)]="contactForm.message"
+                  required
+                  minlength="10"
+                  rows="6"
+                  placeholder="Nhập nội dung thư của bạn..."
+                  [disabled]="isSubmitting"
+                  [class.error]="submitError && (!contactForm.message.trim() || contactForm.message.trim().length < 10)"
+                ></textarea>
+                <small class="form-hint" *ngIf="submitError && (!contactForm.message.trim() || contactForm.message.trim().length < 10)">
+                  Nội dung thư phải có ít nhất 10 ký tự
+                </small>
+              </div>
+
+              <button
+                type="submit"
+                class="submit-btn"
+                [disabled]="isSubmitting || contactFormRef.invalid"
+                [class.loading]="isSubmitting"
+              >
+                <span *ngIf="!isSubmitting" class="btn-content">
+                  <span class="btn-icon">📤</span>
+                  <span>Gửi thư</span>
+                </span>
+                <span *ngIf="isSubmitting" class="btn-content">
+                  <span class="btn-spinner"></span>
+                  <span>Đang gửi...</span>
+                </span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Right: Contact Information -->
+          <div class="contact-info-section" *ngIf="!isLoadingInfo && contactInfo">
+            <h2>Thông tin liên hệ</h2>
+
+            <div class="info-item">
+              <div class="info-icon">📍</div>
+              <div class="info-content">
+                <h3>Địa chỉ</h3>
+                <p>{{ contactInfo.address || 'Chưa cập nhật' }}</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">📞</div>
+              <div class="info-content">
+                <h3>Điện thoại</h3>
+                <p>
+                  <a [href]="'tel:' + contactInfo.phone">{{ contactInfo.phone || 'Chưa cập nhật' }}</a>
+                </p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">✉️</div>
+              <div class="info-content">
+                <h3>Email</h3>
+                <p>
+                  <a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email || 'Chưa cập nhật' }}</a>
+                </p>
+              </div>
+            </div>
+
+            <div class="info-item" *ngIf="contactInfo.workingHours">
+              <div class="info-icon">🕐</div>
+              <div class="info-content">
+                <h3>Giờ làm việc</h3>
+                <p>{{ contactInfo.workingHours }}</p>
+              </div>
+            </div>
+
+            <!-- Social Media -->
+            <div class="social-media" *ngIf="contactInfo.facebook || contactInfo.instagram || contactInfo.zalo">
+              <h3>Mạng xã hội</h3>
+              <div class="social-links">
+                <a
+                  *ngIf="contactInfo.facebook"
+                  [href]="contactInfo.facebook"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-link facebook"
+                >
+                  <i class="fab fa-facebook"></i> Facebook
+                </a>
+                <a
+                  *ngIf="contactInfo.instagram"
+                  [href]="contactInfo.instagram"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-link instagram"
+                >
+                  <i class="fab fa-instagram"></i> Instagram
+                </a>
+                <a
+                  *ngIf="contactInfo.zalo"
+                  [href]="contactInfo.zalo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-link zalo"
+                >
+                  <i class="fas fa-comment"></i> Zalo
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div class="loading-state" *ngIf="isLoadingInfo">
+            <p>Đang tải thông tin liên hệ...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Section -->
+      <div class="map-section">
+        <div class="map-card">
+          <h2>📍 Vị trí của chúng tôi</h2>
+          <p class="map-description">Tìm đường đến cửa hàng của chúng tôi</p>
+          <div class="google-map-wrapper">
+            <iframe
+              [src]="googleMapEmbedUrl"
+              width="100%"
+              height="450"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Bản đồ vị trí cửa hàng"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+

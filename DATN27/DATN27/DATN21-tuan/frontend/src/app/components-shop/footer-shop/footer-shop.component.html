@@ -1,0 +1,61 @@
+<footer class="site-footer">
+ <div class="footer-top">
+   <div class="footer-section">
+     <h4>Dịch vụ khách hàng</h4>
+     <ul>
+       <li *ngFor="let help of helpItemsCol1">
+         <a [routerLink]="['/help-detail', help._id]">{{ help.name }}</a>
+       </li>
+     </ul>
+   </div>
+   <div class="footer-section">
+     <h4>Mua sắm không lo lắng</h4>
+     <ul>
+       <li *ngFor="let help of helpItemsCol2">
+         <a [routerLink]="['/help-detail', help._id]">{{ help.name }}</a>
+       </li>
+     </ul>
+   </div>
+   <div class="footer-section">
+     <h4>Thông tin</h4>
+     <ul>
+       <li *ngFor="let help of helpItemsCol3">
+         <a [routerLink]="['/help-detail', help._id]">{{ help.name }}</a>
+       </li>
+       <li>
+        <a [routerLink]="['/contact']">Liên hệ</a>
+      </li>
+     
+     </ul>
+   </div>
+  <div class="footer-section social-section">
+    <div class="social-icons">
+      <h4>Chấp nhận thanh toán</h4>
+      <div class="social-links">
+        <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png" alt="Momo" class="payment-logo" />
+        <img src="https://stcd02206177151.cloud.edgevnpay.vn/assets/images/logo-icon/logo-primary.svg" alt="VNPay" class="payment-logo" />
+      </div>
+      <h4 class="follow-us-title">Theo dõi chúng tôi</h4>
+      <div class="social-media-icons">
+        <a href="#" class="social-icon facebook" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+        </a>
+        <a href="#" class="social-icon instagram" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+        </a>
+        <a href="#" class="social-icon zalo" aria-label="Zalo">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 5.58 2 10c0 2.13 1.05 4.04 2.73 5.39L2 22l7.27-2.61C10.05 19.96 10.98 20 12 20c5.52 0 10-3.58 10-8s-4.48-8-10-8zm0 14c-.55 0-1.09-.05-1.62-.14l-.81-.14-.8 2.94 2.94-.8-.14-.81c-.09-.53-.14-1.07-.14-1.62 0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6z"/>
+            <circle cx="9" cy="10" r="1"/>
+            <circle cx="15" cy="10" r="1"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+ </div>
+</footer>

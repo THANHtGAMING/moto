@@ -1,0 +1,296 @@
+<main class="store-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <!-- Items per page dropdown -->
+    <div class="filter-item items-dropdown">
+      <div class="filter-header" (click)="toggleDropdown('items')">
+        <h4>72 Mặt Hàng</h4>
+        <span class="dropdown-arrow" [class.open]="isOpen('items')">▼</span>
+      </div>
+      <div class="filter-content items-content" [class.open]="isOpen('items')">
+        <div class="items-options">
+          <label class="radio-option">
+            <input type="radio" name="items" value="24">
+            <span class="radio-custom"></span>
+            24 Mặt Hàng
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="items" value="48">
+            <span class="radio-custom"></span>
+            48 Mặt Hàng
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="items" value="72" checked>
+            <span class="radio-custom"></span>
+            72 Mặt Hàng
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sort by section -->
+    <div class="filter-item">
+      <div class="filter-header" (click)="toggleDropdown('sort')">
+        <div class="filter-title">
+          <h4>Sắp xếp theo</h4>
+          <span class="filter-selected" *ngIf="!isOpen('sort')">Bán chạy nhất</span>
+        </div>
+        <span class="dropdown-arrow" [class.open]="isOpen('sort')">▼</span>
+      </div>
+      <div class="filter-content" [class.open]="isOpen('sort')">
+        <div class="sort-options">
+          <label class="radio-option">
+            <input type="radio" name="sort" value="best-selling" checked>
+            <span class="radio-custom"></span>
+            Bán chạy nhất
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="sort" value="lowest-price">
+            <span class="radio-custom"></span>
+            Giá thấp nhất
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="sort" value="highest-price">
+            <span class="radio-custom"></span>
+            Giá cao nhất
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="sort" value="newest">
+            <span class="radio-custom"></span>
+            Các mặt hàng mới nhất
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price filter section -->
+    <div class="filter-item">
+      <div class="filter-header" (click)="toggleDropdown('price')">
+        <h4>Giá sản phẩm</h4>
+        <span class="dropdown-arrow" [class.open]="isOpen('price')">▼</span>
+      </div>
+      <div class="filter-content" [class.open]="isOpen('price')">
+        <div class="price-input-container">
+          <div class="price-input-group">
+            <label class="price-label">Từ (đ)</label>
+            <input
+              type="number"
+              class="price-input"
+              placeholder="0"
+              [(ngModel)]="minPrice"
+              (input)="onPriceChange()">
+          </div>
+          <div class="price-input-group">
+            <label class="price-label">Đến (đ)</label>
+            <input
+              type="number"
+              class="price-input"
+              placeholder="Không giới hạn"
+              [(ngModel)]="maxPrice"
+              (input)="onPriceChange()">
+          </div>
+          <button class="price-apply-btn" (click)="applyPriceFilter()">Áp dụng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brands section -->
+    <div class="filter-item">
+      <div class="filter-header" (click)="toggleDropdown('brands')">
+        <h4>Các nhãn hàng</h4>
+        <span class="dropdown-arrow" [class.open]="isOpen('brands')">▼</span>
+      </div>
+      <div class="filter-content" [class.open]="isOpen('brands')">
+        <ul class="teams-list" *ngIf="brands.length > 0">
+          <li *ngFor="let brand of brands">
+            <label class="checkbox-option">
+              <input
+                type="checkbox"
+                [checked]="isBrandSelected(brand._id)"
+                (change)="onBrandChange(brand._id, $event)">
+              <span class="checkbox-custom"></span>
+              {{ brand.name }}
+            </label>
+          </li>
+        </ul>
+        <p *ngIf="brands.length === 0" class="no-data">Không có nhãn hàng nào</p>
+      </div>
+    </div>
+
+    <!-- Người lái xe -->
+    <div class="filter-item">
+      <div class="filter-header" (click)="toggleDropdown('riders')">
+        <h4>Tay đua</h4>
+        <span class="dropdown-arrow" [class.open]="isOpen('riders')">▼</span>
+      </div>
+      <div class="filter-content" [class.open]="isOpen('riders')">
+        <ul class="teams-list" *ngIf="riders.length > 0">
+          <li *ngFor="let rider of riders">
+            <label class="checkbox-option">
+              <input
+                type="checkbox"
+                [checked]="isRiderSelected(rider._id)"
+                (change)="onRiderChange(rider._id, $event)">
+              <span class="checkbox-custom"></span>
+              {{ rider.name }}
+            </label>
+          </li>
+        </ul>
+        <p *ngIf="riders.length === 0" class="no-data">Không có tay đua nào</p>
+      </div>
+    </div>
+
+
+    <!-- Kích cỡ nam -->
+    <div class="filter-item">
+      <div class="filter-header" (click)="toggleDropdown('sizes')">
+        <h4>Kích cỡ</h4>
+        <span class="dropdown-arrow" [class.open]="isOpen('sizes')">▼</span>
+      </div>
+      <div class="filter-content" [class.open]="isOpen('sizes')">
+        <div class="size-grid">
+          <button class="size-button" type="button">XS</button>
+          <button class="size-button" type="button">S</button>
+          <button class="size-button" type="button">M</button>
+          <button class="size-button" type="button">L</button>
+          <button class="size-button" type="button">XL</button>
+          <button class="size-button" type="button">2XL</button>
+          <button class="size-button" type="button">3XL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tất cả các loại sản phẩm -->
+    <div class="filter-item">
+      <div class="filter-header" (click)="toggleDropdown('allDepartments')">
+        <h4>Các loại sản phẩm</h4>
+        <span class="dropdown-arrow" [class.open]="isOpen('allDepartments')">▼</span>
+      </div>
+      <div class="filter-content" [class.open]="isOpen('allDepartments')">
+        <ul class="teams-list" *ngIf="types.length > 0">
+          <li *ngFor="let type of types">
+            <label class="checkbox-option">
+              <input
+                type="checkbox"
+                [checked]="isTypeSelected(type._id)"
+                (change)="onTypeChange(type._id, $event)">
+              <span class="checkbox-custom"></span>
+              {{ type.name }}
+            </label>
+          </li>
+        </ul>
+        <p *ngIf="types.length === 0" class="no-data">Không có loại sản phẩm nào</p>
+      </div>
+    </div>
+
+  </aside>
+  <!-- Product section -->
+  <section class="products-section">
+    <!-- top control bar -->
+    <div class="products-topbar">
+      <div class="product-count">
+        <span class="items-count">72 Mặt Hàng</span>
+        <span class="items-range">1 - 72 trong số 196</span>
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div class="loading-state" *ngIf="loading">
+      <p>Đang tải sản phẩm...</p>
+    </div>
+
+    <!-- Error state -->
+    <div class="error-state" *ngIf="error && !loading">
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- grid -->
+    <div class="product-grid" *ngIf="!loading && !error">
+      <a *ngFor="let item of products"
+         [routerLink]="['/product-detail/' + item._id]"
+         routerLinkActive="router-link-active"
+         class="product-item"
+         [class.out-of-stock]="!isInStock(item)">
+
+        <!-- Product Image -->
+        <div class="product-image-container">
+          <img [src]="getProductImage(item.imagesProduct)"
+               alt="{{item.nameProduct}}"
+               loading="lazy"
+               (error)="$event.target.src=getPlaceholderImage()">
+
+          <!-- Out of stock overlay -->
+          <div class="out-of-stock-overlay" *ngIf="!isInStock(item)">
+            <span>Hết hàng</span>
+          </div>
+
+          <!-- Discount badge -->
+          <span class="discount-badge" *ngIf="hasDiscount(item)">
+            -{{ item.discountProduct }}%
+          </span>
+        </div>
+
+        <!-- Clearance badge -->
+        <div class="clearance-badge" *ngIf="hasDiscount(item)">
+          Giải phóng mặt bằng
+        </div>
+
+        <!-- Product Name -->
+        <h5 class="product-title">{{ item.nameProduct }}</h5>
+
+        <!-- Price -->
+        <div class="price-info">
+          <p class="price">
+            <span class="current-price">{{ getDiscountedPrice(item) | number:'1.0-0' }} đ</span>
+            <span class="original-price" *ngIf="hasDiscount(item)">
+              {{ item.priceProduct | number:'1.0-0' }} đ
+            </span>
+          </p>
+        </div>
+
+        <!-- Stock/Size Info -->
+        <div class="stock-info">
+          <!-- Size badges -->
+          <span class="size-badge" *ngIf="hasSizes(item)">
+            <span class="sizes-label">Sizes:</span> {{ getAvailableSizes(item) }}
+          </span>
+
+          <!-- Stock status -->
+          <span class="stock-status"
+                [class.low-stock]="getTotalStock(item) > 0 && getTotalStock(item) <= 5"
+                [class.no-stock]="!isInStock(item)">
+            {{ getStockInfo(item) }}
+          </span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="!loading && !error && products.length === 0">
+      <p *ngIf="currentKeyword">Không tìm thấy sản phẩm nào cho từ khóa "{{ currentKeyword }}".</p>
+      <p *ngIf="!currentKeyword">Không tìm thấy sản phẩm nào.</p>
+    </div>
+
+    <!-- pagination -->
+    <div class="pagination" *ngIf="!loading && !error && pagination.totalPages > 1">
+      <button
+        [disabled]="pagination.page === 1"
+        (click)="onPageChange(pagination.page - 1)"
+        [class.disabled]="pagination.page === 1">
+        &lt;
+      </button>
+      <button
+        *ngFor="let page of getPageNumbers()"
+        [class.active]="page === pagination.page"
+        (click)="onPageChange(page)">
+        {{ page }}
+      </button>
+      <button
+        [disabled]="pagination.page === pagination.totalPages"
+        (click)="onPageChange(pagination.page + 1)"
+        [class.disabled]="pagination.page === pagination.totalPages">
+        &gt;
+      </button>
+    </div>
+  </section>
+</main>

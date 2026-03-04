@@ -1,0 +1,181 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>📦 Quản lý đơn hàng</h2>
+      <div class="search-box">
+        <input 
+          type="text" 
+          placeholder="Tìm theo mã đơn, tên, SĐT..." 
+          [(ngModel)]="filters.keyword"
+          (input)="onFilterChange()"
+          (keyup.enter)="onFilterChange()"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-section">
+    <div class="filter-group">
+      <div class="filter-item">
+        <label class="filter-label">Trạng thái</label>
+        <select [(ngModel)]="filters.status" (change)="onFilterChange()">
+          <option value="">Tất cả trạng thái</option>
+          <option value="pending">Chờ xử lý</option>
+          <option value="pending_payment">Chờ thanh toán</option>
+          <option value="confirmed">Đã xác nhận</option>
+          <option value="shipping">Đang giao</option>
+          <option value="delivered">Đã giao</option>
+          <option value="cancelled">Đã hủy</option>
+          <option value="failed">Thất bại</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label class="filter-label">Phương thức</label>
+        <select [(ngModel)]="filters.paymentMethod" (change)="onFilterChange()">
+          <option value="">Tất cả phương thức</option>
+          <option value="cod">COD</option>
+          <option value="vnpay">VNPay</option>
+          <option value="momo">Momo</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label class="filter-label">Thanh toán</label>
+        <select [(ngModel)]="filters.isPaid" (change)="onFilterChange()">
+          <option value="">Tất cả thanh toán</option>
+          <option value="true">Đã thanh toán</option>
+          <option value="false">Chưa thanh toán</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label class="filter-label">Từ ngày</label>
+        <input 
+          type="date" 
+          [(ngModel)]="filters.startDate"
+          (change)="onFilterChange()"
+          class="date-input"
+        />
+      </div>
+      <div class="filter-item">
+        <label class="filter-label">Đến ngày</label>
+        <input 
+          type="date" 
+          [(ngModel)]="filters.endDate"
+          (change)="onFilterChange()"
+          class="date-input"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="message-container" *ngIf="errorMessage || successMessage">
+    <div class="error-message" *ngIf="errorMessage">
+      ❌ {{ errorMessage }}
+      <button class="close-btn" (click)="clearMessages()">×</button>
+    </div>
+    <div class="success-message" *ngIf="successMessage">
+      ✓ {{ successMessage }}
+      <button class="close-btn" (click)="clearMessages()">×</button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Đang tải...</p>
+  </div>
+
+  <!-- Order Table -->
+  <div class="table-container" *ngIf="!isLoading">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Mã đơn</th>
+          <th>Khách hàng</th>
+          <th>Tổng tiền</th>
+          <th>Mã giảm giá</th>
+          <th>Thanh toán</th>
+          <th>Trạng thái</th>
+          <th>Ngày tạo</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td class="code-cell">
+            <strong>{{ order.orderCode }}</strong>
+          </td>
+          <td>
+            <div *ngIf="order.userId">
+              <strong>{{ order.userId.fullName || order.shippingAddress.fullName }}</strong>
+              <p class="phone-number">{{ order.shippingAddress.phoneNumber }}</p>
+            </div>
+            <div *ngIf="!order.userId">
+              <strong>{{ order.shippingAddress.fullName }}</strong>
+              <p class="phone-number">{{ order.shippingAddress.phoneNumber }}</p>
+            </div>
+          </td>
+          <td>
+            <div class="price-info">
+              <div class="final-price">{{ formatPrice(order.finalPrice) }}</div>
+              <div class="original-price" *ngIf="order.totalPrice !== order.finalPrice">
+                {{ formatPrice(order.totalPrice) }}
+              </div>
+            </div>
+          </td>
+          <td class="coupon-cell">
+            <span class="coupon-badge" *ngIf="order.couponId && order.couponId.code">
+              🎟️ {{ order.couponId.code }}
+            </span>
+            <span class="no-coupon" *ngIf="!order.couponId || !order.couponId.code">
+              -
+            </span>
+          </td>
+          <td>
+            <div>
+              <span class="payment-badge" [class.paid]="isOrderPaid(order)" [class.unpaid]="!isOrderPaid(order)" [ngClass]="getPaymentMethodClass(order.paymentMethod)">
+                {{ getPaymentMethodText(order.paymentMethod) }}
+              </span>
+              <p class="text-muted" *ngIf="isOrderPaid(order)">✓ Đã thanh toán</p>
+              <p class="text-muted" *ngIf="!isOrderPaid(order)">⏳ Chưa thanh toán</p>
+            </div>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusBadgeClass(order.status)">
+              {{ getStatusText(order.status) }}
+            </span>
+          </td>
+          <td class="date-cell">
+            {{ formatDate(order.createdAt) }}
+          </td>
+          <td class="actions-cell">
+            <a [routerLink]="['/admin/order-detail', order._id]" class="btn-view">👁️</a>
+          </td>
+        </tr>
+        <tr *ngIf="orders.length === 0">
+          <td colspan="8" class="empty-row">
+            <p>Không tìm thấy đơn hàng nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Hidden element for pagination-controls to calculate total pages -->
+  <div style="display: none;">
+    <div *ngFor="let item of dummyArray | paginate: { itemsPerPage: pagination.limit, currentPage: p }"></div>
+  </div>
+
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="onPageChange($event)"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>  
+</div>
+

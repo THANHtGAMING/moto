@@ -1,0 +1,68 @@
+<body>
+
+<div class="background"></div>
+
+<header class="top-bar">
+  <div class="top-links">
+    <a routerLink="/" class="back">QUAY LẠI</a>
+  </div>
+</header>
+
+<div class="login-container">
+  <img src="/public/image/logo.svg" alt="MotoGP" class="logo">
+
+  <div class="form-box">
+    <div class="tabs">
+      <a class="tab" routerLink="/register" routerLinkActive="active">ĐĂNG KÝ</a>
+      <a class="tab" routerLink="/login" routerLinkActive="active">ĐĂNG NHẬP</a>
+    </div>
+
+    <div class="social-login">
+      <button class="google" (click)="onGoogleLogin()">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/google.svg" width="25px">
+        Đăng nhập bằng Google
+      </button>
+      <!-- Facebook login tạm thời ẩn - chờ app được review -->
+      <!-- <button class="facebook" (click)="onFacebookLogin()">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" width="25px">
+        Sign in with Facebook
+      </button> -->
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <label>Email</label>
+      <input type="email" formControlName="email" class="form-control" placeholder="Nhập email của bạn">
+      <div class="text-danger" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        Vui lòng nhập địa chỉ email hợp lệ
+      </div>
+
+      <label>Mật khẩu</label>
+      <div class="password-box">
+        <input type="password" formControlName="password" id="password" class="form-control" placeholder="Nhập mật khẩu của bạn">
+        <span class="show" (click)="togglePassword('password')">hiện</span>
+      </div>
+      <div class="text-danger" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        Mật khẩu phải có ít nhất 6 ký tự
+      </div>
+
+      <a routerLink="/forgot-password" class="forgot">Quên mật khẩu?</a>
+      <button type="submit" class="login-btn" [disabled]="loginForm.invalid || isLoading">
+        {{ isLoading ? 'Đang đăng nhập...' : 'Đăng nhập' }}
+      </button>
+    </form>
+  </div>
+
+  <p class="footer-text">TÀI KHOẢN ĐỂ CÙNG ĐUA XE</p>
+
+  <div class="devices">
+    <div class="device"></div>
+    <div class="device"></div>
+    <div class="device"></div>
+    <div class="device"></div>
+  </div>
+</div>
+
+<footer>
+  © 2025 Dorna Sports. Bảo lưu mọi quyền.
+</footer>
+</body>

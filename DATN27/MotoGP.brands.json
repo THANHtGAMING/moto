@@ -1,0 +1,176 @@
+[{
+  "_id": {
+    "$oid": "692982976fc45a2bd06bb60a"
+  },
+  "name": "aprilia",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764328085/brands/nwdmy436leqmhdqdzals.svg",
+  "description": "Aprilia Racing là bộ phận thi đấu chuyên nghiệp của Aprilia. Đây là đội đua chính thức của hãng tại các giải vô địch thế giới như:",
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-11-28T11:08:07.297Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-07T04:16:30.084Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6929836d6fc45a2bd06bb60f"
+  },
+  "name": "Ducati Lenovo Team",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764328300/brands/wqjcawsiduztniphojxl.svg",
+  "description": "Đội đua chính thức của Ducati tại MotoGP. Đây là một trong những đội mạnh nhất hiện nay, sở hữu chiếc Desmosedici GP nổi tiếng với sức mạnh và tốc độ vượt trội.",
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-11-28T11:11:41.045Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-28T11:11:41.045Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692983896fc45a2bd06bb614"
+  },
+  "name": "Gresini Racing MotoGP",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764328329/brands/mfrvzosfzdu5luuy2ylj.svg",
+  "description": "Đội đua độc lập sử dụng xe Ducati. Gresini Racing nổi tiếng sau khi chiêu mộ Marc Márquez và liên tục cạnh tranh top đầu.",
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-11-28T11:12:09.375Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-28T11:12:09.375Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692983a86fc45a2bd06bb619"
+  },
+  "name": "LCR Honda (Idemitsu / Castrol)",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764328360/brands/vfnymsmxch8kfujt9zol.svg",
+  "description": "Đội vệ tinh của Honda tại MotoGP. LCR có hai phiên bản tài trợ: Idemitsu (xe đỏ–trắng) và Castrol (xe xanh–trắng), tham gia thi đấu với Honda RC213V.",
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-11-28T11:12:40.295Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-28T11:12:40.295Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692983d66fc45a2bd06bb61f"
+  },
+  "name": "Monster Energy Yamaha MotoGP",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764328404/brands/smjm92rsnptfr3anefvl.svg",
+  "description": "Đội đua chính thức của Yamaha. Livery màu xanh–đen đặc trưng cùng logo Monster Energy giúp đội có nhận diện mạnh mẽ, từng gắn liền với Valentino Rossi và Fabio Quartararo.",
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-11-28T11:13:26.989Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-28T11:13:26.989Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6929841d6fc45a2bd06bb624"
+  },
+  "name": "Prima Pramac Racing",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764328476/brands/adukskx3m7jym3cobgkm.svg",
+  "description": "Đội vệ tinh mạnh nhất của Ducati. Pramac Racing thường nhận xe và công nghệ tương đương đội chính, nhiều mùa còn đạt thứ hạng cao hơn đội nhà máy.",
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-11-28T11:14:37.194Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-28T11:14:37.194Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692984446fc45a2bd06bb629"
+  },
+  "name": "Red Bull GASGAS Tech3",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764328515/brands/l64yyh8eyn8famn08yv9.svg",
+  "description": "Đội vệ tinh của KTM nhưng chạy dưới thương hiệu GASGAS. Logo đỏ đặc trưng, định hướng trẻ trung và thường tuyển tay đua tài năng mới.",
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-11-28T11:15:16.177Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-28T11:15:16.177Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6929845a6fc45a2bd06bb62e"
+  },
+  "name": "Red Bull KTM Factory Racing",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764328538/brands/aqnf0gsgygrr1z9skssf.svg",
+  "description": "Đội đua chính thức của KTM. Nổi bật với phong cách cam–xanh và chiếc RC16 mạnh mẽ. KTM đang tiến bộ rất nhanh trong MotoGP.",
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-11-28T11:15:38.908Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-28T11:15:38.908Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692984896fc45a2bd06bb633"
+  },
+  "name": "Repsol Honda Team",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764328585/brands/wfqtnf08ekst96a50zu2.svg",
+  "description": "Đội đua nhà máy của Honda với lịch sử huy hoàng. Đây là đội từng giúp Marc Márquez giành 6 chức vô địch MotoGP, nổi tiếng với màu cam–trắng Repsol.",
+  "status": "active",
+  "createdAt": {
+    "$date": "2025-11-28T11:16:25.871Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-07T00:05:05.915Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6934fd4caa24359145216372"
+  },
+  "name": "sadfasdf",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1765080395/brands/gyqdty28xhpg3g6vmtvm.webp",
+  "description": "dsafdsaf",
+  "status": "inactive",
+  "createdAt": {
+    "$date": "2025-12-07T04:06:36.318Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-07T04:06:44.294Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6934fdffaa243591452163fe"
+  },
+  "name": "dsfsdf",
+  "logoUrl": "http://res.cloudinary.com/dzqilomiv/image/upload/v1765080575/brands/ozftlxtrd1srbfqzzhtk.webp",
+  "description": "dsfsadf",
+  "status": "inactive",
+  "createdAt": {
+    "$date": "2025-12-07T04:09:35.722Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-07T04:09:38.181Z"
+  },
+  "__v": 0
+}]

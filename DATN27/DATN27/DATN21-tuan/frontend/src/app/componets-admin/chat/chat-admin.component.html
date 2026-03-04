@@ -1,0 +1,140 @@
+<div class="chat-admin-container">
+  <div class="chat-admin-header">
+    <h2>💬 Quản lý Trò chuyện</h2>
+    <p>Phản hồi tin nhắn từ khách hàng</p>
+  </div>
+
+  <div class="chat-admin-content">
+    <!-- Conversations List -->
+    <div class="conversations-panel">
+      <div class="conversations-header">
+        <h3>Danh sách khách hàng</h3>
+       
+      </div>
+
+      <div class="conversations-list" *ngIf="!isLoadingConversations">
+        <div
+          *ngFor="let conv of conversations"
+          class="conversation-item"
+          [class.active]="selectedUserId === conv.userId"
+          (click)="selectConversation(conv)">
+          <div class="conversation-avatar">
+            {{ conv.user && conv.user.fullName ? conv.user.fullName.charAt(0).toUpperCase() : 'U' }}
+          </div>
+          <div class="conversation-info">
+            <div class="conversation-name-row">
+              <span class="conversation-name">{{ conv.user && conv.user.fullName ? conv.user.fullName : 'Khách hàng' }}</span>
+              <span class="unread-badge" *ngIf="conv.unreadCount > 0">{{ conv.unreadCount }}</span>
+            </div>
+            <p class="conversation-preview">{{ conv.lastMessage && conv.lastMessage.message ? conv.lastMessage.message : 'Chưa có tin nhắn' }}</p>
+            <span class="conversation-time">{{ formatTime(conv.lastMessage && conv.lastMessage.createdAt ? conv.lastMessage.createdAt : undefined) }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="conversations.length === 0" class="empty-state">
+          <p>Chưa có cuộc trò chuyện nào</p>
+        </div>
+      </div>
+
+      <div *ngIf="isLoadingConversations" class="loading-state">
+        <p>Đang tải...</p>
+      </div>
+    </div>
+
+    <!-- Chat Panel -->
+    <div class="chat-panel" *ngIf="selectedUserId">
+      <div class="chat-header">
+        <div class="chat-user-info">
+          <div class="user-avatar">
+            {{ selectedUser?.fullName?.charAt(0)?.toUpperCase() || 'U' }}
+          </div>
+          <div>
+            <h3>{{ selectedUser && selectedUser.fullName ? selectedUser.fullName : 'Khách hàng' }}</h3>
+            <p class="user-email">{{ selectedUser && selectedUser.email ? selectedUser.email : '' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-messages" #messagesContainer>
+        <div *ngIf="isLoading && messages.length === 0" class="loading-messages">
+          <p>Đang tải tin nhắn...</p>
+        </div>
+
+        <div *ngIf="!isLoading || messages.length > 0" class="messages-list">
+          <div
+            *ngFor="let message of messages; let i = index"
+            class="message-wrapper">
+
+            <!-- Date separator -->
+            <div
+              *ngIf="i === 0 || formatDate(message.createdAt) !== formatDate(messages[i-1]?.createdAt)"
+              class="date-separator">
+              {{ formatDate(message.createdAt) }}
+            </div>
+
+            <div
+              class="message"
+              [class.message-user]="message.sender === 'user'"
+              [class.message-admin]="message.sender === 'admin'">
+              <div class="message-content">
+                <p>{{ message.message }}</p>
+                <div class="message-footer">
+                  <span class="message-time">{{ formatTime(message.createdAt) }}</span>
+                  <span class="read-status" *ngIf="message.sender === 'user'">
+                    <span *ngIf="isMessageRead(message)" class="read-indicator" title="Đã đọc">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 6L9 17l-5-5"/>
+                      </svg>
+                    </span>
+                    <span *ngIf="!isMessageRead(message)" class="unread-indicator" title="Chưa đọc">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                      </svg>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="isSending" class="message message-admin">
+            <div class="message-content">
+              <p>Đang gửi...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <textarea
+          [(ngModel)]="newMessage"
+          (keypress)="onKeyPress($event)"
+          placeholder="Nhập tin nhắn phản hồi..."
+          class="chat-input"
+          rows="2"
+          [disabled]="isSending">
+        </textarea>
+        <button
+          class="send-btn"
+          (click)="sendMessage()"
+          [disabled]="!newMessage.trim() || isSending"
+          title="Gửi tin nhắn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-chat-panel" *ngIf="!selectedUserId">
+      <div class="empty-chat-content">
+        <div class="empty-icon">💬</div>
+        <h3>Chọn một cuộc trò chuyện</h3>
+        <p>Chọn khách hàng từ danh sách bên trái để bắt đầu phản hồi</p>
+      </div>
+    </div>
+  </div>
+</div>
+

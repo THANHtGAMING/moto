@@ -1,0 +1,93 @@
+
+.checkout-container {
+  max-width: 550px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #fff;
+  color: #111;
+  font-family: 'Inter', sans-serif;
+}
+
+.checkout-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.paypal-btn {
+  background: #0070ba;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header a {
+  color: #0070ba;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+.name-fields {
+  display: flex;
+  gap: 10px;
+}
+
+.enter-address {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: #0070ba;
+  text-decoration: none;
+}
+
+.consent-section {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 20px;
+}
+
+.consent-section label {
+  display: block;
+  margin-top: 8px;
+}
+
+.policy-links a {
+  color: #0070ba;
+  text-decoration: none;
+}
+
+.continue-btn {
+  display: block;
+  background: #d50000;
+  color: #fff;
+  text-align: center;
+  padding: 14px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 25px;
+  transition: background 0.3s ease;
+}
+
+.continue-btn:hover {
+  background: #b30000;
+}

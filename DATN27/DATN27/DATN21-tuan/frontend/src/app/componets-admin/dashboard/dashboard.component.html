@@ -1,0 +1,254 @@
+<div class="admin-wrapper">
+  <aside class="sidebar">
+    <div class="logo">
+       <img *ngIf="pinnedLogo" [src]="pinnedLogo.imageUrl" [alt]="pinnedLogo.title || 'Logo'" class="logo-image" />
+    </div>
+
+    <div class="menu-section">
+      <div class="section-title">Trang Quản Trị</div>
+      <ul class="menu">
+        <li><a routerLink="/admin/data-analysis"><i class="fas fa-chart-area"></i> Thống Kê</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-section">
+      <div class="section-title">Sản Phẩm</div>
+      <ul class="menu">
+        <li><a routerLink="/admin/product-list"><i class="fas fa-box"></i> Danh Sách Sản Phẩm</a></li>
+        <li><a routerLink="/admin/brand-list"><i class="fas fa-tags"></i> Nhãn Hàng</a></li>
+        <li><a routerLink="/admin/type-list"><i class="fas fa-layer-group"></i> Loại Sản Phẩm</a></li>
+        <li><a routerLink="/admin/tag-list"><i class="fas fa-tag"></i> Thẻ</a></li>
+        <li><a routerLink="/admin/gender-list"><i class="fas fa-venus-mars"></i> Giới Tính</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-section">
+      <div class="section-title">Đơn Hàng</div>
+      <ul class="menu">
+        <li><a routerLink="/admin/order-list"><i class="fas fa-shopping-cart"></i> Danh Sách Đơn Hàng</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-section">
+      <div class="section-title">Người Dùng</div>
+      <ul class="menu">
+        <li><a routerLink="/admin/user-list"><i class="fas fa-users"></i> Danh Sách Người Dùng</a></li>
+        <li><a routerLink="/admin/rider-list"><i class="fas fa-motorcycle"></i> Tay Đua</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-section">
+      <div class="section-title">Nội Dung</div>
+      <ul class="menu">
+        <li><a routerLink="/admin/news-list"><i class="fas fa-newspaper"></i> Tin Tức</a></li>
+        <li><a routerLink="/admin/help-list"><i class="fas fa-question-circle"></i> Trợ Giúp</a></li>
+        <li><a routerLink="/admin/contact-list"><i class="fas fa-address-book"></i> Liên Hệ</a></li>
+    
+      </ul>
+    </div>
+
+    <div class="menu-section">
+      <div class="section-title">Khác</div>
+      <ul class="menu">
+        <li><a routerLink="/admin/review-list"><i class="fas fa-star"></i> Đánh Giá</a></li>
+        <li><a routerLink="/admin/coupon-list"><i class="fas fa-ticket-alt"></i> Mã Giảm Giá</a></li>
+        <li><a routerLink="/admin/chat"><i class="fas fa-comments"></i> Trò chuyện</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="content-area">
+    <header class="topbar">
+      <div class="brand-inline">
+        <img *ngIf="pinnedLogo" [src]="pinnedLogo.imageUrl" [alt]="pinnedLogo.title || 'Logo'" class="brand-logo-image" />
+      </div>
+
+      <div class="top-right">
+        <div class="icon-btn banner-btn" [routerLink]="['/admin/banner']" title="Quản lý banner trang chủ">
+          <i class="fas fa-image"></i>
+        </div>
+        <div class="icon-btn logo-btn" [routerLink]="['/admin/logo']" title="Quản lý logo">
+          <i class="fas fa-paint-brush"></i>
+        </div>
+        <div class="icon-btn notification-btn" (click)="toggleNotificationDropdown()">
+          <i class="far fa-bell"></i>
+          <span class="badge" *ngIf="getTotalNotificationCount() > 0">{{ getTotalNotificationCount() > 99 ? '99+' : getTotalNotificationCount() }}</span>
+          <div class="notification-dropdown" *ngIf="showNotificationDropdown">
+            <div class="dropdown-header">
+              <span>Thông Báo</span>
+              <span class="unread-count" *ngIf="getTotalNotificationCount() > 0">{{ getTotalNotificationCount() }} chưa đọc</span>
+            </div>
+            <div class="dropdown-content">
+              <!-- Pending Orders Notification -->
+              <div class="notification-item pending-orders" *ngIf="pendingOrdersCount > 0" (click)="goToPendingOrders()">
+                <div class="notification-icon">
+                  <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="notification-content">
+                  <div class="notification-title">Đơn hàng chờ xử lý</div>
+                  <div class="notification-message">Có {{ pendingOrdersCount }} đơn hàng đang chờ xử lý</div>
+                  <div class="notification-time">Nhấp để xem chi tiết</div>
+                </div>
+              </div>
+              <!-- Chat Notification -->
+              <div class="notification-item chat-notification" *ngIf="unreadChatCount > 0" (click)="goToChat()">
+                <div class="notification-icon">
+                  <i class="fas fa-comments"></i>
+                </div>
+                <div class="notification-content">
+                  <div class="notification-title">Tin nhắn chat mới</div>
+                  <div class="notification-message">Có {{ unreadChatCount }} tin nhắn chat chưa đọc</div>
+                  <div class="notification-time">Nhấp để xem chi tiết</div>
+                </div>
+              </div>
+              <!-- Contact Notification -->
+              <div class="notification-item contact-notification" *ngIf="unreadContactCount > 0" (click)="goToContactList()">
+                <div class="notification-icon">
+                  <i class="fas fa-envelope"></i>
+                </div>
+                <div class="notification-content">
+                  <div class="notification-title">Thư liên hệ mới</div>
+                  <div class="notification-message">Có {{ unreadContactCount }} thư liên hệ chưa đọc</div>
+                  <div class="notification-time">Nhấp để xem chi tiết</div>
+                </div>
+              </div>
+              <div *ngIf="notifications.length === 0 && pendingOrdersCount === 0 && unreadChatCount === 0 && unreadContactCount === 0" class="empty-message">Không có thông báo nào</div>
+              <div *ngFor="let notif of notifications.slice(0, 5)" 
+                   class="notification-item" 
+                   [class.unread]="!notif.isRead"
+                   (click)="markNotificationAsRead(notif._id)">
+                <div class="notification-icon">
+                  <i class="fas" 
+                     [ngClass]="{
+                       'fa-shopping-cart': notif.type === 'ORDER',
+                       'fa-gift': notif.type === 'PROMOTION',
+                       'fa-info-circle': notif.type === 'SYSTEM',
+                       'fa-shield-alt': notif.type === 'SECURITY',
+                       'fa-star': notif.type === 'REVIEW'
+                     }"></i>
+                </div>
+                <div class="notification-content">
+                  <div class="notification-title">{{ notif.title }}</div>
+                  <div class="notification-message">{{ notif.message }}</div>
+                  <div class="notification-time">{{ notif.createdAt | date:'dd/MM/yyyy HH:mm' }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="dropdown-footer" *ngIf="notifications.length > 5">
+              <a routerLink="/admin/notifications">Xem tất cả</a>
+            </div>
+          </div>
+        </div>
+        <div class="icon-btn contact-btn" (click)="toggleContactDropdown()">
+          <i class="far fa-comment-dots"></i>
+          <span class="badge" *ngIf="(unreadContactCount + unreadChatCount) > 0">{{ (unreadContactCount + unreadChatCount) > 99 ? '99+' : (unreadContactCount + unreadChatCount) }}</span>
+          <div class="contact-dropdown" *ngIf="showContactDropdown">
+            <div class="dropdown-header">
+              <span>Thư Liên Hệ & Trò chuyện</span>
+            </div>
+            <div class="dropdown-content">
+              <div class="contact-item" (click)="goToContactList()">
+                <i class="fas fa-envelope"></i>
+                <span>Thư Liên Hệ 
+                  <span class="unread-badge" *ngIf="unreadContactCount > 0">({{ unreadContactCount }})</span>
+                </span>
+              </div>
+              <div class="contact-item" (click)="goToChat()">
+                <i class="fas fa-comments"></i>
+                <span>Trò chuyện
+                  <span class="unread-badge" *ngIf="unreadChatCount > 0">({{ unreadChatCount }})</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="user-profile" (click)="toggleUserDropdown()">
+          <div class="user-avatar" *ngIf="adminAvatar; else avatarFallback">
+            <img [src]="adminAvatar" [alt]="adminName" />
+          </div>
+          <ng-template #avatarFallback>
+            <div class="user-avatar-text">{{ adminInitials || 'AD' }}</div>
+          </ng-template>
+          <div class="user-name">{{ adminName || 'Quản trị viên' }}</div>
+          <i class="fas fa-chevron-down"></i>
+          <div class="user-dropdown" *ngIf="showUserDropdown">
+            <a (click)="openEditProfileModal()" style="cursor: pointer;"><i class="far fa-user"></i> Chỉnh Sửa Hồ Sơ</a>
+            <a (click)="logout()" style="cursor: pointer;"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+
+
+    <section class="router-slot">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal-overlay" *ngIf="showEditProfileModal" (click)="closeEditProfileModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Chỉnh Sửa Hồ Sơ</h2>
+      <button class="modal-close" (click)="closeEditProfileModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="updateProfile()" #profileForm="ngForm">
+        <div class="form-group">
+          <label for="avatar">Ảnh Đại Diện</label>
+          <div class="avatar-upload">
+            <div class="avatar-preview">
+              <img *ngIf="previewAvatar || adminAvatar" [src]="previewAvatar || adminAvatar" alt="Xem trước ảnh đại diện" />
+              <div *ngIf="!previewAvatar && !adminAvatar" class="avatar-placeholder">
+                <i class="fas fa-user"></i>
+              </div>
+            </div>
+            <div class="avatar-actions">
+              <label for="avatarInput" class="btn-upload">
+                <i class="fas fa-camera"></i> Chọn Ảnh
+              </label>
+              <input 
+                type="file" 
+                id="avatarInput" 
+                accept="image/*" 
+                (change)="onAvatarSelected($event)"
+                style="display: none;"
+              />
+              <button type="button" class="btn-remove" *ngIf="previewAvatar || adminAvatar" (click)="removeAvatar()">
+                <i class="fas fa-trash"></i> Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="fullName">Họ và Tên</label>
+          <input 
+            type="text" 
+            id="fullName" 
+            name="fullName" 
+            [(ngModel)]="editProfileForm.fullName"
+            required
+            minlength="2"
+            class="form-control"
+            placeholder="Nhập họ và tên"
+          />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="closeEditProfileModal()">Hủy</button>
+          <button type="submit" class="btn-save" [disabled]="profileForm.invalid || isUpdating">
+            <span *ngIf="!isUpdating">Lưu Thay Đổi</span>
+            <span *ngIf="isUpdating">
+              <i class="fas fa-spinner fa-spin"></i> Đang lưu...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

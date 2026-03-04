@@ -1,0 +1,214 @@
+<div class="order-detail-page">
+  <div class="page-header">
+    <a routerLink="/admin/order-list" class="btn-back">← Quay lại</a>
+  </div>
+
+  <!-- Messages -->
+  <div class="message-container" *ngIf="errorMessage || successMessage">
+    <div class="error-message" *ngIf="errorMessage">
+      ❌ {{ errorMessage }}
+      <button class="close-btn" (click)="clearMessages()">×</button>
+    </div>
+    <div class="success-message" *ngIf="successMessage">
+      ✓ {{ successMessage }}
+      <button class="close-btn" (click)="clearMessages()">×</button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Đang tải...</p>
+  </div>
+
+  <!-- Order Detail -->
+  <div class="order-content" *ngIf="!isLoading && order">
+    <div class="form-sections-grid">
+      <!-- Cột trái -->
+      <div class="form-column">
+        <!-- Order Info Card -->
+        <div class="form-section">
+          <h3>Thông tin đơn hàng</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Mã đơn hàng:</label>
+              <strong>{{ order.orderCode }}</strong>
+            </div>
+            <div class="info-item">
+              <label>Trạng thái:</label>
+              <span class="status-badge" [ngClass]="getStatusBadgeClass(order.status)">
+                {{ getStatusLabel(order.status) }}
+              </span>
+            </div>
+            <div class="info-item">
+              <label>Phương thức thanh toán:</label>
+              <span class="payment-badge" [ngClass]="getPaymentMethodClass(order.paymentMethod)">{{ getPaymentMethodText(order.paymentMethod) }}</span>
+            </div>
+            <div class="info-item">
+              <label>Đã thanh toán:</label>
+              <span [class.paid]="isOrderPaid()" [class.unpaid]="!isOrderPaid()">
+                {{ isOrderPaid() ? '✓ Đã thanh toán' : '⏳ Chưa thanh toán' }}
+              </span>
+            </div>
+            <div class="info-item" *ngIf="order.paidAt">
+              <label>Ngày thanh toán:</label>
+              <span>{{ formatDate(order.paidAt) }}</span>
+            </div>
+            <div class="info-item">
+              <label>Ngày tạo:</label>
+              <span>{{ formatDate(order.createdAt) }}</span>
+            </div>
+            <div class="info-item">
+              <label>Cập nhật lần cuối:</label>
+              <span>{{ formatDate(order.updatedAt) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Info -->
+        <div class="form-section">
+          <h3>Thông tin khách hàng</h3>
+          <div class="info-grid">
+            <div class="info-item" *ngIf="order.userId">
+              <label>Họ tên:</label>
+              <span>{{ order.userId.fullName || order.shippingAddress.fullName }}</span>
+            </div>
+            <div class="info-item">
+              <label>Người nhận:</label>
+              <span>{{ order.shippingAddress.fullName }}</span>
+            </div>
+            <div class="info-item">
+              <label>Số điện thoại:</label>
+              <span>{{ order.shippingAddress.phoneNumber }}</span>
+            </div>
+            <div class="info-item">
+              <label>Email:</label>
+              <span>{{ order.shippingAddress.email }}</span>
+            </div>
+            <div class="info-item full-width">
+              <label>Địa chỉ giao hàng:</label>
+              <span>{{ order.shippingAddress.address }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products -->
+        <div class="form-section">
+          <h3>Sản phẩm</h3>
+          <table class="products-table">
+            <thead>
+              <tr>
+                <th>Hình ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Kích cỡ</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of order.products">
+                <td>
+                  <img [src]="product.imageProduct" [alt]="product.nameProduct" class="product-image" />
+                </td>
+                <td>{{ product.nameProduct }}</td>
+                <td>{{ product.size || 'Không có size' }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ formatPrice(product.price) }}</td>
+                <td><strong>{{ formatPrice(product.price * product.quantity) }}</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Cột phải -->
+      <div class="form-column">
+        <!-- Order Summary -->
+        <div class="form-section">
+          <h3>Tổng kết đơn hàng</h3>
+          <div class="summary">
+            <div class="summary-row">
+              <span>Tạm tính:</span>
+              <span>{{ formatPrice(order.totalPrice) }}</span>
+            </div>
+            <div class="summary-row" *ngIf="order.discountAmount && order.discountAmount > 0">
+              <span>Giảm giá:</span>
+              <span class="discount">-{{ formatPrice(order.discountAmount) }}</span>
+            </div>
+            <div class="summary-row" *ngIf="order.couponId">
+              <span>Mã giảm giá:</span>
+              <span>{{ order.couponId.code }} - {{ getCouponDiscountText(order.couponId) }}</span>
+            </div>
+            <div class="summary-row" *ngIf="order.shippingFee">
+              <span>Phí vận chuyển:</span>
+              <span>{{ formatPrice(order.shippingFee) }}</span>
+            </div>
+            <div class="summary-row total">
+              <span>Tổng cộng:</span>
+              <strong>{{ formatPrice(order.finalPrice) }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status History -->
+        <div class="form-section" *ngIf="order.statusHistory && order.statusHistory.length > 0">
+          <h3>Lịch sử trạng thái</h3>
+          <div class="status-history">
+            <div class="history-item" *ngFor="let history of order.statusHistory">
+              <div class="history-status">{{ getStatusLabel(history.status) }}</div>
+              <div class="history-date">{{ formatDate(history.updatedAt) }}</div>
+              <div class="history-note" *ngIf="history.note">{{ history.note }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-section">
+          <h3>Thao tác</h3>
+          <div class="actions-content" *ngIf="canUpdateStatus()">
+            <div class="action-group">
+              <label>Cập nhật trạng thái:</label>
+              <div class="form-row">
+                <select [(ngModel)]="newStatus" class="status-select">
+                  <option *ngFor="let opt of statusOptions" [value]="opt.value">
+                    {{ opt.label }}
+                  </option>
+                </select>
+                <textarea 
+                  [(ngModel)]="statusNote" 
+                  placeholder="Ghi chú (tùy chọn)"
+                  class="status-note"
+                  rows="2"
+                ></textarea>
+                <button 
+                  (click)="updateStatus()" 
+                  [disabled]="isUpdating || newStatus === order.status"
+                  class="btn-update"
+                >
+                  {{ isUpdating ? 'Đang cập nhật...' : 'Cập nhật trạng thái' }}
+                </button>
+              </div>
+            </div>
+            <div class="action-group" *ngIf="!isOrderPaid()">
+              <button 
+                (click)="markPaid()" 
+                [disabled]="isUpdating"
+                class="btn-action btn-mark-paid"
+              >
+                Đánh dấu đã thanh toán
+              </button>
+            </div>
+          </div>
+          <div class="actions-locked" *ngIf="!canUpdateStatus()">
+            <p class="locked-message">
+              <strong>Đơn hàng đã kết thúc</strong><br>
+              Đơn hàng này đã ở trạng thái <strong>{{ getStatusLabel(order.status) }}</strong> và không thể cập nhật trạng thái hoặc thanh toán nữa.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

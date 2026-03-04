@@ -1,0 +1,136 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>🎟️ Quản lý mã giảm giá</h2>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Tìm theo mã hoặc tên..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          (keyup.enter)="onSearch()"
+        />
+      </div>
+      <select class="sort-select" [(ngModel)]="statusFilter" (change)="onFilterChange()">
+        <option value="">Tất cả trạng thái</option>
+        <option value="active">Đang hoạt động</option>
+        <option value="expired">Đã hết hạn</option>
+        <option value="inactive">Đã tắt</option>
+      </select>
+      <select class="sort-select" [(ngModel)]="typeFilter" (change)="onFilterChange()">
+        <option value="">Tất cả loại</option>
+        <option value="PERCENTAGE">Giảm theo %</option>
+        <option value="FIXED_AMOUNT">Giảm tiền cố định</option>
+      </select>
+    </div>
+    <a routerLink="/admin/coupon-add" class="btn-add">+ Thêm mã mới</a>
+  </div>
+
+  <!-- Messages -->
+  <div class="message-container" *ngIf="errorMessage || successMessage">
+    <div class="error-message" *ngIf="errorMessage">
+      ❌ {{ errorMessage }}
+      <button class="close-btn" (click)="clearMessages()">×</button>
+    </div>
+    <div class="success-message" *ngIf="successMessage">
+      ✓ {{ successMessage }}
+      <button class="close-btn" (click)="clearMessages()">×</button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Đang tải...</p>
+  </div>
+
+  <!-- Coupon Table -->
+  <div class="table-container" *ngIf="!isLoading">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Mã</th>
+          <th>Tên chương trình</th>
+          <th>Loại</th>
+          <th>Giá trị</th>
+          <th>Đơn tối thiểu</th>
+          <th>Thời gian</th>
+          <th>Đã dùng</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let coupon of filteredCoupons | paginate : { itemsPerPage: 10, currentPage: p }">
+          <td class="code-cell">
+            <span class="coupon-code">{{ coupon.code }}</span>
+          </td>
+          <td>
+            <strong>{{ coupon.name }}</strong>
+            <p class="description" *ngIf="coupon.description">{{ coupon.description }}</p>
+          </td>
+          <td>
+            <span class="type-badge" [class.percentage]="coupon.type === 'PERCENTAGE'" [class.fixed]="coupon.type === 'FIXED_AMOUNT'">
+              {{ coupon.type === 'PERCENTAGE' ? 'Phần trăm' : 'Tiền cố định' }}
+            </span>
+          </td>
+          <td class="value-cell">
+            <strong>{{ getDiscountText(coupon) }}</strong>
+          </td>
+          <td>{{ coupon.minOrderValue | number:'1.0-0' }}đ</td>
+          <td class="date-cell">
+            <div>{{ formatDate(coupon.startDate) }}</div>
+            <div>→ {{ formatDate(coupon.endDate) }}</div>
+          </td>
+          <td class="usage-cell">
+            <span>{{ coupon.usedCount }}/{{ coupon.usageLimit }}</span>
+            <div class="usage-bar">
+              <div class="usage-progress" [style.width.%]="(coupon.usedCount / coupon.usageLimit) * 100"></div>
+            </div>
+          </td>
+          <td class="status-cell">
+            <span class="status-badge" [ngClass]="getStatusBadge(coupon).class">
+              {{ getStatusBadge(coupon).text }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button class="btn-action btn-toggle" [class.active]="coupon.isActive" (click)="toggleActive(coupon)" title="Bật/Tắt">
+              {{ coupon.isActive ? '🟢' : '⚪' }}
+            </button>
+            <button
+              class="btn-action btn-header"
+              [class.active]="coupon.showOnHeader"
+              (click)="toggleShowOnHeader(coupon)"
+              title="{{ coupon.showOnHeader ? 'Đang hiển thị trên header' : 'Hiển thị trên header' }}">
+              {{ coupon.showOnHeader ? '📌' : '📍' }}
+            </button>
+            <a [routerLink]="['/admin/coupon-edit', coupon._id]" class="btn-action btn-edit" title="Sửa">✏️</a>
+            <button class="btn-action btn-delete" (click)="deleteCoupon(coupon)" title="Xóa">🗑️</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredCoupons.length === 0">
+          <td colspan="9" class="empty-row">
+            <p>Không tìm thấy mã giảm giá nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="!isLoading">
+    <span>Tổng: <strong>{{ coupons.length }}</strong> mã</span>
+    <span>Hiển thị: <strong>{{ filteredCoupons.length }}</strong> mã</span>
+  </div>
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="p = $event"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>
+</div>
+

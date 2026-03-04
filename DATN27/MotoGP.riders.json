@@ -1,0 +1,143 @@
+[{
+  "_id": {
+    "$oid": "692b2d462900aedab1ae9046"
+  },
+  "name": "Aleix Espargaró",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764907043/riders/t6ltolmkwsox98e19vu1.webp",
+  "team": "",
+  "createdAt": "2025-11-19T20:36:56.864Z",
+  "updatedAt": {
+    "$date": "2025-12-05T03:57:24.158Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692b2d672900aedab1ae9048"
+  },
+  "name": "Valentino Rossi",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1765117249/riders/ga7xctp5lbvtgh2t9nge.webp",
+  "team": "legend",
+  "createdAt": "2025-11-28T10:48:14.014Z",
+  "updatedAt": {
+    "$date": "2025-12-07T14:20:49.597Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692b2eb52900aedab1ae904c"
+  },
+  "name": "Augusto Fernández",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764907258/riders/r6yxm46fmiqppqmqur4i.webp",
+  "team": "",
+  "createdAt": "2025-11-19T20:36:56.864Z",
+  "updatedAt": {
+    "$date": "2025-12-05T04:00:59.547Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692b2eed2900aedab1ae904d"
+  },
+  "name": "Brad Binder",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764907002/riders/skr8izhbamozatel9ktp.webp",
+  "team": "",
+  "createdAt": "2025-11-28T10:35:23.743Z",
+  "updatedAt": {
+    "$date": "2025-12-05T03:56:44.496Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692b2eff2900aedab1ae904e"
+  },
+  "name": "Enea Bastianini",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764906946/riders/sd0dcojwicfesvmuqfri.jpg",
+  "team": "",
+  "createdAt": "2025-11-28T10:35:39.936Z",
+  "updatedAt": {
+    "$date": "2025-12-05T03:55:46.853Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692b2f0e2900aedab1ae904f"
+  },
+  "name": "Fabio Di Giannantonio",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764906902/riders/g3rytkk6vduyondd8j6p.webp",
+  "team": "",
+  "createdAt": "2025-11-28T10:35:53.741Z",
+  "updatedAt": {
+    "$date": "2025-12-05T03:55:03.805Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692b2f282900aedab1ae9051"
+  },
+  "name": "Nicky Hayden",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764905705/riders/lgdcmcc5ymgj49bchzpo.webp",
+  "team": "legend",
+  "createdAt": "2025-11-28T10:47:52.134Z",
+  "updatedAt": {
+    "$date": "2025-12-05T03:35:06.908Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692b2f432900aedab1ae9052"
+  },
+  "name": "Marco Simoncelli",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764905783/riders/vpxw12mrjlgwvwm0xepv.webp",
+  "team": "legend",
+  "createdAt": "2025-11-28T10:47:31.467Z",
+  "updatedAt": {
+    "$date": "2025-12-05T03:36:24.129Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692b2f5c2900aedab1ae9053"
+  },
+  "name": "Marco Bezzecchi",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764906488/riders/pbx9wdqtsrmnxdfhfqsk.jpg",
+  "team": "normal",
+  "createdAt": "2025-11-28T10:36:34.890Z",
+  "updatedAt": {
+    "$date": "2025-12-05T03:48:09.126Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692b2f9c2900aedab1ae9055"
+  },
+  "name": "Fabio Quartararo",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764906795/riders/iypnmpnnrqi9gh7olvkc.webp",
+  "team": "",
+  "createdAt": "2025-11-28T10:36:09.174Z",
+  "updatedAt": {
+    "$date": "2025-12-05T03:53:16.527Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "692b2fb52900aedab1ae9056"
+  },
+  "name": "Marc Márquez",
+  "image": "http://res.cloudinary.com/dzqilomiv/image/upload/v1764906649/riders/cykgdpwkk4amudadxs3e.webp",
+  "team": "",
+  "createdAt": "2025-11-28T10:36:23.150Z",
+  "updatedAt": {
+    "$date": "2025-12-05T03:50:50.659Z"
+  },
+  "__v": 0
+}]

@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "69246b449928c502329d5e1c"
+  },
+  "name": "Repsol Honda Team",
+  "country": "Tây Ban Nha",
+  "founded_year": 1995,
+  "manager_name": "Alberto Puig",
+  "description": "Đội đua hàng đầu với nhiều chức vô địch",
+  "status": "ACTIVE",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-11-24T14:27:16.242Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-24T14:27:16.242Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69246b449928c502329d5e1d"
+  },
+  "name": "Monster Energy Yamaha MotoGP",
+  "country": "Nhật Bản",
+  "founded_year": 1973,
+  "manager_name": "Lin Jarvis",
+  "description": "Đội đua lâu đời với truyền thống vinh quang",
+  "status": "ACTIVE",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-11-24T14:27:16.242Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-24T14:27:16.242Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69246b449928c502329d5e1e"
+  },
+  "name": "Ducati Lenovo Team",
+  "country": "Ý",
+  "founded_year": 2003,
+  "manager_name": "Luigi Dall'Igna",
+  "description": "Đội đua với công nghệ tiên tiến",
+  "status": "ACTIVE",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-11-24T14:27:16.242Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-24T14:27:16.242Z"
+  }
+}]

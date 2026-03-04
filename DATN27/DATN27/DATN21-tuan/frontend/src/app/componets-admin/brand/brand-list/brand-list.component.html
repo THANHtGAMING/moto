@@ -1,0 +1,93 @@
+<div class="admin-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>🏷️ Quản lý nhãn hàng</h2>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Tìm kiếm nhãn hàng..."
+          [(ngModel)]="keyword"
+          (input)="onSearch()"
+        />
+      </div>
+      <div class="filter-group">
+        <select [(ngModel)]="statusFilter" (change)="onFilterChange()">
+          <option value="">Tất cả trạng thái</option>
+          <option value="active">Hoạt động</option>
+          <option value="inactive">Ngừng hoạt động</option>
+        </select>
+      </div>
+    </div>
+    <a routerLink="/admin/brand-add" class="btn-add">+ Thêm nhãn hàng mới</a>
+  </div>
+
+  <!-- Brand Table -->
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên nhãn hàng</th>
+          <th>Logo</th>
+          <th>Mô tả</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let brand of filteredBrands | paginate: { itemsPerPage: 11, currentPage: p }; index as i">
+          <td>{{ i + 1 }}</td>
+          <td><strong>{{ brand.name }}</strong></td>
+          <td>
+            <img
+              [src]="brand.logoUrl || getDefaultImage()"
+              [alt]="brand.name"
+              style="width: 80px; height: 80px; object-fit: contain; border-radius: 4px; background-color: #f0f0f0;"
+              (error)="onImageError($event)"
+            />
+          </td>
+          <td class="description-cell">{{ brand.description || 'Chưa có mô tả' }}</td>
+          <td>
+            <div class="status-indicator" (click)="toggleActive(brand)" [title]="brand.status === 'active' ? 'Đang hoạt động - Nhấp để tắt' : 'Đã tắt - Nhấp để bật'">
+              <span class="status-dot" [class.active]="brand.status === 'active'" [class.inactive]="brand.status !== 'active'"></span>
+              <span class="status-text" [class.inactive-status]="brand.status !== 'active'">{{ brand.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động' }}</span>
+            </div>
+          </td>
+          <td class="actions-cell">
+            <a
+              [routerLink]="['/admin/brand-edit/', brand._id]"
+              class="btn-action btn-edit"
+              title="Chỉnh sửa">✏️</a>
+            <button
+              (click)="onDelete(brand._id)"
+              class="btn-action btn-delete"
+              title="Xóa">🗑️</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredBrands.length === 0">
+          <td colspan="6" class="empty-row">
+            <p>Không tìm thấy nhãn hàng nào</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="filteredBrands.length > 0">
+    <span>Tổng: <strong>{{ filteredBrands.length }}</strong> nhãn hàng</span>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <pagination-controls 
+      (pageChange)="p = $event"
+      previousLabel="Trước"
+      nextLabel="Sau"
+      screenReaderPaginationLabel="Phân trang"
+      screenReaderPageLabel="trang"
+      screenReaderCurrentLabel="Bạn đang ở trang">
+    </pagination-controls>
+  </div>
+</div>
+

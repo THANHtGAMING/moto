@@ -1,0 +1,120 @@
+<body>
+  <div class="background"></div>
+
+  <header class="top-bar">
+    <div class="top-links">
+      <a routerLink="/" class="back">QUAY LẠI</a>
+    </div>
+  </header>
+
+  <div class="login-container">
+    <img src="/public/image/logo.svg" alt="MotoGP" class="logo">
+
+    <div class="form-box">
+    <div class="tabs">
+  <a class="tab" [routerLink]="['/register']" routerLinkActive="router-link-active" >ĐĂNG KÝ</a>
+  <a class="tab" [routerLink]="['/login']" routerLinkActive="router-link-active" >ĐĂNG NHẬP</a>
+</div>
+
+
+      <div class="social-login">
+        <button class="google" (click)="onGoogleLogin()">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/google.svg" width="25px">
+          Đăng ký bằng Google
+        </button>
+        <!-- Facebook login tạm thời ẩn - chờ app được review -->
+        <!-- <button class="facebook" (click)="onFacebookLogin()">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" width="25px">
+          Sign up with Facebook
+        </button> -->
+      </div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+  <!-- Full Name -->
+  <label>Họ và tên</label>
+  <input
+    type="text"
+    id="fullname"
+    formControlName="fullname"
+    class="form-control"
+    placeholder="Nhập họ và tên của bạn"
+  />
+  <div class="text-danger" *ngIf="registerForm.get('fullname')?.invalid && registerForm.get('fullname')?.touched">
+    Họ và tên phải có ít nhất 6 ký tự
+  </div>
+
+  <!-- Email -->
+  <label>Email</label>
+  <input
+    type="email"
+    id="email"
+    formControlName="email"
+    class="form-control"
+    placeholder="Nhập email của bạn"
+  />
+  <div class="text-danger" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+    Vui lòng nhập địa chỉ email hợp lệ
+  </div>
+
+  <!-- Password -->
+  <label>Mật khẩu</label>
+  <div class="password-box">
+    <input
+      type="password"
+      id="password"
+      formControlName="password"
+      class="form-control"
+      placeholder="Nhập mật khẩu của bạn"
+    />
+    <span class="show" (click)="togglePassword('password')">hiện</span>
+  </div>
+  <div class="text-danger" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+    Mật khẩu phải có ít nhất 6 ký tự
+  </div>
+
+  <!-- Confirm Password -->
+  <label>Xác nhận mật khẩu</label>
+  <div class="password-box">
+    <input
+      type="password"
+      id="confirmPassword"
+      formControlName="confirmPassword"
+      class="form-control"
+      placeholder="Xác nhận mật khẩu của bạn"
+    />
+    <span class="show" (click)="togglePassword('confirmPassword')">hiện</span>
+  </div>
+  <div
+    class="text-danger"
+    *ngIf="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched"
+  >
+    Mật khẩu không khớp
+  </div>
+
+  <!-- Checkbox -->
+  
+
+  <button type="submit" class="login-btn" [disabled]="registerForm.invalid || isLoading">
+    {{ isLoading ? 'Đang tạo tài khoản...' : 'Tạo tài khoản' }}
+  </button>
+</form>
+
+    </div>
+
+    <p class="footer-text">THAM GIA CỘNG ĐỒNG MOTO GP</p>
+
+    <div class="devices">
+      <div class="device"></div>
+      <div class="device"></div>
+      <div class="device"></div>
+      <div class="device"></div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Dorna Sports. Bảo lưu mọi quyền.
+  </footer>
+
+  <script src="/public/js/login.js">
+  </script>
+</body>

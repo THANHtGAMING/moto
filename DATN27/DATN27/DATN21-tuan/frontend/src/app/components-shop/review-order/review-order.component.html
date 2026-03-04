@@ -1,0 +1,104 @@
+<div class="review-order-container" *ngIf="!isLoading">
+  <div class="review-header">
+    <h1>Đánh giá sản phẩm</h1>
+    <p class="order-code" *ngIf="orderCode">Đơn hàng: {{ orderCode }}</p>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <div class="success-message" *ngIf="success">
+    <p>{{ success }}</p>
+  </div>
+
+  <div class="pending-products" *ngIf="pendingProducts.length > 0">
+    <div class="product-review-card" *ngFor="let product of pendingProducts">
+      <div class="product-info">
+        <img [src]="product.imageProduct" [alt]="product.nameProduct" class="product-image">
+        <div class="product-details">
+          <h3>{{ product.nameProduct }}</h3>
+          <p class="product-price">{{ formatPrice(product.price) }}</p>
+          <p class="product-meta" *ngIf="product.size">Size: {{ product.size }} | Số lượng: {{ product.quantity }}</p>
+        </div>
+      </div>
+
+      <div class="review-form" *ngIf="reviewForms[product.productId]">
+        <div class="rating-section">
+          <label>Đánh giá của bạn:</label>
+          <div class="rating-stars">
+            <button
+              *ngFor="let i of [1,2,3,4,5]; let idx = index"
+              type="button"
+              class="star-btn"
+              [class.active]="reviewForms[product.productId].rating > idx"
+              (click)="onRatingClick(product.productId, i)">
+              ★
+            </button>
+          </div>
+          <span class="rating-text">
+            {{ reviewForms[product.productId].rating === 5 ? 'Rất hài lòng' :
+               reviewForms[product.productId].rating === 4 ? 'Hài lòng' :
+               reviewForms[product.productId].rating === 3 ? 'Bình thường' :
+               reviewForms[product.productId].rating === 2 ? 'Không hài lòng' :
+               'Rất không hài lòng' }}
+          </span>
+        </div>
+
+        <div class="comment-section">
+          <label for="comment-{{product.productId}}">Nhận xét:</label>
+          <textarea
+            id="comment-{{product.productId}}"
+            [(ngModel)]="reviewForms[product.productId].comment"
+            placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."
+            rows="4"
+            maxlength="500"></textarea>
+          <span class="char-count">{{ reviewForms[product.productId].comment.length }}/500</span>
+        </div>
+
+        <div class="image-section">
+          <label>Thêm ảnh (tối đa 5 ảnh):</label>
+          <div class="image-upload">
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              (change)="onImageSelected(product.productId, $event)"
+              [disabled]="reviewForms[product.productId].images.length >= 5"
+              id="images-{{product.productId}}">
+            <label for="images-{{product.productId}}" class="upload-btn">
+              Chọn ảnh
+            </label>
+            <span class="image-count" *ngIf="reviewForms[product.productId].images.length > 0">
+              Đã chọn {{ reviewForms[product.productId].images.length }}/5 ảnh
+            </span>
+          </div>
+          <div class="image-preview" *ngIf="reviewForms[product.productId].images.length > 0">
+            <div class="preview-item" *ngFor="let img of reviewForms[product.productId].images; let i = index">
+              <img [src]="getImagePreview(img)" alt="Preview">
+              <button type="button" class="remove-image" (click)="removeImage(product.productId, i)">×</button>
+            </div>
+          </div>
+        </div>
+
+        <button
+          class="submit-review-btn"
+          (click)="submitReview(product.productId)"
+          [disabled]="reviewForms[product.productId].isSubmitting || !reviewForms[product.productId].comment.trim()">
+          <span *ngIf="!reviewForms[product.productId].isSubmitting">Gửi đánh giá</span>
+          <span *ngIf="reviewForms[product.productId].isSubmitting">Đang gửi...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="pendingProducts.length === 0 && !isLoading">
+    <p>Tất cả sản phẩm trong đơn hàng này đã được đánh giá!</p>
+    <a routerLink="/profile" class="back-btn">Quay lại danh sách đơn hàng</a>
+  </div>
+</div>
+
+<div class="loading" *ngIf="isLoading">
+  <p>Đang tải...</p>
+</div>
+

@@ -1,0 +1,239 @@
+<main class="cart-page">
+  <!-- Loading Indicator -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Đang tải...</p>
+  </div>
+
+  <!-- Messages -->
+  <div class="message-container" *ngIf="errorMessage || successMessage">
+    <div class="error-message" *ngIf="errorMessage">
+      ❌ {{ errorMessage }}
+      <button class="close-btn" (click)="clearMessages()">×</button>
+    </div>
+    <div class="success-message" *ngIf="successMessage">
+      ✓ {{ successMessage }}
+      <button class="close-btn" (click)="clearMessages()">×</button>
+    </div>
+  </div>
+
+  <div class="cart-container">
+    <!-- LEFT: Cart Items -->
+    <div class="cart-left">
+      <div class="cart-alert" *ngIf="!isEmpty">
+        <span>🔥 Sản phẩm có thể hết hàng, đặt ngay!</span>
+      </div>
+
+      <!-- Cart Items -->
+      <div *ngFor="let item of cartItems; let i = index" class="cart-item">
+        <!-- Image -->
+        <div class="cart-item-image">
+          <img [src]="getProductImage(item)" [alt]="getProductName(item)">
+        </div>
+
+        <!-- Info -->
+        <div class="cart-item-info">
+          <h3>{{ getProductName(item) }}</h3>
+
+          <!-- Size (if applicable) -->
+          <p class="cart-size" *ngIf="item.size">
+            Size: <strong>{{ item.size }}</strong>
+          </p>
+
+          <!-- Quantity controls -->
+          <div class="cart-quantity">
+            <label>Số lượng:</label>
+            <div class="quantity-controls">
+              <button class="qty-btn"
+                      (click)="decrementQuantity(item)"
+                      [disabled]="item.quantity <= 1 || isLoading">
+                -
+              </button>
+              <span class="qty-value">{{ item.quantity }}</span>
+              <button class="qty-btn"
+                      (click)="incrementQuantity(item)"
+                      [disabled]="item.quantity >= getMaxQuantity(item) || isLoading">
+                +
+              </button>
+            </div>
+            <span class="max-qty-hint">Tối đa: {{ getMaxQuantity(item) }}</span>
+          </div>
+
+          <p class="cart-shipping">
+            Sản phẩm sẽ được giao trong 1 ngày làm việc.
+          </p>
+        </div>
+
+        <!-- Price + Remove -->
+        <div class="cart-item-price">
+          <!-- Discounted price -->
+          <p class="current-price">{{ getDiscountedPrice(item) | number:'1.0-0' }} đ</p>
+
+          <!-- Original price if discounted -->
+          <p class="original-price" *ngIf="hasDiscount(item)">
+            {{ getProductPrice(item) | number:'1.0-0' }} đ
+          </p>
+
+          <!-- Subtotal -->
+          <p class="subtotal">
+            Tổng: {{ getItemSubtotal(item) | number:'1.0-0' }} đ
+          </p>
+
+          <button class="cart-remove"
+                  (click)="removeItem(item)"
+                  [disabled]="isLoading"
+                  title="Xóa sản phẩm">
+            ×
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty cart message -->
+      <div class="empty-cart" *ngIf="isEmpty && !isLoading">
+        <p>🛒 Giỏ hàng trống!</p>
+        <a routerLink="/all-product" class="continue-btn">Tiếp tục mua sắm</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: Summary -->
+    <div class="cart-right" *ngIf="!isEmpty">
+
+      <!-- SHOPEE-STYLE COUPON SECTION -->
+      <div class="coupon-section-shopee">
+        <div class="coupon-header" (click)="toggleCouponDropdown()">
+          <div class="coupon-header-left">
+            <span class="coupon-icon">🎟️</span>
+            <span class="coupon-title">Mã giảm giá</span>
+          </div>
+          <div class="coupon-header-right">
+            <span class="coupon-count" *ngIf="!hasAppliedCoupon">
+              {{ eligibleCouponsCount > 0 ? eligibleCouponsCount + ' mã có thể dùng' : 'Chọn mã' }}
+            </span>
+            <span class="coupon-applied" *ngIf="hasAppliedCoupon && appliedCoupon">
+              {{ appliedCoupon.code }}
+            </span>
+            <span class="dropdown-arrow" [class.open]="showCouponDropdown">▼</span>
+          </div>
+        </div>
+
+        <!-- Coupon Dropdown -->
+        <div class="coupon-dropdown" *ngIf="showCouponDropdown">
+          <div class="coupon-dropdown-header">
+            <span>Chọn Voucher</span>
+            <button class="close-dropdown" (click)="closeCouponDropdown()">×</button>
+          </div>
+
+          <!-- Coupon List -->
+          <div class="coupon-list-shopee" *ngIf="coupons.length > 0">
+            <div
+              *ngFor="let coupon of coupons"
+              class="coupon-card"
+              [class.eligible]="coupon.isEligible"
+              [class.ineligible]="!coupon.isEligible"
+              [class.selected]="selectedCoupon?._id === coupon._id"
+              (click)="selectCoupon(coupon)"
+            >
+              <!-- Coupon Left (Ticket style) -->
+              <div class="coupon-card-left">
+                <div class="coupon-discount-badge">
+                  <span class="discount-value" *ngIf="coupon.type === 'PERCENTAGE'">{{ coupon.value }}%</span>
+                  <span class="discount-value" *ngIf="coupon.type === 'FIXED_AMOUNT'">{{ coupon.value / 1000 }}K</span>
+                  <span class="discount-label">GIẢM</span>
+                </div>
+              </div>
+
+              <!-- Coupon Right (Info) -->
+              <div class="coupon-card-right">
+                <div class="coupon-name">{{ coupon.name }}</div>
+                <div class="coupon-code">Mã: {{ coupon.code }}</div>
+                <div class="coupon-condition">
+                  Đơn tối thiểu {{ coupon.minOrderValue | number:'1.0-0' }}đ
+                </div>
+
+                <!-- Progress or status -->
+                <div class="coupon-status">
+                  <span class="status-eligible" *ngIf="coupon.isEligible">
+                    ✓ Có thể áp dụng
+                  </span>
+                  <span class="status-ineligible" *ngIf="!coupon.isEligible">
+                    {{ getRemainingAmountText(coupon) }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Selected indicator -->
+              <div class="coupon-check" *ngIf="selectedCoupon?._id === coupon._id && coupon.isEligible">
+                ✓
+              </div>
+            </div>
+          </div>
+
+          <!-- No coupons -->
+          <div class="no-coupons" *ngIf="coupons.length === 0">
+            <p>😔 Không có mã giảm giá nào</p>
+          </div>
+
+          <!-- Apply button -->
+          <div class="coupon-dropdown-footer" *ngIf="coupons.length > 0">
+            <button
+              class="apply-coupon-btn-shopee"
+              [disabled]="!selectedCoupon || couponApplying"
+              (click)="applySelectedCoupon()"
+            >
+              {{ couponApplying ? 'Đang áp dụng...' : 'Áp dụng' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Applied Coupon Display -->
+        <div class="applied-coupon-display" *ngIf="hasAppliedCoupon && appliedCoupon && !showCouponDropdown">
+          <div class="applied-info">
+            <span class="applied-code">{{ appliedCoupon.code }}</span>
+            <span class="applied-discount">{{ getCouponDiscountText(appliedCoupon) }}</span>
+          </div>
+          <div class="applied-actions">
+            <span class="applied-badge">Đã áp dụng ✓</span>
+            <button class="remove-coupon-btn" (click)="removeAppliedCoupon()" title="Xóa mã giảm giá">
+              ×
+            </button>
+          </div>
+        </div>
+
+        <!-- Warning hint -->
+        <div class="coupon-warning" *ngIf="hasAppliedCoupon && !showCouponDropdown">
+          <small>💡 Lưu ý: Thay đổi sản phẩm có thể khiến mã giảm giá bị huỷ</small>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h4>Tóm tắt đơn hàng</h4>
+
+        <div class="summary-item">
+          <span>Tạm tính</span>
+          <span>{{ totalPrice | number:'1.0-0' }} đ</span>
+        </div>
+
+        <div class="summary-item discount" *ngIf="discountAmount > 0">
+          <span>Giảm giá</span>
+          <span class="discount-amount">-{{ discountAmount | number:'1.0-0' }} đ</span>
+        </div>
+
+        <hr />
+
+        <div class="summary-item total">
+          <span>Tổng cộng</span>
+          <span class="final-price">{{ finalPrice | number:'1.0-0' }} đ</span>
+        </div>
+
+        <button class="checkout-btn"
+                (click)="goToPayment()"
+                [disabled]="isLoading || isEmpty">
+          🔒 Thanh toán
+        </button>
+      </div>
+
+      <a routerLink="/all-product" class="continue-shopping">← TIẾP TỤC MUA SẮM</a>
+    </div>
+  </div>
+</main>

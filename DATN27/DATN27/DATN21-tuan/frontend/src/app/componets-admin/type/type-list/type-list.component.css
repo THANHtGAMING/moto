@@ -1,0 +1,648 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
+@import '../../shared/admin-styles.css';
+
+/* ============================================
+   Enhanced Type List Styles
+   ============================================ */
+
+.admin-page {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  background: #ffffff;
+  min-height: 100vh;
+  font-family: 'Be Vietnam Pro', 'Inter', 'Roboto', 'Segoe UI', Tahoma, Arial, sans-serif;
+  overflow-x: hidden;
+  overflow-y: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-sizing: border-box;
+}
+
+/* Ẩn scrollbar ngang cho tất cả elements bên trong */
+.admin-page * {
+  scrollbar-width: thin; /* Firefox - thin scrollbar */
+  scrollbar-color: transparent transparent; /* Firefox - ẩn scrollbar */
+  -ms-overflow-style: -ms-autohiding-scrollbar; /* IE and Edge */
+}
+
+/* Ẩn scrollbar ngang cho Chrome, Safari, Opera - chỉ cho elements con */
+.admin-page *::-webkit-scrollbar {
+  height: 0px; /* Ẩn scrollbar ngang */
+}
+
+/* Chỉ cho phép scrollbar dọc ở body/html, không phải ở admin-page */
+.admin-page {
+  position: relative;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 18px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+  gap: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  flex: 1;
+}
+
+.page-header h2 {
+  margin: 0;
+  color: #000000;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+.btn-add {
+  background: #4A90E2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(74, 144, 226, 0.25);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-add:hover {
+  background: #357ABD;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(74, 144, 226, 0.35);
+}
+
+/* Filters Section */
+.filters {
+  background: #ffffff;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Search Box */
+.search-box {
+  margin: 0;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: #fafafa;
+  box-sizing: border-box;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+  color: #000000;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.search-box input:hover {
+  border-color: #a0a0a0;
+  background: white;
+}
+
+.search-box input::placeholder {
+  color: #999999;
+}
+
+.sort-select {
+  padding: 10px 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #fafafa;
+  color: #000000;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  min-width: 160px;
+  box-sizing: border-box;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.sort-select:hover {
+  border-color: #a0a0a0;
+  background: white;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+/* Filter Group */
+.filter-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-group select {
+  padding: 10px 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #fafafa;
+  color: #000000;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  min-width: 160px;
+  box-sizing: border-box;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.filter-group select:hover {
+  border-color: #a0a0a0;
+  background: white;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.filter-group select option {
+  padding: 10px;
+  background: white;
+  color: #000000;
+  font-weight: 500;
+}
+
+/* Filter Buttons */
+.filter-btn-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-btn {
+  padding: 10px 18px;
+  background: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+  min-width: 140px;
+  text-align: left;
+  position: relative;
+}
+
+.filter-btn::after {
+  content: '▼';
+  float: right;
+  font-size: 10px;
+  margin-left: 8px;
+  opacity: 0.6;
+}
+
+.filter-btn:hover {
+  background: #f5f5f5;
+  border-color: #000000;
+}
+
+.filter-btn.active {
+  background: #000000;
+  color: white;
+  border-color: #000000;
+}
+
+.filter-btn.active::after {
+  opacity: 1;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.filter-option {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #000000;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.filter-option:last-child {
+  border-bottom: none;
+}
+
+.filter-option:hover {
+  background: #f5f5f5;
+}
+
+.filter-option.selected {
+  background: #000000;
+  color: white;
+  font-weight: 600;
+}
+
+/* Reset Button */
+.btn-reset {
+  padding: 10px 18px;
+  background: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000000;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
+}
+
+.btn-reset:hover {
+  background: #f5f5f5;
+  border-color: #000000;
+  color: #000000;
+}
+
+/* Table Container */
+.table-container {
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+  overflow-y: visible;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ẩn scrollbar ngang của table container */
+.table-container::-webkit-scrollbar {
+  height: 6px; /* Scrollbar ngang mỏng cho table */
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Firefox - scrollbar ngang cho table */
+.table-container {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #c1c1c1 #f1f1f1; /* Firefox */
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  background: #f5f5f5;
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 800;
+  color: #000000;
+  border-bottom: 2px solid #e0e0e0;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.admin-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.admin-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: #f5f5f5;
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Badge Container */
+.badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 600;
+  display: inline-block;
+  letter-spacing: 0.2px;
+}
+
+.badge-gender {
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 9px;
+}
+
+/* Màu cho Nữ / Phụ nữ - Tông hồng, đỏ hồng */
+.badge-gender-female,
+.badge-gender-nu,
+.badge-gender-phu-nu,
+.badge-gender-women {
+  background: linear-gradient(135deg, #FF6B9D 0%, #E91E63 100%);
+  color: white;
+  box-shadow: 0 2px 6px rgba(233, 30, 99, 0.4);
+}
+
+.badge-gender-female:hover,
+.badge-gender-nu:hover,
+.badge-gender-phu-nu:hover,
+.badge-gender-women:hover {
+  background: linear-gradient(135deg, #FF8FB3 0%, #F06292 100%);
+  box-shadow: 0 3px 8px rgba(233, 30, 99, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Màu cho Nam / Đàn ông - Tông xanh dương, xanh lá */
+.badge-gender-male,
+.badge-gender-nam,
+.badge-gender-dan-ong,
+.badge-gender-men {
+  background: linear-gradient(135deg, #4A90E2 0%, #2196F3 100%);
+  color: white;
+  box-shadow: 0 2px 6px rgba(33, 150, 243, 0.4);
+}
+
+.badge-gender-male:hover,
+.badge-gender-nam:hover,
+.badge-gender-dan-ong:hover,
+.badge-gender-men:hover {
+  background: linear-gradient(135deg, #6BA3E8 0%, #42A5F5 100%);
+  box-shadow: 0 3px 8px rgba(33, 150, 243, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Màu cho Unisex / Chung - Tông tím, vàng cam */
+.badge-gender-unisex,
+.badge-gender-chung,
+.badge-gender-both {
+  background: linear-gradient(135deg, #9C27B0 0%, #BA68C8 100%);
+  color: white;
+  box-shadow: 0 2px 6px rgba(156, 39, 176, 0.4);
+}
+
+.badge-gender-unisex:hover,
+.badge-gender-chung:hover,
+.badge-gender-both:hover {
+  background: linear-gradient(135deg, #AB47BC 0%, #CE93D8 100%);
+  box-shadow: 0 3px 8px rgba(156, 39, 176, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Màu cho Trẻ em / Kids - Tông vàng, cam */
+.badge-gender-kids,
+.badge-gender-tre-em,
+.badge-gender-children {
+  background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+  color: white;
+  box-shadow: 0 2px 6px rgba(255, 152, 0, 0.4);
+}
+
+.badge-gender-kids:hover,
+.badge-gender-tre-em:hover,
+.badge-gender-children:hover {
+  background: linear-gradient(135deg, #FFA726 0%, #FFCC80 100%);
+  box-shadow: 0 3px 8px rgba(255, 152, 0, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Màu mặc định cho các gender khác - Tông xám, xanh lá */
+.badge-gender-default {
+  background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%);
+  color: white;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
+}
+
+.badge-gender-default:hover {
+  background: linear-gradient(135deg, #81C784 0%, #66BB6A 100%);
+  box-shadow: 0 3px 8px rgba(76, 175, 80, 0.5);
+  transform: translateY(-1px);
+}
+
+.badge-tag {
+  background: #666666;
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.text-muted {
+  color: #999999;
+  font-style: italic;
+  font-size: 13px;
+}
+
+/* Actions */
+.actions-cell {
+  white-space: nowrap;
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  margin: 0 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.btn-edit {
+  color: #000000;
+  background: #f5f5f5;
+}
+
+.btn-edit:hover {
+  background: #000000;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.btn-delete {
+  color: #000000;
+  background: #f5f5f5;
+}
+
+.btn-delete:hover {
+  background: #000000;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Empty Row */
+.empty-row {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999999;
+  font-size: 16px;
+}
+
+.empty-row p {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Stats */
+.stats {
+  background: #ffffff;
+  padding: 14px 24px;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #666666;
+  font-weight: 600;
+}
+
+.stats strong {
+  color: #000000;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+/* Pagination */
+.pagination {
+  background: #ffffff;
+  padding: 18px 24px;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .filter-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group select {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-page {
+    padding: 0;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .filters {
+    padding: 15px;
+  }
+
+  .admin-table {
+    font-size: 12px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 8px;
+  }
+}

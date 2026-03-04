@@ -1,0 +1,60 @@
+<div class="success-container">
+
+  <!-- Thanh toán ngân hàng -->
+  <div *ngIf="paymentMethod === 'BANK'; else codTemplate" class="bank-transfer" >
+
+    <div class="left-box">
+      <h2>Thanh toán chuyển khoản</h2>
+
+      <img src="/frontend/src/public/image/qrchuyenkoan.jpg" class="qr-img" >
+
+      <div class="bank-info" *ngFor="let item of cartItems">
+        <p><strong>Ngân hàng:</strong> MB Bank</p>
+        <p><strong>Chủ tài khoản:</strong> Nguyen Van Kiet</p>
+        <p><strong>Số tài khoản:</strong> 0905393475</p>
+        <p><strong>Nội dung:</strong> chuyen khoan</p>
+        <p><strong>Số tiền cần chuyển:</strong> {{ item.price | number }} VND</p>
+      </div>
+    </div>
+
+    <!-- Chi tiết đơn hàng -->
+    <div class="right-box">
+      <h2>Chi tiết đơn hàng</h2>
+
+      <div *ngFor="let item of cartItems" class="order-item">
+        <img [src]="item.image" alt="product">
+
+        <div class="info">
+          <p><strong>{{ item.name }}</strong></p>
+          <p>Size: {{ item.size }}</p>
+          <p>Số lượng: {{ item.quantity }}</p>
+        </div>
+
+        <strong>{{ item.price | number }} VND</strong>
+      </div>
+
+      <h3 class="total">
+        Tổng thanh toán: {{ order?.totalPrice | number }} VND
+      </h3>
+
+      <button class="confirm-btn">Tôi đã chuyển khoản</button>
+    </div>
+  </div>
+
+
+  <!-- COD -->
+  <ng-template #codTemplate>
+    <div class="cod-box">
+      <h2>Đặt hàng thành công!</h2>
+      <p>Đơn hàng của bạn sẽ được giao trong thời gian sớm nhất.</p>
+
+      <button
+        [routerLink]="['/store']"
+        routerLinkActive="router-link-active"
+        class="back-btn">
+        Tiếp tục mua sắm
+      </button>
+    </div>
+  </ng-template>
+
+</div>
